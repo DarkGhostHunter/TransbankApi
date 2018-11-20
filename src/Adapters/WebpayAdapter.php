@@ -26,7 +26,7 @@ class WebpayAdapter extends AbstractAdapter
     protected function prepareTransbankSdk()
     {
         if (!$this->webpaySdk) {
-            $configuration = new Configuration();
+            $configuration = new Configuration;
             $configuration->setEnvironment(
                 $this->isProduction ? 'PRODUCCION' : 'INTEGRACION'
             );

@@ -1,7 +1,3 @@
-git:
-  depth: 3
-  submodules: false
-
 branches:
   only:
   - master

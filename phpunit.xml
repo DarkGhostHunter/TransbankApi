@@ -2,10 +2,10 @@
          colors="true"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="Wrapper">
+        <testsuite name="Unit">
             <directory suffix="Test.php">tests/Unit</directory>
         </testsuite>
-        <testsuite name="Integration">
+        <testsuite name="Feature">
             <directory suffix="Test.php">tests/Feature</directory>
         </testsuite>
     </testsuites>
