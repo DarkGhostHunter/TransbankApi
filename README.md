@@ -1,21 +1,21 @@
 # Transbank SDK Wrapper - v0.5
 
-Wrapper no-oficial de Transbank para mejorar la experiencia de uso del SDK oficial.
+Wrapper no-oficial de [Transbank SDK](https://github.com/TransbankDevelopers/transbank-sdk-php) para mejorar la experiencia de uso.
 
-> Esta versión es incompatible con PHP 5. Para usar este código con PHP 5, usa directamente la versión 1.4.2.
+> Esta versión es incompatible con PHP 5. Para usar este código con PHP 5, usa la versión 1.4.3 del SDK oficial.
 
 > Esta paquete es un trabajo en progreso ¡No lo uses en producción hasta que no esté listo! 
 
 ## Requisitos:
 
-- PHP 7.1 o mayor
+- PHP 7.1.3 o mayor
 - Composer
 
 ## Dependencias
 
-Este paquete sólo necesita descargar el SDK oficial de Transbank.  
+Este paquete descarga automáticamente el SDK oficial de Transbank como única dependencia.  
 
-A su vez, el SDK oficial necesita las siguiente extensiones de PHP habilitadas:
+A su vez, el SDK oficial necesita las siguientes extensiones de PHP habilitadas:
 
 * ext-curl
 * ext-json
@@ -23,21 +23,21 @@ A su vez, el SDK oficial necesita las siguiente extensiones de PHP habilitadas:
 * ext-soap
 * ext-dom
 
-Instalarlas dependerá de tu sistema. En algunos casos sólo necesitarás habilitarlas en tu `php.ini`, o usar `ini_set`. En otros, descargarlas usando tu gestor de packetes (como `apt-get` o `apk`) o compilarlas manualmente. 
+Instalarlas dependerá de tu sistema: en algunos casos sólo necesitarás habilitarlas en tu `php.ini`; en otros, descargarlas usando tu gestor de packetes (como `apt-get` o `apk`) o compilarlas manualmente. 
 
 # Instalación
 
-Hay dos formas para instalar el paquete: usando Composer o descargando el paquete de forma manual y ~~darse la paja bajar las dependencias~~.
+Hay dos formas para instalar el paquete: usando Composer o descargando el paquete de forma manual.
 
-### Instalar con Composer
+### Instalar con Composer (fácil)
 
 Para usar el SDK en tu proyecto puedes usar Composer, instalándolo desde la consola:
 
 ```bash
-composer require transbank/transbank-sdk "2.0-beta"
+composer require darkghosthunter/transbank-wrapper "1.0-beta"
 ```
 
-También puedes añadir el SDK como dependencia a tu proyecto:
+También puedes añadir el SDK como dependencia a tu proyecto y luego ejecutar `composer update`.
 
 ```json
     "require": {
@@ -45,31 +45,62 @@ También puedes añadir el SDK como dependencia a tu proyecto:
     }
 ```
 
-### Instalación manual
+### Instalación manual (complicado)
 
-Esto es un poco más jodido. Además de tener instalado PHP en algún lugar accesible, debes descargar el código desde este repositorio descomprimirlo en el directorio que desees, y realizar lo siguiente:
+Además de tener instalado la línea de comandos de PHP, debes descargar el código desde este repositorio, descomprimirlo en el directorio que desees, y realizar lo siguiente:
 
-1 - [Descargar `composer.phar`](https://getcomposer.org/download/) en el directorio donde descomprimiste el SDK.
+1 - [Descargar `composer.phar`](https://getcomposer.org/download/) en el mismo directorio donde descomprimiste el SDK.
 
 2 - Ejecutar en el directorio del SDK:
 
 ```bash
 php composer.phar require --nodev
 ```
+
 3 - Requerir el SDK directamente desde tu aplicación 
 
 ```php
 require_once('/directorio/del/sdk/load.php');
 ```
 
-Si no tienes acceso a la consola de tu servidor, siempre puedes usar tu propio sistema, descargar PHP, usar el ejecutable, comprimir el resultado y descomprimirlo manualmente en tu servidor web. Esto último es lo mejor salvo que teangas tiempo de sobra para subir cientos de archivos por FTP u otro protocolo.
+### Instalación remota (jodido)
+
+Si no tienes acceso a la consola de tu servidor web, siempre puedes usar tu propio sistema: 
+
+* [Descarga PHP](http://php.net/downloads.php)
+
+* [Descarga `composer.phar`](https://getcomposer.org/download) donde descargaste este paquete.
+
+* Abre una ventana de consola (powershell en Windows, Terminal en MacOS, *sh en Linux) y tipea:
+
+```bash
+directorio/de/php/php.exe composer.phar require --no-dev
+```
+
+> (Si en MacOS y Unix, omite `.exe`)
+
+* Comprime el directorio del paquete.
+
+* Sube el directorio del paquete a tu servidor
+
+* Descomprime el diretorio en tu servidor.
+
+* Continúa con el [tercer paso de la instalación manual](#instalación-manual-complicado).
 
 ## Documentación 
 
-La documentación de este Wrapper está en la Wiki.
+La documentación de este Wrapper está [en la Wiki](/wiki).
 
-La información sobre las variables de cada transacción está en https://www.transbankdevelopers.cl.
+La información sobre las variables de cada transacción está en [Transbank Developers](https://www.transbankdevelopers.cl).
 
 ## Información para contribuir y desarrollar este Wrapper
 
 Tirar la talla en buen chileno en los PR. Si usas otro idioma, serás víctima de bullying.
+
+# Licencia
+
+Este paquete está licenciado bajo la [Licencia MIT](LICENCIA) [(En inglés)](LICENSE).
+
+`Redcompra`, `Webpay`, `Onepay`, `Patpass` y `tbk` son marcas registradas de [Transbank S.A.](https://www.transbank.cl/)
+
+Este paquete no está aprobado, apoyado ni avalado por Transbank S.A. ni ninguna persona natural o jurídica vinculada directa o indirectamente a Transbank S.A.
