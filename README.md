@@ -6,6 +6,8 @@ Wrapper no-oficial de [Transbank SDK](https://github.com/TransbankDevelopers/tra
 
 > Esta paquete es un trabajo en progreso ¡No lo uses en producción hasta que no esté listo! 
 
+> Esta versión ocupa el namespace `Transbank/Wrapper`. En la versión final va a cambiar.
+
 ## Requisitos:
 
 - PHP 7.1.3 o mayor
@@ -27,7 +29,7 @@ Instalarlas dependerá de tu sistema: en algunos casos sólo necesitarás habili
 
 # Instalación
 
-Hay dos formas para instalar el paquete: usando Composer o descargando el paquete de forma manual.
+Hay tres formas para instalar el paquete: usando Composer, sin composer, y todo de forma manual.
 
 ### Instalar con Composer (fácil)
 
@@ -45,7 +47,7 @@ También puedes añadir el SDK como dependencia a tu proyecto y luego ejecutar `
     }
 ```
 
-### Instalación manual (complicado)
+### Instalación sin Composer (complicado)
 
 Además de tener instalado la línea de comandos de PHP, debes descargar el código desde este repositorio, descomprimirlo en el directorio que desees, y realizar lo siguiente:
 
@@ -54,7 +56,7 @@ Además de tener instalado la línea de comandos de PHP, debes descargar el cód
 2 - Ejecutar en el directorio del SDK:
 
 ```bash
-php composer.phar require --nodev
+php composer.phar install --nodev
 ```
 
 3 - Requerir el SDK directamente desde tu aplicación 
@@ -74,22 +76,22 @@ Si no tienes acceso a la consola de tu servidor web, siempre puedes usar tu prop
 * Abre una ventana de consola (powershell en Windows, Terminal en MacOS, *sh en Linux) y tipea:
 
 ```bash
-directorio/de/php/php.exe composer.phar require --no-dev
+directorio/de/php/php.exe composer.phar install --no-dev
 ```
 
 > (Si en MacOS y Unix, omite `.exe`)
 
 * Comprime el directorio del paquete.
 
-* Sube el directorio del paquete a tu servidor
+* Sube el directorio del paquete a tu servidor y descomprímlo allí.
 
-* Descomprime el diretorio en tu servidor.
+> Si cada archivo uno por uno, puedes demorarte horas.
 
 * Continúa con el [tercer paso de la instalación manual](#instalación-manual-complicado).
 
 ## Documentación 
 
-La documentación de este Wrapper está [en la Wiki](/wiki).
+La documentación de este Wrapper está [en la Wiki](https://github.com/DarkGhostHunter/transbank-wrapper/wiki).
 
 La información sobre las variables de cada transacción está en [Transbank Developers](https://www.transbankdevelopers.cl).
 
