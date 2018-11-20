@@ -125,8 +125,6 @@ class OnepayTransactionsTest extends TestCase
 
         $results = $this->onepayIntegration->createCart($this->mockCart);
 
-        var_dump($results);
-
         $this->assertInstanceOf(OnepayResult::class, $results);
         $this->assertEquals('ok', $results->get('test'));
 

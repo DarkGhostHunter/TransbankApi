@@ -7,4 +7,3 @@ if (file_exists($autoloader) && is_readable($autoloader)) {
 } else {
     throw new Exception('Composer has not been installed, or autoloader is not present.');
 }
-
