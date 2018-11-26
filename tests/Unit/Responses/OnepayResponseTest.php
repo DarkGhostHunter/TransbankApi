@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Unit\Results;
+namespace Tests\Unit\Responses;
 
 use PHPUnit\Framework\TestCase;
 
-class OnepayResultTest extends TestCase
+class OnepayResponseTest extends TestCase
 {
     public function testTransformToJson()
     {

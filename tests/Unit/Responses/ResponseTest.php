@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Unit\Results;
+namespace Tests\Unit\Responses;
 
 use PHPUnit\Framework\TestCase;
 
-class ResultTest extends TestCase
+class ResponseTest extends TestCase
 {
 
     public function testTransactionDoesNotPerformsGetResultWhenAlreadyResulted()

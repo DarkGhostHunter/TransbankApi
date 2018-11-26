@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Unit\Results;
+namespace Tests\Unit\Responses;
 
 use PHPUnit\Framework\TestCase;
 
-class WebpayPlusResponseTest extends TestCase
+class WebpayOneclickResponseTest extends TestCase
 {
 
     public function testReturnsFullUrlForRedirect()

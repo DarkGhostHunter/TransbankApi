@@ -25,7 +25,7 @@ class WebpayOneclickResponse extends AbstractResponse
     public function setStatus()
     {
         switch (true) {
-            case count($this->attributes) === 1 && $this->attributes[0] === true:
+            case count($this->attributes) === 1 && ($this->attributes[0] ?? false) === true:
                 $this->isSuccess = true;
                 $this->attributes = [];
                 break;

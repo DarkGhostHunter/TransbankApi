@@ -164,8 +164,6 @@ class Transbank
      */
     public function setCredentials(string $service, array $credentials)
     {
-        var_dump($credentials);
-
         if (in_array($service, self::AVAILABLE_SERVICES)) {
             foreach ($credentials as $credential) {
                 if (!is_string($credential)) {

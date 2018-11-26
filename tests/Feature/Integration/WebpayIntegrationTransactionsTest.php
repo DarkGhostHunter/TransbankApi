@@ -3,11 +3,12 @@
 namespace Tests\Feature\Integration;
 
 use PHPUnit\Framework\TestCase;
-use DarkGhostHunter\TransbankApi\Exceptions\Webpay\InvalidWebpayTransactionException;
-use DarkGhostHunter\TransbankApi\Responses\WebpayMallResult;
-use DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse;
 use DarkGhostHunter\TransbankApi\Transbank;
 use DarkGhostHunter\TransbankApi\Webpay;
+use DarkGhostHunter\TransbankApi\Responses\WebpayOneclickResponse;
+use DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse;
+use DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse;
+use DarkGhostHunter\TransbankApi\Exceptions\Webpay\InvalidWebpayTransactionException;
 
 class WebpayIntegrationTransactionsTest extends TestCase
 {
@@ -83,7 +84,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
             ]
         ]);
 
-        $this->assertInstanceOf(WebpayMallResult::class, $normal);
+        $this->assertInstanceOf(WebpayPlusMallResponse::class, $normal);
         $this->assertTrue(is_string($normal->token));
         $this->assertTrue(is_string(filter_var($normal->url, FILTER_VALIDATE_URL)));
     }
@@ -150,19 +151,19 @@ class WebpayIntegrationTransactionsTest extends TestCase
             'responseUrl' => 'https://app.com/oneclick/result'
         ]);
 
-        $this->assertInstanceOf(WebpayPlusResponse::class, $registration);
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $registration);
         $this->assertTrue(is_string($registration->token));
-        $this->assertTrue(is_string(filter_var($registration->urlWebpay, FILTER_VALIDATE_URL)));
+        $this->assertTrue(is_string(filter_var($registration->url, FILTER_VALIDATE_URL)));
     }
 
     public function testCommitsInvalidOneclickUnregistration()
     {
-        $this->expectException(InvalidWebpayTransactionException::class);
-
         $unregistration  = $this->webpay->createUnregistration([
             'username' => 'appusername',
             'tbkUser' => 'tbkUser',
         ]);
+
+        $this->assertFalse($unregistration->isSuccess());
     }
 
     public function testCommitsInvalidCharge()
@@ -180,11 +181,11 @@ class WebpayIntegrationTransactionsTest extends TestCase
 
     public function testCommitsInvalidOneclickReverseCharge()
     {
-        $this->expectException(InvalidWebpayTransactionException::class);
-
         $reverse = $this->webpay->createReverseCharge([
             'buyOrder' => 20202020120001001
         ]);
+
+        $this->assertFalse($reverse->isSuccess());
     }
 
 

@@ -34,7 +34,7 @@ class TransactionTest extends TestCase
     {
         $this->mockAttributes['object'] = new \stdClass();
 
-        $this->transaction = new AbstractServiceTransaction();
+        $this->transaction = new class extends AbstractServiceTransaction {};
 
         $transbank = \Mockery::mock(Transbank::class);
         $transbank->expects('getDefaults')
@@ -94,7 +94,7 @@ class TransactionTest extends TestCase
 
     public function testInstantiatesWithAttributes()
     {
-        $this->transaction = new AbstractServiceTransaction($this->mockAttributes);
+        $this->transaction = new $this->transaction($this->mockAttributes);
 
         $this->assertEquals($this->mockAttributes, $this->transaction->getAttributes(),
             '', 0.0, 10, true);
@@ -102,8 +102,8 @@ class TransactionTest extends TestCase
 
     public function testMergesDefaults()
     {
-        $this->transaction = new AbstractServiceTransaction($this->mockAttributes);
 
+        $this->transaction->setAttributes($this->mockAttributes);
         $this->transaction->setDefaults($defaults = [
             'attribute' => 'default',
             'newAttribute' => true,
@@ -116,7 +116,7 @@ class TransactionTest extends TestCase
 
     public function testBecomesArray()
     {
-        $this->transaction = new AbstractServiceTransaction($this->mockAttributes);
+        $this->transaction = new $this->transaction($this->mockAttributes);
 
         $this->assertTrue(is_array($this->transaction->toArray()));
         $this->assertTrue(is_array((array)$this->transaction));
@@ -124,7 +124,7 @@ class TransactionTest extends TestCase
 
     public function testBecomesJson()
     {
-        $this->transaction = new AbstractServiceTransaction($this->mockAttributes);
+        $this->transaction = new $this->transaction($this->mockAttributes);
 
         $this->assertTrue(is_string($this->transaction->toJson()));
         $this->assertJson($this->transaction->toJson());
@@ -132,7 +132,7 @@ class TransactionTest extends TestCase
 
     public function testBecomesString()
     {
-        $this->transaction = new AbstractServiceTransaction($this->mockAttributes);
+        $this->transaction = new $this->transaction($this->mockAttributes);
 
         $this->assertTrue(is_string((string)$this->transaction));
     }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Tests\Unit\Factories;
+namespace Tests\Unit\TransactionFactories;
 
 use DarkGhostHunter\TransbankApi\Responses\OnepayResponse;
 use PHPUnit\Framework\TestCase;

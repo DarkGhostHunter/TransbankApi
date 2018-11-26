@@ -1,13 +1,14 @@
 <?php
 
 
-namespace Tests\Unit\Factories;
+namespace Tests\Unit\TransactionFactories;
 
 use PHPUnit\Framework\TestCase;
+use DarkGhostHunter\TransbankApi\Responses\WebpayOneclickResponse;
+use DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse;
+use DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse;
 use DarkGhostHunter\TransbankApi\Adapters\WebpaySoapAdapter;
 use DarkGhostHunter\TransbankApi\Contracts\AdapterInterface;
-use DarkGhostHunter\TransbankApi\Responses\WebpayMallResult;
-use DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse;
 use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
 use DarkGhostHunter\TransbankApi\Transactions\WebpayMallTransaction;
 use DarkGhostHunter\TransbankApi\Transbank;
@@ -81,9 +82,7 @@ class WebpayTransactionsTest extends TestCase
             ->with(\Mockery::type(WebpayTransaction::class))
             ->andReturn([
                 'type' => 'normal',
-                'body' => [
-                    'test' => 'ok'
-                ]
+                'test' => 'ok'
             ]);
     }
 
@@ -93,9 +92,7 @@ class WebpayTransactionsTest extends TestCase
             ->with(\Mockery::type(WebpayMallTransaction::class))
             ->andReturn([
                 'type' => 'mall',
-                'body' => [
-                    'test' => 'ok'
-                ]
+                'test' => 'ok'
             ]);
     }
 
@@ -131,6 +128,8 @@ class WebpayTransactionsTest extends TestCase
 
         $results = $this->webpayIntegration->createNormal($this->mockTransactionAttributes);
 
+        var_dump($results);
+
         $this->assertInstanceOf(WebpayPlusResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
 
@@ -162,12 +161,12 @@ class WebpayTransactionsTest extends TestCase
 
         $results = $this->webpayIntegration->createMallNormal($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayMallResult::class, $results);
+        $this->assertInstanceOf(WebpayPlusMallResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
 
         $results = $this->webpayProduction->createMallNormal($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayMallResult::class, $results);
+        $this->assertInstanceOf(WebpayPlusMallResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
     }
 
@@ -222,12 +221,12 @@ class WebpayTransactionsTest extends TestCase
 
         $results = $this->webpayIntegration->createRegistration($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayPlusResponse::class, $results);
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
 
         $results = $this->webpayProduction->createRegistration($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayPlusResponse::class, $results);
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
     }
 
@@ -252,12 +251,12 @@ class WebpayTransactionsTest extends TestCase
 
         $results = $this->webpayIntegration->createUnregistration($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayPlusResponse::class, $results);
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
 
         $results = $this->webpayProduction->createUnregistration($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayPlusResponse::class, $results);
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
     }
 
@@ -282,12 +281,12 @@ class WebpayTransactionsTest extends TestCase
 
         $results = $this->webpayIntegration->createCharge($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayPlusResponse::class, $results);
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
 
         $results = $this->webpayProduction->createCharge($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayPlusResponse::class, $results);
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
     }
 
@@ -312,12 +311,12 @@ class WebpayTransactionsTest extends TestCase
 
         $results = $this->webpayIntegration->createReverseCharge($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayPlusResponse::class, $results);
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
 
         $results = $this->webpayProduction->createReverseCharge($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayPlusResponse::class, $results);
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
     }
 
@@ -343,12 +342,12 @@ class WebpayTransactionsTest extends TestCase
 
         $results = $this->webpayIntegration->createMallCharge($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayMallResult::class, $results);
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
 
         $results = $this->webpayProduction->createMallCharge($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayMallResult::class, $results);
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
     }
 
@@ -374,12 +373,12 @@ class WebpayTransactionsTest extends TestCase
 
         $results = $this->webpayIntegration->createMallReverseCharge($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayMallResult::class, $results);
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
 
         $results = $this->webpayProduction->createMallReverseCharge($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayMallResult::class, $results);
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
     }
 
@@ -404,12 +403,12 @@ class WebpayTransactionsTest extends TestCase
 
         $results = $this->webpayIntegration->createMallNullify($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayPlusResponse::class, $results);
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
 
         $results = $this->webpayProduction->createMallNullify($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayPlusResponse::class, $results);
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
     }
 
@@ -434,12 +433,12 @@ class WebpayTransactionsTest extends TestCase
 
         $results = $this->webpayIntegration->createMallReverseNullify($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayPlusResponse::class, $results);
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
 
         $results = $this->webpayProduction->createMallReverseNullify($this->mockTransactionAttributes);
 
-        $this->assertInstanceOf(WebpayPlusResponse::class, $results);
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
     }
 
