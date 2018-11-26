@@ -28,30 +28,16 @@ interface AdapterInterface
      * @param array $options
      * @return mixed
      */
-    public function commit(TransactionInterface $transaction, array $options = []);
+    public function commit(TransactionInterface $transaction, $options = null);
 
     /**
-     * Retrieves and Acknowledges a transaction into the Transbank SDK
+     * Retrieves and Confirms a transaction into the Transbank SDK
      *
      * @param $transaction
      * @param array $options
      * @return mixed
      */
-    public function confirm($transaction, array $options = []);
-
-    /**
-     * Return the Error Code from the Response
-     *
-     * @return mixed
-     */
-    public function getErrorCode() : string;
-
-    /**
-     * Translates the Error Code to a humanized string
-     *
-     * @return string
-     */
-    public function getErrorForHumans() : string;
+    public function get($transaction, $options = null);
 
     /**
      * Returns if the environment is Production

@@ -8,10 +8,10 @@ use Transbank\Wrapper\Helpers\Helpers;
  * Class WebpayTransaction
  * @package Transbank\Wrapper\Transactions
  *
- * @method \Transbank\Wrapper\Results\WebpayResult getResult()
- * @method \Transbank\Wrapper\Results\WebpayResult forceGetResult()
+ * @method \Transbank\Wrapper\Results\WebpayResult commit()
+ * @method \Transbank\Wrapper\Results\WebpayResult forceCommit()
  */
-class WebpayTransaction extends ServiceTransaction
+class WebpayTransaction extends AbstractServiceTransaction
 {
     /**
      * Set default attributes for the Item, depending on the Transaction type
@@ -69,9 +69,9 @@ class WebpayTransaction extends ServiceTransaction
     protected function performPreLogic()
     {
         // Create the BuyOder with the timestamp only when this
-        // transaction is a Webpay Oneclick Charge.
+        // transaction is a WebpaySoap Oneclick Charge.
         if ($this->type === 'oneclick.charge' && strlen((string)$this->buyOrder) < 14) {
-            $this->buyOrder = (new \DateTime)->format('YmdHis') . substr($this->buyOrder, -3);
+            $this->buyOrder = date('YmdHis') . (substr((string)$this->buyOrder, -3) ?? '000');
         }
     }
 }

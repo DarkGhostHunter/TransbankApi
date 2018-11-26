@@ -5,6 +5,7 @@ namespace Tests\Feature\Integration;
 use PHPUnit\Framework\TestCase;
 use Transbank\Wrapper\Exceptions\Onepay\CartEmptyException;
 use Transbank\Wrapper\Exceptions\Onepay\CartNegativeAmountException;
+use Transbank\Wrapper\Exceptions\Onepay\OnepaySdkException;
 use Transbank\Wrapper\Onepay;
 use Transbank\Wrapper\TransbankConfig;
 
@@ -31,10 +32,10 @@ class OnepayIntegrationTransactionsTest extends TestCase
         parent::setUp();
     }
 
-
     public function testCreatesCartInTransbank()
     {
         $cart = $this->onepay->createCart([
+            'channel' => 'APP',
             'items' => [
                 'description' => 'Zapatos',
                 'quantity' =>  1,
@@ -50,7 +51,23 @@ class OnepayIntegrationTransactionsTest extends TestCase
         $this->assertNotEmpty($cart->signature);
         $this->assertEquals('OK', $cart->responseCode);
         $this->assertEquals('OK', $cart->description);
-        $this->assertNotEmpty('OK', $cart->amount);
+        $this->assertNotEmpty($cart->amount);
+    }
+
+    public function testExceptionOnChannelAppWithoutScheme()
+    {
+
+        $this->expectException(OnepaySdkException::class);
+
+        $cart = $this->onepay->createCart([
+            'channel' => 'app',
+            'appScheme' => null,
+            'items' => [
+                'description' => 'Zapatos',
+                'quantity' =>  1,
+                'amount' => 15000
+            ]
+        ]);
     }
 
     public function testExcCreatedCartHidesSignatureOnSerialization()

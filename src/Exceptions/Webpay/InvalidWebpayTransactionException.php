@@ -2,59 +2,19 @@
 
 namespace Transbank\Wrapper\Exceptions\Webpay;
 
+use Throwable;
 use Transbank\Wrapper\Contracts\TransactionInterface;
 use Transbank\Wrapper\Exceptions\TransbankException;
 
 class InvalidWebpayTransactionException extends \Exception implements TransbankException, WebpayException
 {
 
-    /** @var TransactionInterface */
-    private $transaction;
-
-    /**
-     * InvalidWebpayTransactionException constructor.
-     *
-     * @param string $message
-     * @param TransactionInterface $transaction
-     */
-    public function __construct(?string $message, TransactionInterface $transaction)
+    public function __construct(TransactionInterface $transaction, Throwable $previous = null)
     {
-        // Get the *real* error message
-        $string = $this->cutString($message ?? 'Transaction was not performed on Transbank');
+        $message = "This transaction is malformed or the credentials are not valid: \n $transaction";
 
-        $this->message = $string['error'];
-        $this->transaction = $transaction;
-
-        $this->message = "$this->message\n";
-        $this->message .= "Transaction details:\n";
-        $this->message .= 'Type ' . $this->transaction->getType() . "\n";
-        $this->message .= $this->transaction;
-
-        $this->code = $string['code'];
+        parent::__construct($message, 500, $previous);
     }
 
-    /**
-     * Clean the error
-     *
-     * @param string $string
-     * @return array
-     */
-    protected function cutString(string $string)
-    {
-        $start = strpos($string, '(');
-        $end = strpos($string, ')');
 
-        if ($string && $end) {
-            return [
-                'code' => substr($string, $start, $end) ?? '',
-                'error' => trim(substr($string, 0, $start)) ?? ''
-            ];
-        }
-
-        return [
-            'code' => 500,
-            'error' => $string
-        ];
-
-    }
 }

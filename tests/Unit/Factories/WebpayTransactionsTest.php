@@ -4,7 +4,7 @@
 namespace Tests\Unit\Factories;
 
 use PHPUnit\Framework\TestCase;
-use Transbank\Wrapper\Adapters\WebpayAdapter;
+use Transbank\Wrapper\Adapters\WebpaySoapAdapter;
 use Transbank\Wrapper\Contracts\AdapterInterface;
 use Transbank\Wrapper\Results\WebpayMallResult;
 use Transbank\Wrapper\Results\WebpayResult;
@@ -21,7 +21,7 @@ class WebpayTransactionsTest extends TestCase
     /** @var Webpay */
     protected $webpayProduction;
 
-    /** @var \Mockery\MockInterface|WebpayAdapter */
+    /** @var \Mockery\MockInterface|WebpaySoapAdapter */
     protected $mockAdapter;
 
     protected $mockCredentials = [
@@ -48,7 +48,7 @@ class WebpayTransactionsTest extends TestCase
 
     protected function setUp()
     {
-        $this->mockAdapter = \Mockery::instanceMock(WebpayAdapter::class, AdapterInterface::class);
+        $this->mockAdapter = \Mockery::instanceMock(WebpaySoapAdapter::class, AdapterInterface::class);
     }
 
     protected function setWebpay()

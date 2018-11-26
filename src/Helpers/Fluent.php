@@ -35,7 +35,7 @@ class Fluent implements ArrayAccess, JsonSerializable
     {
         foreach ($attributes as $key => $value) {
             // If the attribute has a setter, use that
-            if (method_exists($this, $method = 'set'. lcfirst($key))) {
+            if (method_exists($this, $method = 'set'. lcfirst($key) . 'Attribute')) {
                 $this->$method($value);
             } else {
                 $this->attributes[$key] = $value;

@@ -8,8 +8,6 @@ use Transbank\Wrapper\Exceptions\Onepay\CartNegativeAmountException;
 class OnepayTransactionTest extends TestCase
 {
 
-
-
     public function testResultWithCartNegativeAmountException()
     {
         $this->expectException(CartNegativeAmountException::class);

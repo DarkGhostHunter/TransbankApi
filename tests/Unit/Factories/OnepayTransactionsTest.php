@@ -5,7 +5,7 @@ namespace Tests\Unit\Factories;
 
 use PHPUnit\Framework\TestCase;
 use Transbank\Wrapper\Adapters\OnepayAdapter;
-use Transbank\Wrapper\Adapters\WebpayAdapter;
+use Transbank\Wrapper\Adapters\WebpaySoapAdapter;
 use Transbank\Wrapper\Contracts\AdapterInterface;
 use Transbank\Wrapper\Onepay;
 use Transbank\Wrapper\Results\OnepayResult;
@@ -21,7 +21,7 @@ class OnepayTransactionsTest extends TestCase
     /** @var Onepay */
     protected $onepayProduction;
 
-    /** @var \Mockery\MockInterface|WebpayAdapter */
+    /** @var \Mockery\MockInterface|WebpaySoapAdapter */
     protected $mockAdapter;
 
     protected $mockCredentials = [

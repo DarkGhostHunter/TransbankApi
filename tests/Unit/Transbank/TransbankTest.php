@@ -4,6 +4,7 @@ namespace Tests\Unit\Transbank;
 
 use PHPUnit\Framework\TestCase;
 use Transbank\Wrapper\Exceptions\Credentials\CredentialInvalidException;
+use Transbank\Wrapper\Exceptions\Transbank\InvalidServiceException;
 use Transbank\Wrapper\TransbankConfig;
 
 class TransbankTest extends TestCase
@@ -168,14 +169,28 @@ class TransbankTest extends TestCase
 
     public function testCredentialInvalidException()
     {
-        $this->markTestSkipped();
-
         $this->expectException(CredentialInvalidException::class);
+
+        $transbank = TransbankConfig::environment('production');
+
+        $transbank->setCredentials('webpay', [
+            'asdads' => [],
+            'asdasd' => new \stdClass(),
+            'asdads' => 654654654.5454
+        ]);
     }
 
     public function testSettingCredentialsForInvalidServiceReturnsException()
     {
-        $this->markTestSkipped();
+        $this->expectException(InvalidServiceException::class);
+
+        $transbank = TransbankConfig::environment('production');
+
+        $transbank->setCredentials('asdasdasd', [
+            'asdads' => [],
+            'asdasd' => new \stdClass(),
+            'asdads' => 654654654.5454
+        ]);
     }
 
 

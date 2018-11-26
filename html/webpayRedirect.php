@@ -5,7 +5,7 @@
     <title>Conectando con Webpay...</title>
 </head>
 <body>
-    <form id="redirect" action="<?php echo urlencode($result->url) ?>" method="POST">
+    <form id="redirect" action="<?php echo $result->url ?>" method="POST">
         <input type="hidden" name="<?php echo $result->getTokenName() ?>" value="<?php echo htmlspecialchars($result->token, ENT_HTML5) ?>">
     </form>
     <script>

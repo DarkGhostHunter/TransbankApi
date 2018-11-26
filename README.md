@@ -1,4 +1,4 @@
-# Transbank SDK Wrapper - v0.5
+# Transbank SDK Wrapper - @dev
 
 Wrapper no-oficial de [Transbank SDK](https://github.com/TransbankDevelopers/transbank-sdk-php) para mejorar la experiencia de uso.
 
@@ -29,7 +29,7 @@ Instalarlas dependerá de tu sistema: en algunos casos sólo necesitarás habili
 
 # Instalación
 
-Hay tres formas para instalar el paquete: usando Composer, sin composer, y todo de forma manual.
+Hay tres formas para instalar el paquete: usando Composer, sin composer, y todo de forma (muy) manual.
 
 ### Instalar con Composer (fácil)
 
@@ -43,7 +43,7 @@ También puedes añadir el SDK como dependencia a tu proyecto y luego ejecutar `
 
 ```json
     "require": {
-        "darkghostgunter/transbank-wrapper": "0.5"
+        "darkghostgunter/transbank-wrapper": "@dev"
     }
 ```
 

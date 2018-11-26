@@ -3,17 +3,19 @@
 namespace Transbank\Wrapper;
 
 use Transbank\Wrapper\Adapters\OnepayAdapter;
-use Transbank\Wrapper\Results\ServiceResult;
-use Transbank\Wrapper\Results\OnepayResult;
+use Transbank\Wrapper\ResponseFactories\OnepayResponseFactory;
+use Transbank\Wrapper\Responses\OnepayResponse;
 use Transbank\Wrapper\TransactionFactories\OnepayTransactionFactory;
-use Transbank\Wrapper\Transactions\ServiceTransaction;
 
 /**
  * Class Onepay
  * @package Transbank\Wrapper
  *
- * @method Transactions\OnepayTransaction|Transactions\OnepayTransaction makeCart(array $items = [])
- * @method Results\OnepayResult createCart(array $items = [])
+ * @method Transactions\OnepayTransaction   makeCart(array $attributes = [])
+ * @method Responses\OnepayResponse         createCart(array $attributes = [])
+ * @method Transactions\OnepayTransaction   makeNullify(array $attributes = [])
+ * @method Responses\OnepayResponse         createNullify(array $attributes = [])
+ *
  */
 class Onepay extends AbstractService
 {
@@ -31,24 +33,34 @@ class Onepay extends AbstractService
      */
     protected const PRODUCTION_KEYS = 'production/onepay-keys.php';
 
-
-    /**
-     * Class in charge of dispatching a Transaction
-     *
-     * @var OnepayAdapter
-     */
-    protected $adapter;
-
     /**
      * Transaction Factory to use for forwarding calls
      *
-     * @example \Transbank\Wrapper\Webpay\TransactionFactory::class
+     * @example \Transbank\Wrapper\WebpaySoap\AbstractTransactionFactory::class
      * @var string
      */
-    protected $factory;
+    protected $transactionFactory;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Booting
+    |--------------------------------------------------------------------------
+    */
 
     /**
-     * Boot any logic needed for the Service, like the Adapter and Factory;
+     * Boot any logic needed for the Service, like the Adapter and Factories;
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->bootAdapter();
+        $this->bootTransactionFactory();
+        $this->bootResponseFactory();
+    }
+
+    /**
+     * Instantiates (and/or boots) the Adapter for the Service
      *
      * @return void
      */
@@ -62,54 +74,89 @@ class Onepay extends AbstractService
      *
      * @return void
      */
-    public function bootFactory()
+    public function bootTransactionFactory()
     {
-        $this->factory = new OnepayTransactionFactory($this, $this->defaults);
+        $this->transactionFactory = new OnepayTransactionFactory($this, $this->defaults);
+    }
+
+    /**
+     * Instantiates (and/or boots) the Result Factory for the Service
+     *
+     * @return void
+     */
+    public function bootResponseFactory()
+    {
+        $this->resultFactory = new OnepayResponseFactory($this);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Credentials
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Get the Service Credentials for the Production Environment
+     *
+     * @return array
+     */
+    protected function getProductionCredentials()
+    {
+        return include __DIR__ . self::CREDENTIALS_DIR . self::PRODUCTION_KEYS;
     }
 
     /**
      * Get the Service Credentials for the Integration Environment
      *
-     * @param ServiceTransaction $transaction
+     * @param string $type
      * @return array
      */
-    protected function getIntegrationCredentials(ServiceTransaction $transaction)
+    protected function getIntegrationCredentials(string $type = null)
     {
-        /** @noinspection PhpIncludeInspection */
         return include __DIR__ . self::CREDENTIALS_DIR . self::INTEGRATION_KEYS;
     }
 
-    /**
-     * Get the Service Credentials for the Production Environment
-     *
-     * @param ServiceTransaction $transaction
-     * @return array
-     */
-    protected function getProductionCredentials(ServiceTransaction $transaction)
-    {
-        /** @noinspection PhpIncludeInspection */
-        return include __DIR__ . self::CREDENTIALS_DIR . self::PRODUCTION_KEYS;
-    }
-
-    /**
-     * Transform the adapter raw Result to a Transaction Result
-     *
-     * @param $result
-     * @return ServiceResult
-     */
-    protected function parseToTransactionResult($result)
-    {
-        return new OnepayResult($result);
-    }
+    /*
+    |--------------------------------------------------------------------------
+    | Operations
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Gets and Acknowledges a Transaction in Transbank
      *
      * @param $transaction
-     * @return ServiceResult
+     * @param $options
+     * @return Contracts\ResponseInterface
      */
-    public function confirmTransaction($transaction)
+    public function get($transaction, $options = null)
     {
-        // TODO: Implement confirmTransaction() method.
+        return parent::get([$transaction['occ'], $transaction['externalUniqueNumber']], 'onepay.cart');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Parsers
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Transform the adapter raw answer of a transaction commitment to a
+     * more friendly Onepay Response
+     *
+     * @param array $result
+     * @param string $type
+     * @return Contracts\ResponseInterface
+     */
+    protected function parseResponse(array $result, string $type)
+    {
+        $response = new OnepayResponse($result);
+
+        $response->setType($type);
+
+        // Set the status of the Response
+        $response->setStatus();
+
+        return $response;
     }
 }

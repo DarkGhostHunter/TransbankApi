@@ -4,7 +4,6 @@ namespace Tests\Feature\Integration;
 
 use PHPUnit\Framework\TestCase;
 use Transbank\Wrapper\Exceptions\Webpay\InvalidWebpayTransactionException;
-use Transbank\Wrapper\Exceptions\Webpay\ServiceSdkUnavailableException;
 use Transbank\Wrapper\Results\WebpayMallResult;
 use Transbank\Wrapper\Results\WebpayResult;
 use Transbank\Wrapper\TransbankConfig;
@@ -16,7 +15,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
     /** @var Webpay */
     protected $webpay;
 
-    protected function setUp() : void
+    protected function setUp()
     {
         $transbank = TransbankConfig::environment();
 
@@ -36,7 +35,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
     /**
      * @group selenium
      */
-    public function testStartsPlusNormal()
+    public function testCommitsPlusNormal()
     {
         $normal = $this->webpay->createNormal([
             'returnUrl' => 'http://app.com/webpay/return',
@@ -51,7 +50,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
 
     }
 
-    public function testStartsInvalidPlusNormal()
+    public function testSendsInvalidPlusNormal()
     {
         $this->expectException(InvalidWebpayTransactionException::class);
 
@@ -89,7 +88,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
         $this->assertTrue(is_string(filter_var($normal->url, FILTER_VALIDATE_URL)));
     }
 
-    public function testCreatesInvalidPlusMallNormal()
+    public function testCommitsInvalidPlusMallNormal()
     {
         $this->expectException(InvalidWebpayTransactionException::class);
 
@@ -112,7 +111,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
         ]);
     }
 
-    public function testCreatesNotFoundPlusCapture()
+    public function testCommitsNotFoundPlusCapture()
     {
         $this->expectException(InvalidWebpayTransactionException::class);
 
@@ -131,7 +130,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
         ]);
     }
 
-    public function testCreatesInvalidNullify()
+    public function testCommitsInvalidNullify()
     {
         $this->expectException(InvalidWebpayTransactionException::class);
 
@@ -156,7 +155,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
         $this->assertTrue(is_string(filter_var($registration->urlWebpay, FILTER_VALIDATE_URL)));
     }
 
-    public function testCreatesInvalidOneclickUnregistration()
+    public function testCommitsInvalidOneclickUnregistration()
     {
         $this->expectException(InvalidWebpayTransactionException::class);
 
@@ -166,7 +165,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
         ]);
     }
 
-    public function testCreatesInvalidCharge()
+    public function testCommitsInvalidCharge()
     {
         $this->expectException(InvalidWebpayTransactionException::class);
 
@@ -179,65 +178,12 @@ class WebpayIntegrationTransactionsTest extends TestCase
     }
 
 
-    public function testCreatesInvalidOneclickReverseCharge()
+    public function testCommitsInvalidOneclickReverseCharge()
     {
         $this->expectException(InvalidWebpayTransactionException::class);
 
         $reverse = $this->webpay->createReverseCharge([
             'buyOrder' => 20202020120001001
-        ]);
-    }
-
-    public function testServiceSdkUnavailableExceptionOnOneclickMallCharge()
-    {
-        $this->expectException(ServiceSdkUnavailableException::class);
-
-        $charges = $this->webpay->createMallCharge([
-            'buyOrder' => 'master-store-order#65987',
-            'tbkUser' => 'tbkUser',
-            'username' => 'username',
-            'storesInput' => [
-                [
-                    'storeCode' => 597044444402,
-                    'amount' => 4990,
-                    'buyOrder' => '201',
-                    'sessionId' => 'alpha-session-id-1',
-                    'sharesNumber' => 3
-                ],
-            ],
-        ]);
-    }
-
-    public function testServiceSdkUnavailableExceptionOnOneclickMallReverse()
-    {
-        $this->expectException(ServiceSdkUnavailableException::class);
-
-        $reverse = $this->webpay->createMallReverseCharge([
-            'buyOrder' => 'store-order#123',
-        ]);
-    }
-
-    public function testServiceSdkUnavailableExceptionOnOneclickMallNullify()
-    {
-        $this->expectException(ServiceSdkUnavailableException::class);
-
-        $reverse = $this->webpay->createMallNullify([
-            'authorizationCode' => 'makoy123',
-            'commerceId' => 'store-child-1',
-            'buyOrder' => '20181201153000001',
-            'authorizedAmount' => 19990,
-            'nullifyAmount' => 10000
-        ]);
-    }
-
-    public function testServiceSdkUnavailableExceptionOnOneclickMallReverseNullify()
-    {
-        $this->expectException(ServiceSdkUnavailableException::class);
-
-        $reverse = $this->webpay->createMallReverseNullify([
-            'commerceId' => 'store-child-1',
-            'buyOrder' => '20181201153000001',
-            'nullifyAmount' => 10000
         ]);
     }
 

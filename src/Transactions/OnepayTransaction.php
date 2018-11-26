@@ -3,22 +3,15 @@
 namespace Transbank\Wrapper\Transactions;
 
 use Closure;
-use Exception;
 use Transbank\Wrapper\Exceptions\Onepay\CartEmptyException;
 use Transbank\Wrapper\Exceptions\Onepay\CartNegativeAmountException;
-use Transbank\Wrapper\Onepay\Item;
 use Transbank\Wrapper\Transactions\Concerns\HasItems;
 
 /**
  * Class OnepayTransaction
  * @package Transbank\Wrapper\Transactions
- *
- * @method \Transbank\Wrapper\Results\OnepayResult getResult()
- * @method \Transbank\Wrapper\Results\OnepayResult forceGetResult()
- *
- * @property
  */
-class OnepayTransaction extends ServiceTransaction
+class OnepayTransaction extends AbstractServiceTransaction
 {
     use HasItems;
 
@@ -30,17 +23,21 @@ class OnepayTransaction extends ServiceTransaction
     protected $eunGenerator;
 
     /**
-     * Item Class to instantiate
+     * Item defaults
      *
-     * @var string
+     * @var array
      */
-    protected $itemClass = Item::class;
+    protected $itemDefaults = [
+        'quantity' => 1,
+        'amount' => 0,
+        'expire' => 0,
+        'additionalData' => null
+    ];
 
     /**
      * OnepayTransaction constructor.
      *
      * @param array $attributes
-     * @throws Exception
      */
     public function __construct(array $attributes = [])
     {
@@ -56,10 +53,11 @@ class OnepayTransaction extends ServiceTransaction
      * Automatically generates an External Unique Number for the Item
      *
      * @return string
+     * @throws \Exception
      */
     protected function autoGenerateEun()
     {
-        return uniqid('', true);
+        return bin2hex(random_bytes(16));
     }
 
     /**
@@ -81,7 +79,7 @@ class OnepayTransaction extends ServiceTransaction
         // If there is some kind of generator for the unique code, use it,
         // unless its already set by the developer.
         if (!$this->externalUniqueNumber) {
-            if ($this->eunGenerator) {
+            if ($this->eunGenerator instanceof Closure) {
                 $closure = $this->eunGenerator;
                 $this->externalUniqueNumber = $closure($this);
             } else {
@@ -101,15 +99,16 @@ class OnepayTransaction extends ServiceTransaction
      */
     protected function performPreLogic()
     {
-        // Throw an Exception if the OnepayTransaction is being set with no amount
-        if (empty($this->items)) {
-            throw new CartEmptyException($this);
-        }
+        if ($this->getType() === 'onepay.cart') {
+            // Throw an Exception if the OnepayTransaction is being set with no amount
+            if (empty($this->items)) {
+                throw new CartEmptyException($this);
+            }
 
-        if (($this->total = $this->getTotal()) < 1) {
-            throw new CartNegativeAmountException($this);
+            if (($this->total = $this->getTotal()) < 1) {
+                throw new CartNegativeAmountException($this);
+            }
         }
-
     }
 
     /**
@@ -125,10 +124,10 @@ class OnepayTransaction extends ServiceTransaction
         }
 
         if (is_array($item) && $item['quantity'] > 0) {
-            return new $this->itemClass($item);
+            return new Item(array_merge($this->itemDefaults,$item));
         }
 
-        if ($item instanceof $this->itemClass && $item->quantity > 0) {
+        if ($item instanceof Item && $item->quantity > 0) {
             return $item;
         }
 
@@ -171,12 +170,17 @@ class OnepayTransaction extends ServiceTransaction
      */
     public function toArray()
     {
-        return array_merge(
-            array_merge(
-                $this->attributes,
-                ['total' => $this->getTotal()]
-            ),
-            ['items' => $this->items]
-        );
+        $attributes = null;
+        if ($this->items) {
+            $attributes = array_merge(
+                array_merge(
+                    $this->attributes,
+                    ['total' => $this->getTotal()]
+                ),
+                ['items' => $this->items]
+            );
+        }
+
+        return $attributes ?? $this->attributes;
     }
 }

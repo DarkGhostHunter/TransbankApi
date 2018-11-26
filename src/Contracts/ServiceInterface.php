@@ -2,8 +2,7 @@
 
 namespace Transbank\Wrapper\Contracts;
 
-use Transbank\Wrapper\Results\ServiceResult;
-use Transbank\Wrapper\Transactions\ServiceTransaction;
+use Transbank\Wrapper\Responses\AbstractResponse;
 use Transbank\Wrapper\TransbankConfig;
 
 /**
@@ -52,20 +51,21 @@ interface ServiceInterface
     public function setAdapter(AdapterInterface $adapter);
 
     /**
-     * Performs a new Transaction to Transbank Services
+     * Performs a new Transaction to Transbank Services and returns its Result
      *
      * @param TransactionInterface $transaction
-     * @return ServiceResult
+     * @return AbstractResponse
      */
-    public function commitTransaction(TransactionInterface $transaction);
+    public function commit(TransactionInterface $transaction);
 
     /**
      * Gets and Acknowledges a Transaction in Transbank
      *
      * @param $transaction
-     * @return ServiceResult
+     * @param $options
+     * @return AbstractResponse
      */
-    public function confirmTransaction($transaction);
+    public function get($transaction, $options = null);
 
     /**
      * Returns a new service instance using the Transbank Configuration

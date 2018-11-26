@@ -3,6 +3,7 @@
 namespace Transbank\Wrapper\Transactions\Concerns;
 
 use Transbank\Wrapper\Helpers\Helpers;
+use Transbank\Wrapper\Transactions\Item;
 
 trait HasItems
 {
@@ -38,18 +39,17 @@ trait HasItems
      */
     protected function parseItem($item)
     {
-        if(is_string($item) && $array = json_decode($item, true)) {
+        // First, let's try to decode this Item
+        if (is_string($item) && $array = json_decode($item, true)) {
             $item = $array;
         }
 
+        // If it was decoded, then return the Item
         if (is_array($item)) {
-            return new $this->itemClass($item);
+            return new Item(array_merge($item, $this->itemDefaults ?? []));
         }
 
-        if ($item instanceof $this->itemClass) {
-            return $item;
-        }
-
+        // We did nothing, so we return nothing
         return null;
     }
 

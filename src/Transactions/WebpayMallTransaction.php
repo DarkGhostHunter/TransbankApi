@@ -2,27 +2,27 @@
 
 namespace Transbank\Wrapper\Transactions;
 
-use Exception;
 use Transbank\Wrapper\Transactions\Concerns\HasItems;
-use Transbank\Wrapper\Webpay\MallItem;
 
 /**
  * Class WebpayMallTransaction
  * @package Transbank\Wrapper\Transactions
  *
- * @method \Transbank\Wrapper\Results\WebpayMallResult getResult()
- * @method \Transbank\Wrapper\Results\WebpayMallResult forceGetResult()
+ * @method \Transbank\Wrapper\Results\WebpayMallResult commit()
+ * @method \Transbank\Wrapper\Results\WebpayMallResult forceCommit()
  */
 class WebpayMallTransaction extends WebpayTransaction
 {
     use HasItems;
 
     /**
-     * Item Class to instantiate
+     * Item defaults
      *
      * @var string
      */
-    protected $itemClass = MallItem::class;
+    protected $itemDefaults = [
+        'sessionId' => null,
+    ];
 
     /**
      * OnepayTransaction constructor.
@@ -40,7 +40,7 @@ class WebpayMallTransaction extends WebpayTransaction
     }
 
     /**
-     * Dynamically call the Items helpers as *Order methods
+     * Dynamically call the Items helpers as *Order* methods
      *
      * @param string $method
      * @param array $parameters
@@ -49,12 +49,17 @@ class WebpayMallTransaction extends WebpayTransaction
     public function __call($method, $parameters)
     {
         if (strpos('Order', $method)) {
-            return $this->{str_replace('Order','Item',$method)}($parameters);
+            return $this->{str_replace('Order', 'Item', $method)}($parameters);
         }
 
         return parent::__call($method, $parameters);
     }
 
+    /**
+     * Transform the object to an array.
+     *
+     * @return array
+     */
     public function toArray()
     {
         return array_merge(

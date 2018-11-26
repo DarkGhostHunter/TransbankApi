@@ -4,7 +4,7 @@ namespace Tests\Unit\Transactions;
 
 use PHPUnit\Framework\TestCase;
 use Transbank\Wrapper\AbstractService;
-use Transbank\Wrapper\Transactions\ServiceTransaction;
+use Transbank\Wrapper\Transactions\AbstractServiceTransaction;
 use Transbank\Wrapper\TransbankConfig;
 
 class TransactionTest extends TestCase
@@ -27,14 +27,14 @@ class TransactionTest extends TestCase
         'credential' => 'value'
     ];
 
-    /** @var \Mockery\MockInterface|ServiceTransaction */
+    /** @var \Mockery\MockInterface|AbstractServiceTransaction */
     protected $transaction;
 
     protected function setUp()
     {
         $this->mockAttributes['object'] = new \stdClass();
 
-        $this->transaction = new ServiceTransaction();
+        $this->transaction = new AbstractServiceTransaction();
 
         $transbank = \Mockery::mock(TransbankConfig::class);
         $transbank->expects('getDefaults')
@@ -51,7 +51,7 @@ class TransactionTest extends TestCase
 
     public function testCanBeInstantiated()
     {
-        $this->assertInstanceOf(ServiceTransaction::class, $this->transaction);
+        $this->assertInstanceOf(AbstractServiceTransaction::class, $this->transaction);
     }
 
     public function testDoesNotInstantiatesWithoutArray()
@@ -94,7 +94,7 @@ class TransactionTest extends TestCase
 
     public function testInstantiatesWithAttributes()
     {
-        $this->transaction = new ServiceTransaction($this->mockAttributes);
+        $this->transaction = new AbstractServiceTransaction($this->mockAttributes);
 
         $this->assertEquals($this->mockAttributes, $this->transaction->getAttributes(),
             '', 0.0, 10, true);
@@ -102,7 +102,7 @@ class TransactionTest extends TestCase
 
     public function testMergesDefaults()
     {
-        $this->transaction = new ServiceTransaction($this->mockAttributes);
+        $this->transaction = new AbstractServiceTransaction($this->mockAttributes);
 
         $this->transaction->setDefaults($defaults = [
             'attribute' => 'default',
@@ -116,7 +116,7 @@ class TransactionTest extends TestCase
 
     public function testBecomesArray()
     {
-        $this->transaction = new ServiceTransaction($this->mockAttributes);
+        $this->transaction = new AbstractServiceTransaction($this->mockAttributes);
 
         $this->assertTrue(is_array($this->transaction->toArray()));
         $this->assertTrue(is_array((array)$this->transaction));
@@ -124,7 +124,7 @@ class TransactionTest extends TestCase
 
     public function testBecomesJson()
     {
-        $this->transaction = new ServiceTransaction($this->mockAttributes);
+        $this->transaction = new AbstractServiceTransaction($this->mockAttributes);
 
         $this->assertTrue(is_string($this->transaction->toJson()));
         $this->assertJson($this->transaction->toJson());
@@ -132,7 +132,7 @@ class TransactionTest extends TestCase
 
     public function testBecomesString()
     {
-        $this->transaction = new ServiceTransaction($this->mockAttributes);
+        $this->transaction = new AbstractServiceTransaction($this->mockAttributes);
 
         $this->assertTrue(is_string((string)$this->transaction));
     }

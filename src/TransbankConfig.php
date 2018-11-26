@@ -3,6 +3,7 @@
 namespace Transbank\Wrapper;
 
 use Exception;
+use Transbank\Wrapper\Exceptions\Credentials\CredentialInvalidException;
 use Transbank\Wrapper\Exceptions\Transbank\InvalidServiceException;
 
 /**
@@ -35,6 +36,13 @@ class TransbankConfig
         'webpay',
         'onepay',
     ];
+
+    /**
+     * Services holder
+     *
+     * @var array
+     */
+    protected $services = [];
 
     /**
      * Determines if the Environment is Production
@@ -80,11 +88,30 @@ class TransbankConfig
      *
      * @param string $service
      * @param string $option
+     * @param null $default
      * @return string|null
      */
-    public function getDefault(string $service, string $option)
+    public function getDefault(string $service, string $option, $default = null)
     {
-        return $this->servicesDefaults[$service][$option] ?? null;
+        return $this->servicesDefaults[$service][$option] ?? $default;
+    }
+
+    /**
+     * Sets a single default option for the service
+     *
+     * @param string $service
+     * @param string $option
+     * @param $value
+     * @throws InvalidServiceException
+     */
+    public function setDefault(string $service, string $option, $value)
+    {
+        if (in_array($service, self::AVAILABLE_SERVICES)) {
+            $this->servicesDefaults[$service][$option] = $value;
+            return;
+        }
+
+        throw new InvalidServiceException($service);
     }
 
     /**
@@ -137,6 +164,11 @@ class TransbankConfig
     public function setCredentials(string $service, array $credentials)
     {
         if (in_array($service, self::AVAILABLE_SERVICES)) {
+            foreach ($credentials as $credential) {
+                if (!is_string($credentials)) {
+                    throw new CredentialInvalidException($service, $credential);
+                }
+            }
             $this->servicesCredentials[$service] = $credentials;
             return;
         }
@@ -191,6 +223,34 @@ class TransbankConfig
     public static function environment(string $environment = null, array $credentials = [])
     {
         return new static($environment, $credentials);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Services Constructor
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Returns or creates a WebpaySoap instance
+     *
+     * @return Webpay
+     * @throws Exception
+     */
+    public function webpay()
+    {
+        return $this->services['webpay'] ?? $this->services['webpay'] = new Webpay($this);
+    }
+
+    /**
+     * Returns or creates a new Onepay instance
+     *
+     * @return Onepay
+     * @throws Exception
+     */
+    public function onepay()
+    {
+        return $this->services['onepay'] ?? $this->services['onepay'] = new Onepay($this);
     }
 
 }

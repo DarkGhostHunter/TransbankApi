@@ -4,45 +4,67 @@ namespace Transbank\Wrapper\TransactionFactories;
 
 use Transbank\Wrapper\Transactions\OnepayTransaction;
 
-class OnepayTransactionFactory extends TransactionFactory
+class OnepayTransactionFactory extends AbstractTransactionFactory
 {
-
     /**
      * Returns an instance of a Transaction
      *
      * @param string $type
-     * @param array $items
-     * @return \Transbank\Wrapper\Transactions\ServiceTransaction|\Transbank\Wrapper\Transactions\Cart|OnepayTransaction
+     * @param array $attributes
+     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|OnepayTransaction
      * @throws \Exception
      */
-    protected function makeTransaction(string $type, array $items = [])
+    protected function makeTransaction(string $type, array $attributes = [])
     {
-        return $this->prepareTransaction($type, new OnepayTransaction($items));
+        return $this->prepareTransaction($type, new OnepayTransaction($attributes));
     }
 
     /**
-     * Makes a OnepayTransaction, optionally with Items inside it
+     * Makes a Onepay Transaction, optionally with Items inside it
      *
-     * @param array $items
-     * @return \Transbank\Wrapper\Transactions\ServiceTransaction|\Transbank\Wrapper\Transactions\Cart|OnepayTransaction
+     * @param array $attributes
+     * @return OnepayTransaction
      * @throws \Exception
      */
-    public function makeCart(array $items = [])
+    public function makeCart(array $attributes = [])
     {
-        return $this->makeTransaction('onepay.cart', $items);
+        return $this->makeTransaction('onepay.cart', $attributes);
     }
 
     /**
-     * Creates a OnepayTransaction and immediately sends it to Transbank
+     * Creates a Onepay Transaction and immediately sends it to Transbank
      *
-     * @param array $items
-     * @return \Transbank\Wrapper\Results\ServiceResult
+     * @param array $attributes
+     * @return \Transbank\Wrapper\Responses\OnepayResponse
      * @throws \Exception
      */
-    public function createCart(array $items)
+    public function createCart(array $attributes)
     {
-        return $this->makeCart($items)->getResult();
+        return $this->makeCart($attributes)->commit();
     }
 
+    /**
+     * Creates a new Onepay Nullify transaction
+     *
+     * @param array $attributes
+     * @return OnepayTransaction
+     * @throws \Exception
+     */
+    public function makeNullify(array $attributes)
+    {
+        return $this->makeTransaction('onepay.nullify', $attributes);
+    }
+
+    /**
+     * Creates a Onepay Nullify transaction and immediately sends it to Transbank
+     *
+     * @param array $attributes
+     * @return \Transbank\Wrapper\Responses\OnepayResponse
+     * @throws \Exception
+     */
+    public function createNullify(array $attributes)
+    {
+        return $this->makeNullify($attributes)->commit();
+    }
 
 }

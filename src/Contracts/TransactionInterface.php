@@ -5,13 +5,6 @@ namespace Transbank\Wrapper\Contracts;
 interface TransactionInterface
 {
     /**
-     * Set default attributes for the Item
-     *
-     * @param array $defaults
-     */
-    public function setDefaults(array $defaults);
-
-    /**
      * Set the Transaction type
      *
      * @param string $type
@@ -40,18 +33,25 @@ interface TransactionInterface
     public function getService();
 
     /**
-     * Commits the transaction to Transbank and return a AbstractResult
+     * Set default attributes for the Item
      *
-     * @return \Transbank\Wrapper\Results\ServiceResult
+     * @param array $defaults
      */
-    public function getResult();
+    public function setDefaults(array $defaults);
+
+    /**
+     * Commits the transaction to Transbank and return a response
+     *
+     * @return \Transbank\Wrapper\Results\AbstractResult
+     */
+    public function commit();
 
     /**
      * Forcefully commits the transaction to Transbank
      *
-     * @return \Transbank\Wrapper\Results\ServiceResult
+     * @return \Transbank\Wrapper\Results\AbstractResult
      */
-    public function forceGetResult();
+    public function forceCommit();
 
     /**
      * Serializes the object to a string

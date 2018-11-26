@@ -8,8 +8,8 @@ use Transbank\Wrapper\Contracts\AdapterInterface;
 use Transbank\Wrapper\Contracts\ServiceInterface;
 use Transbank\Wrapper\Contracts\TransactionInterface;
 use Transbank\Wrapper\Helpers\Helpers;
-use Transbank\Wrapper\Results\ServiceResult;
-use Transbank\Wrapper\Transactions\ServiceTransaction;
+use Transbank\Wrapper\Results\AbstractResult;
+use Transbank\Wrapper\Transactions\AbstractServiceTransaction;
 
 /**
  * Class AbstractService
@@ -55,12 +55,25 @@ abstract class AbstractService implements ServiceInterface
     /**
      * Transaction Factory to use for forwarding calls
      *
-     * @var TransactionFactories\TransactionFactory
+     * @var TransactionFactories\AbstractTransactionFactory
      */
-    protected $factory;
+    protected $transactionFactory;
 
     /**
-     * Webpay constructor.
+     * Result Factory to use for forwarding calls
+     *
+     * @var ResponseFactories\AbstractResponseFactory
+     */
+    protected $resultFactory;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Construct
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * WebpaySoap constructor.
      *
      * @param TransbankConfig $transbankConfig
      * @throws \Exception
@@ -75,15 +88,22 @@ abstract class AbstractService implements ServiceInterface
         $this->boot();
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Booting
+    |--------------------------------------------------------------------------
+    */
+
     /**
-     * Boot any logic needed for the Service, like the Adapter and Factory;
+     * Boot any logic needed for the Service, like the Adapter and Factories;
      *
      * @return void
      */
     public function boot()
     {
         $this->bootAdapter();
-        $this->bootFactory();
+        $this->bootTransactionFactory();
+        $this->bootResponseFactory();
     }
 
     /**
@@ -98,7 +118,20 @@ abstract class AbstractService implements ServiceInterface
      *
      * @return void
      */
-    abstract public function bootFactory();
+    abstract public function bootTransactionFactory();
+
+    /**
+     * Instantiates (and/or boots) the Result Factory for the Service
+     *
+     * @return void
+     */
+    abstract public function bootResponseFactory();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Getters and Setters
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Returns if the service is using a Production environment
@@ -121,34 +154,6 @@ abstract class AbstractService implements ServiceInterface
     }
 
     /**
-     * Returns the service Credentials to use with the Adapter
-     *
-     * @return null
-     */
-    protected function getCredentials()
-    {
-        return $this->transbankConfig->getCredentials(
-            lcfirst(Helpers::classBasename(static::class))
-        ) ?? [];
-    }
-
-    /**
-     * Get the Service Credentials for the Integration Environment
-     *
-     * @param ServiceTransaction $transaction
-     * @return array
-     */
-    abstract protected function getIntegrationCredentials(ServiceTransaction $transaction);
-
-    /**
-     * Get the Service Credentials for the Production Environment
-     *
-     * @param ServiceTransaction $transaction
-     * @return array
-     */
-    abstract protected function getProductionCredentials(ServiceTransaction $transaction);
-
-    /**
      * Retrieves the default options for the service Transactions
      *
      * @return array|null
@@ -156,8 +161,8 @@ abstract class AbstractService implements ServiceInterface
     protected function getDefaults()
     {
         return $this->transbankConfig->getDefaults(
-            lcfirst(Helpers::classBasename(static::class))
-        ) ?? [];
+                lcfirst(Helpers::classBasename(static::class))
+            ) ?? [];
     }
 
     /**
@@ -185,110 +190,37 @@ abstract class AbstractService implements ServiceInterface
      *
      * @return string
      */
-    public function getFactory()
+    public function getTransactionFactory()
     {
-        return $this->factory;
+        return $this->transactionFactory;
     }
 
     /**
      * Set Factory
      *
-     * @param string $factory
+     * @param string $transactionFactory
      */
-    public function setFactory(string $factory)
+    public function setTransactionFactory(string $transactionFactory)
     {
-        $this->factory = $factory;
+        $this->transactionFactory = $transactionFactory;
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Credentials Operations
+    |--------------------------------------------------------------------------
+    */
+
     /**
-     * Performs a Transaction into Transbank Services using the Adapter
+     * Returns the service Credentials to use with the Adapter
      *
-     * @param TransactionInterface $transaction
-     * @return ServiceResult
+     * @return null
      */
-    public function commitTransaction(TransactionInterface $transaction)
+    protected function getCredentials()
     {
-        // Set the adapter using the application keys with the service keys.
-        // The application issued credentials will have precedence, though.
-        $this->adapter->setCredentials(
-            array_merge(
-                $this->isProduction()
-                    ? $this->getProductionCredentials($transaction)
-                    : $this->getIntegrationCredentials($transaction),
-                $this->getCredentials() ?? []
-            )
-        );
-
-        // Commit the transaction to the adapter
-        return $this->parseToTransactionResult(
-            $this->adapter->commit($transaction)
-        );
-    }
-
-    /**
-     * Gets and Acknowledges a Transaction in Transbank
-     *
-     * @param $transaction
-     * @return ServiceResult
-     */
-    public function confirmTransaction($transaction)
-    {
-        return $this->parseToTransactionResult(
-            $this->adapter->confirm($transaction)
-        );
-    }
-
-    /**
-     * Transform the adapter raw Result to a Transaction Result
-     *
-     * @param $result
-     * @return ServiceResult
-     */
-    abstract protected function parseToTransactionResult($result);
-
-    /**
-     * Dynamically handle class to the Transaction Factory from __class
-     *
-     * @param $method
-     * @param $parameters
-     * @return mixed
-     * @throws Exception|\ReflectionException
-     */
-    protected function forwardCallToTransactionFactory($method, $parameters)
-    {
-        // Proceed to call the Factory, or throw an Exception if the method doesn't exists.
-        if (method_exists($this->factory, $method) || is_callable([$this->factory, $method])) {
-            return $this->factory->{$method}(...$parameters);
-        }
-
-        throw new BadMethodCallException(
-            "Method $method does not exist in class " . Helpers::classBasename(static::class)
-        );
-    }
-
-    /**
-     * Dynamically forwards calls to the Transaction Factory
-     *
-     * @param $name
-     * @param $arguments
-     * @return mixed
-     * @throws \ReflectionException
-     */
-    public function __call($name, $arguments)
-    {
-        return $this->forwardCallToTransactionFactory($name, $arguments);
-    }
-
-    /**
-     * Returns a new service instance using the Transbank Configuration
-     *
-     * @param TransbankConfig $config
-     * @return AbstractService|$this
-     * @throws \Exception
-     */
-    public static function fromConfig(TransbankConfig $config)
-    {
-        return new static($config);
+        return $this->transbankConfig->getCredentials(
+            lcfirst(Helpers::classBasename(static::class))
+        ) ?? [];
     }
 
     /**
@@ -309,5 +241,160 @@ abstract class AbstractService implements ServiceInterface
     protected function environmentCredentialsDirectory()
     {
         return $this->credentialsDirectory() . $this->transbankConfig->getEnvironment() . '/';
+    }
+
+    /**
+     * Set the correct credentials set in the adapter.
+     *
+     * Whe using `integration` environments, Webpay credentials will
+     * depend on the transaction type being used.
+     *
+     * @param string|null $type
+     */
+    protected function setAdapterCredentials(string $type = null)
+    {
+        $this->adapter->setCredentials(
+            array_merge(
+                $this->isProduction()
+                    ? $this->getProductionCredentials()
+                    : $this->getIntegrationCredentials($type),
+                $this->getCredentials() ?? []
+            )
+        );
+    }
+
+    /**
+     * Get the Service Credentials for the Production Environment
+     *
+     * @return array
+     */
+    abstract protected function getProductionCredentials();
+
+    /**
+     * Get the Service Credentials for the Integration Environment
+     *
+     * @param string $type
+     * @return array
+     */
+    abstract protected function getIntegrationCredentials(string $type = null);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Operations
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Performs a Transaction into Transbank Services using the Adapter
+     *
+     * @param TransactionInterface $transaction
+     * @return Contracts\ResponseInterface
+     */
+    public function commit(TransactionInterface $transaction)
+    {
+        // Set the correct adapter credentials
+        $this->setAdapterCredentials($transaction->getType());
+
+        // Commit the transaction to the adapter
+        return $this->parseResponse(
+            $this->adapter->commit($transaction),
+            $transaction->getType()
+        );
+    }
+
+    /**
+     * Gets and Acknowledges a Transaction in Transbank
+     *
+     * @param $transaction
+     * @param $options
+     * @return Contracts\ResponseInterface
+     */
+    public function get($transaction, $options = null)
+    {
+        // Set the correct adapter credentials
+        $this->setAdapterCredentials($options);
+
+        return $this->parseResponse(
+            $this->adapter->get($transaction, $options),
+            $options
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Parser
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Transform the adapter raw answer of a transaction commitment to a
+     * more friendly Webpay Response
+     *
+     * @param array $result
+     * @param string $type
+     * @return Contracts\ResponseInterface
+     */
+    abstract protected function parseResponse(array $result, string $type);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Internal methods
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Dynamically handle class to the Transaction Factory from __class
+     *
+     * @param $method
+     * @param $parameters
+     * @return mixed
+     * @throws Exception|\ReflectionException
+     */
+    protected function forwardCallToTransactionFactory($method, $parameters)
+    {
+        // Proceed to call the Transaction Factory, or throw an Exception if the method doesn't exists.
+        if (method_exists($this->transactionFactory, $method) && is_callable([$this->transactionFactory, $method])) {
+            return $this->transactionFactory->{$method}(...$parameters);
+        }
+
+        // Try the same with the result factory
+        if (method_exists($this->resultFactory, $method) && is_callable([$this->resultFactory, $method])) {
+            return $this->resultFactory->{$method}(...$parameters);
+        }
+
+        throw new BadMethodCallException(
+            "Method $method does not exist in class " . Helpers::classBasename(static::class)
+        );
+    }
+
+    /**
+     * Dynamically forwards calls to the Transaction Factory
+     *
+     * @param $name
+     * @param $arguments
+     * @return mixed
+     * @throws \ReflectionException
+     */
+    public function __call($name, $arguments)
+    {
+        return $this->forwardCallToTransactionFactory($name, $arguments);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Static instancing
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Returns a new service instance using the Transbank Configuration
+     *
+     * @param TransbankConfig $config
+     * @return AbstractService|$this
+     * @throws \Exception
+     */
+    public static function fromConfig(TransbankConfig $config)
+    {
+        return new static($config);
     }
 }

@@ -4,27 +4,32 @@ namespace Transbank\Wrapper\Adapters;
 
 use Transbank\Onepay\Item;
 use Transbank\Onepay\OnepayBase;
+use Transbank\Onepay\Refund;
 use Transbank\Onepay\ShoppingCart;
 use Transbank\Onepay\Transaction;
 use Transbank\Wrapper\Contracts\TransactionInterface;
+use Transbank\Wrapper\Exceptions\Onepay\OnepaySdkException;
 use Transbank\Wrapper\Exceptions\Transbank\TransbankSdkException;
+use Transbank\Wrapper\Transactions\OnepayTransaction;
 
 class OnepayAdapter extends AbstractAdapter
 {
     /**
      * Set ups the Onepay SDK
      *
-     * @param TransactionInterface $transaction
+     * @param TransactionInterface|null $transaction
      * @throws \Exception
      */
-    protected function setUpOnepaySdk(TransactionInterface $transaction)
+    protected function setUpOnepaySdk(TransactionInterface $transaction = null)
     {
         // Set the Integration type
         OnepayBase::setCurrentIntegrationType($this->isProduction ? 'LIVE' : 'TEST');
 
-        // Set the App Scheme if the transaction will use the APP channel
-        OnepayBase::setAppScheme($transaction->appScheme);
-        OnepayBase::setCallbackUrl($transaction->callbackUrl);
+        if ($transaction) {
+            // Set the App Scheme if the transaction will use the APP channel
+            OnepayBase::setAppScheme($transaction->appScheme);
+            OnepayBase::setCallbackUrl($transaction->callbackUrl);
+        }
 
         // Set the credentials
         OnepayBase::setApiKey($this->credentials['apiKey']);
@@ -35,14 +40,31 @@ class OnepayAdapter extends AbstractAdapter
      * Commits a transaction into the Transbank SDK
      *
      * @param TransactionInterface|\Transbank\Wrapper\Transactions\OnepayTransaction $transaction
-     * @param array $options
+     * @param mixed|null $options
      * @return array
      * @throws \Exception
      */
-    public function commit(TransactionInterface $transaction, array $options = [])
+    public function commit(TransactionInterface $transaction, $options = null)
     {
         $this->setUpOnepaySdk($transaction);
 
+        switch ($transaction->getType()) {
+            case 'onepay.cart':
+                return $this->commitCart($transaction);
+            case 'onepay.nullify':
+                return $this->commitNullify($transaction);
+        }
+    }
+
+    /**
+     * Commits a Onepay Cart
+     *
+     * @param OnepayTransaction $transaction
+     * @return array
+     * @throws OnepaySdkException
+     */
+    protected function commitCart(OnepayTransaction $transaction)
+    {
         $cart = new ShoppingCart;
 
         // Add each Item into the Shopping Cart
@@ -58,15 +80,14 @@ class OnepayAdapter extends AbstractAdapter
             );
         }
 
-        $channel = 'WEB';
-
         switch (strtolower($transaction->channel)) {
             case 'mobile':  $channel = 'MOBILE';    break;
-            case 'web':     $channel = 'WEB';       break;
             case 'app':     $channel = 'APP';       break;
+            case 'web':
+            default:        $channel = 'WEB';       break;
         }
 
-        // Catch the Transbank SDK Exception
+        // Catch the Transbank SDK Exception, return it as part of the OnepaySdkException
         try {
             $result = Transaction::create(
                 $cart,
@@ -74,7 +95,7 @@ class OnepayAdapter extends AbstractAdapter
                 $transaction->externalUniqueNumber
             );
         } catch (\Exception $exception) {
-            throw new TransbankSdkException($exception);
+            throw new OnepaySdkException($exception);
         }
 
         return [
@@ -88,38 +109,67 @@ class OnepayAdapter extends AbstractAdapter
             'description'           => $result->getDescription(),
             'amount'                => $transaction->getTotal()
         ];
+    }
 
+    /**
+     * Commits a Nullify transaction
+     *
+     * @param OnepayTransaction $transaction
+     * @return array
+     * @throws OnepaySdkException
+     */
+    protected function commitNullify(OnepayTransaction $transaction)
+    {
+        // Catch the Transbank SDK Exception, return it as part of the OnepaySdkException
+        try {
+            $result = Refund::create(
+                $transaction->amount,
+                $transaction->occ,
+                $transaction->externalUniqueNumber,
+                $transaction->authorizationCode
+            );
+        } catch (\Exception $exception) {
+            throw new OnepaySdkException($exception);
+        }
+
+        return [
+            'occ'                   => $result->getOcc(),
+            'externalUniqueNumber'  => $result->getExternalUniqueNumber(),
+            'reverseCode'           => $result->getReverseCode(),
+            'issuedAt'              => $result->getIssuedAt(),
+        ];
     }
 
     /**
      * Retrieves and Acknowledges a transaction into the Transbank SDK
      *
      * @param $transaction
-     * @param array $options
+     * @param mixed|null $options
      * @return mixed
+     * @throws \Exception
      */
-    public function confirm($transaction, array $options = [])
+    public function get($transaction, $options = null)
     {
-        // TODO: Implement confirm() method.
-    }
+        $this->setUpOnepaySdk();
 
-    /**
-     * Return the Error Code from the Response
-     *
-     * @return mixed
-     */
-    public function getErrorCode() : string
-    {
-        // TODO: Implement getErrorCode() method.
-    }
+        try {
+            $result = Transaction::commit($transaction[0], $transaction[1]);
+        } catch (\Exception $exception) {
+            throw new OnepaySdkException($exception);
+        }
 
-    /**
-     * Translates the Error Code to a humanized string
-     *
-     * @return mixed
-     */
-    public function getErrorForHumans() : string
-    {
-        // TODO: Implement getErrorForHumans() method.
+        return [
+            'amount'                =>  $result->getAmount(),
+            'authorizationCode'     =>  $result->getAuthorizationCode(),
+            'buyOrder'              =>  $result->getBuyOrder(),
+            'installmentsNumber'    =>  $result->getInstallmentsNumber(),
+            'installmentsAmount'    =>  $result->getInstallmentsAmount(),
+            'issuedAt'              =>  $result->getIssuedAt(),
+            'occ'                   =>  $result->getOcc(),
+            'transactionDesc'       =>  $result->getTransactionDesc(),
+            'responseCode'          =>  $result->getResponseCode(),
+            'description'           =>  $result->getDescription(),
+        ];
+
     }
 }
