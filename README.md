@@ -15,7 +15,7 @@ Wrapper no-oficial de [Transbank SDK](https://github.com/TransbankDevelopers/tra
 
 ## Dependencias
 
-Este paquete descarga automáticamente el SDK oficial de Transbank como única dependencia.  
+Este paquete descarga automáticamente el SDK oficial de Transbank como dependencia, además de la [implementación de SOAP de Luis Urrutia](https://github.com/LuisUrrutia/TransbankSoap).  
 
 A su vez, el SDK oficial necesita las siguientes extensiones de PHP habilitadas:
 
@@ -85,7 +85,7 @@ directorio/de/php/php.exe composer.phar install --no-dev
 
 * Sube el directorio del paquete a tu servidor y descomprímlo allí.
 
-> Si cada archivo uno por uno, puedes demorarte horas.
+> Si subes cada archivo uno por uno, puedes demorarte horas.
 
 * Continúa con el [tercer paso de la instalación manual](#instalación-manual-complicado).
 
