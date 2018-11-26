@@ -1,8 +1,8 @@
 <?php
 
-namespace Transbank\Wrapper\Exceptions\Credentials;
+namespace DarkGhostHunter\TransbankApi\Exceptions\Credentials;
 
-use Transbank\Wrapper\Exceptions\TransbankException;
+use DarkGhostHunter\TransbankApi\Exceptions\TransbankException;
 
 class CredentialsNotReadableException extends \Exception implements TransbankException
 {

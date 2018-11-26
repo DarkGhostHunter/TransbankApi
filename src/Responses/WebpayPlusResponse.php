@@ -1,6 +1,6 @@
 <?php
 
-namespace Transbank\Wrapper\Responses;
+namespace DarkGhostHunter\TransbankApi\Responses;
 
 class WebpayPlusResponse extends AbstractResponse
 {

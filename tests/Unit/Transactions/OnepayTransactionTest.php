@@ -3,7 +3,7 @@
 namespace Tests\Unit\Transactions;
 
 use PHPUnit\Framework\TestCase;
-use Transbank\Wrapper\Exceptions\Onepay\CartNegativeAmountException;
+use DarkGhostHunter\TransbankApi\Exceptions\Onepay\CartNegativeAmountException;
 
 class OnepayTransactionTest extends TestCase
 {

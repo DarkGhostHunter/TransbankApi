@@ -1,10 +1,10 @@
 <?php
 
-namespace Transbank\Wrapper\Exceptions\Onepay;
+namespace DarkGhostHunter\TransbankApi\Exceptions\Onepay;
 
 use Throwable;
-use Transbank\Wrapper\Exceptions\TransbankException;
-use Transbank\Wrapper\Transactions\OnepayTransaction;
+use DarkGhostHunter\TransbankApi\Exceptions\TransbankException;
+use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 
 class CartNegativeAmountException extends \Exception implements TransbankException, OnepayException
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Transbank\Wrapper\Contracts;
+namespace DarkGhostHunter\TransbankApi\Contracts;
 
 
 /**
@@ -9,7 +9,7 @@ namespace Transbank\Wrapper\Contracts;
  * Provides methods to use against the Transbank SDK depending on the transaction properties
  * and attributes.
  *
- * @package Transbank\Wrapper\Contracts
+ * @package DarkGhostHunter\TransbankApi\Contracts
  */
 interface AdapterInterface
 {

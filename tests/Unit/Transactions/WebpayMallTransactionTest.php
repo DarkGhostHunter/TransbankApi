@@ -3,9 +3,9 @@
 namespace Tests\Unit\Transactions;
 
 use PHPUnit\Framework\TestCase;
-use Transbank\Wrapper\Webpay;
-use Transbank\Wrapper\Exceptions\Webpay\ServiceSdkUnavailableException;
-use Transbank\Wrapper\TransbankConfig;
+use DarkGhostHunter\TransbankApi\Webpay;
+use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ServiceSdkUnavailableException;
+use DarkGhostHunter\TransbankApi\Transbank;
 
 class WebpayMallTransactionTest extends TestCase
 {
@@ -14,7 +14,7 @@ class WebpayMallTransactionTest extends TestCase
 
     protected function setUp()
     {
-        $transbank = TransbankConfig::environment();
+        $transbank = Transbank::environment();
 
         $transbank->setDefaults('webpay', [
             'plusReturnUrl'         => 'http://app.com/webpay/result',

@@ -3,11 +3,11 @@
 namespace Tests\Feature\Integration;
 
 use PHPUnit\Framework\TestCase;
-use Transbank\Wrapper\Exceptions\Onepay\CartEmptyException;
-use Transbank\Wrapper\Exceptions\Onepay\CartNegativeAmountException;
-use Transbank\Wrapper\Exceptions\Onepay\OnepaySdkException;
-use Transbank\Wrapper\Onepay;
-use Transbank\Wrapper\TransbankConfig;
+use DarkGhostHunter\TransbankApi\Exceptions\Onepay\CartEmptyException;
+use DarkGhostHunter\TransbankApi\Exceptions\Onepay\CartNegativeAmountException;
+use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepaySdkException;
+use DarkGhostHunter\TransbankApi\Onepay;
+use DarkGhostHunter\TransbankApi\Transbank;
 
 class OnepayIntegrationTransactionsTest extends TestCase
 {
@@ -16,7 +16,7 @@ class OnepayIntegrationTransactionsTest extends TestCase
 
     protected function setUp() : void
     {
-        $transbank = TransbankConfig::environment();
+        $transbank = Transbank::environment();
 
         $transbank->setDefaults('onepay', [
             'channel'               => 'mobile',

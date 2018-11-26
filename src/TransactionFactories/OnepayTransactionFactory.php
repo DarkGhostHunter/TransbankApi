@@ -1,8 +1,8 @@
 <?php
 
-namespace Transbank\Wrapper\TransactionFactories;
+namespace DarkGhostHunter\TransbankApi\TransactionFactories;
 
-use Transbank\Wrapper\Transactions\OnepayTransaction;
+use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 
 class OnepayTransactionFactory extends AbstractTransactionFactory
 {
@@ -11,7 +11,7 @@ class OnepayTransactionFactory extends AbstractTransactionFactory
      *
      * @param string $type
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|OnepayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|OnepayTransaction
      * @throws \Exception
      */
     protected function makeTransaction(string $type, array $attributes = [])
@@ -35,7 +35,7 @@ class OnepayTransactionFactory extends AbstractTransactionFactory
      * Creates a Onepay Transaction and immediately sends it to Transbank
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Responses\OnepayResponse
+     * @return \DarkGhostHunter\TransbankApi\Responses\OnepayResponse
      * @throws \Exception
      */
     public function createCart(array $attributes)
@@ -59,7 +59,7 @@ class OnepayTransactionFactory extends AbstractTransactionFactory
      * Creates a Onepay Nullify transaction and immediately sends it to Transbank
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Responses\OnepayResponse
+     * @return \DarkGhostHunter\TransbankApi\Responses\OnepayResponse
      * @throws \Exception
      */
     public function createNullify(array $attributes)

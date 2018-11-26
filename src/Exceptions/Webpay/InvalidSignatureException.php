@@ -1,8 +1,8 @@
 <?php
 
-namespace Transbank\Wrapper\Exceptions\Webpay;
+namespace DarkGhostHunter\TransbankApi\Exceptions\Webpay;
 
-use Transbank\Wrapper\Exceptions\TransbankException;
+use DarkGhostHunter\TransbankApi\Exceptions\TransbankException;
 
 class InvalidSignatureException extends \Exception implements TransbankException, WebpayException
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Transbank\Wrapper\Exceptions\Onepay;
+namespace DarkGhostHunter\TransbankApi\Exceptions\Onepay;
 
 use Throwable;
-use Transbank\Wrapper\Exceptions\TransbankException;
+use DarkGhostHunter\TransbankApi\Exceptions\TransbankException;
 
 class OnepaySdkException extends \Exception implements TransbankException, OnepayException
 {

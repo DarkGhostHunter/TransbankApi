@@ -1,6 +1,6 @@
 <?php
 
-namespace Transbank\Wrapper\Helpers;
+namespace DarkGhostHunter\TransbankApi\Helpers;
 
 use ArrayAccess;
 use JsonSerializable;

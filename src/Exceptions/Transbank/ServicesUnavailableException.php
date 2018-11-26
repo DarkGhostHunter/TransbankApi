@@ -1,8 +1,8 @@
 <?php
 
-namespace Transbank\Wrapper\Exceptions\Transbank;
+namespace DarkGhostHunter\TransbankApi\Exceptions\Transbank;
 
-use Transbank\Wrapper\Exceptions\TransbankException;
+use DarkGhostHunter\TransbankApi\Exceptions\TransbankException;
 
 class ServicesUnavailableException extends \Exception implements TransbankException
 {

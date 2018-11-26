@@ -1,6 +1,6 @@
 <?php
 
-namespace Transbank\Wrapper\Exceptions\Webpay;
+namespace DarkGhostHunter\TransbankApi\Exceptions\Webpay;
 
 interface WebpayException
 {

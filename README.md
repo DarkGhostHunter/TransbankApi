@@ -1,12 +1,10 @@
-# Transbank SDK Wrapper - @dev
+# TransbankApi - @dev
 
-Wrapper no-oficial de [Transbank SDK](https://github.com/TransbankDevelopers/transbank-sdk-php) para mejorar la experiencia de uso.
+`TransbankApi` es una especie de wrapper no-oficial de [Transbank SDK](https://github.com/TransbankDevelopers/transbank-sdk-php) para mejorar la experiencia de integración y uso.
 
 > Esta versión es incompatible con PHP 5. Para usar este código con PHP 5, usa la versión 1.4.3 del SDK oficial.
 
 > Esta paquete es un trabajo en progreso ¡No lo uses en producción hasta que no esté listo! 
-
-> Esta versión ocupa el namespace `Transbank/Wrapper`. En la versión final va a cambiar.
 
 ## Requisitos:
 
@@ -15,7 +13,7 @@ Wrapper no-oficial de [Transbank SDK](https://github.com/TransbankDevelopers/tra
 
 ## Dependencias
 
-Este paquete descarga automáticamente el SDK oficial de Transbank como dependencia, además de la [implementación de SOAP de Luis Urrutia](https://github.com/LuisUrrutia/TransbankSoap).  
+Este paquete descarga el SDK oficial de Transbank como dependencia, además de la [implementación de SOAP de Luis Urrutia](https://github.com/LuisUrrutia/TransbankSoap).  
 
 A su vez, el SDK oficial necesita las siguientes extensiones de PHP habilitadas:
 
@@ -87,13 +85,13 @@ directorio/de/php/php.exe composer.phar install --no-dev
 
 > Si subes cada archivo uno por uno, puedes demorarte horas.
 
-* Continúa con el [tercer paso de la instalación manual](#instalación-manual-complicado).
+* Continúa con el [tercer paso de la instalación manual](#instalación-sin-composer-complicado).
 
 ## Documentación 
 
-La documentación de este Wrapper está [en la Wiki](https://github.com/DarkGhostHunter/transbank-wrapper/wiki).
+La documentación de este paquete está [en la Wiki](https://github.com/DarkGhostHunter/transbank-wrapper/wiki).
 
-La información sobre las variables de cada transacción está en [Transbank Developers](https://www.transbankdevelopers.cl).
+La información sobre las variables de cada transacción está en [Transbank Developers](https://www.transbankdevelopers.cl). Este paquete no modifica el nombre de las variables, sin embargo en alguna versión 2.0 lo hará para mantener la homogeneidad entre transacciones.
 
 ## Información para contribuir y desarrollar este Wrapper
 

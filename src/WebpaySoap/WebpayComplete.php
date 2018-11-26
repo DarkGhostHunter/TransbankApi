@@ -1,8 +1,8 @@
 <?php
-namespace Transbank\Wrapper\WebpaySoap;
+namespace DarkGhostHunter\TransbankApi\WebpaySoap;
 
 use Exception;
-use Transbank\Wrapper\Helpers\Fluent;
+use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 
 class WebpayComplete extends Transaction
 {

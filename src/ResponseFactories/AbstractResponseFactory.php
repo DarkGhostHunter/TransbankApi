@@ -1,15 +1,15 @@
 <?php
 
-namespace Transbank\Wrapper\ResponseFactories;
+namespace DarkGhostHunter\TransbankApi\ResponseFactories;
 
-use Transbank\Wrapper\AbstractService;
+use DarkGhostHunter\TransbankApi\AbstractService;
 
 abstract class AbstractResponseFactory
 {
     /**
      * Service using this Factory
      *
-     * @var \Transbank\Wrapper\AbstractService|\Transbank\Wrapper\Webpay|\Transbank\Wrapper\Onepay
+     * @var \DarkGhostHunter\TransbankApi\AbstractService|\DarkGhostHunter\TransbankApi\Webpay|\DarkGhostHunter\TransbankApi\Onepay
      */
     protected $service;
 

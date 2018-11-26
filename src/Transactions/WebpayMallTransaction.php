@@ -1,15 +1,15 @@
 <?php
 
-namespace Transbank\Wrapper\Transactions;
+namespace DarkGhostHunter\TransbankApi\Transactions;
 
-use Transbank\Wrapper\Transactions\Concerns\HasItems;
+use DarkGhostHunter\TransbankApi\Transactions\Concerns\HasItems;
 
 /**
  * Class WebpayMallTransaction
- * @package Transbank\Wrapper\Transactions
+ * @package DarkGhostHunter\TransbankApi\Transactions
  *
- * @method \Transbank\Wrapper\Results\WebpayMallResult commit()
- * @method \Transbank\Wrapper\Results\WebpayMallResult forceCommit()
+ * @method \DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse commit()
+ * @method \DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse forceCommit()
  */
 class WebpayMallTransaction extends WebpayTransaction
 {

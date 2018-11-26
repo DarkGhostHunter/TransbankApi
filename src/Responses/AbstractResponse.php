@@ -1,9 +1,9 @@
 <?php
 
-namespace Transbank\Wrapper\Responses;
+namespace DarkGhostHunter\TransbankApi\Responses;
 
-use Transbank\Wrapper\Contracts\ResponseInterface;
-use Transbank\Wrapper\Helpers\Fluent;
+use DarkGhostHunter\TransbankApi\Contracts\ResponseInterface;
+use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 
 abstract class AbstractResponse extends Fluent implements ResponseInterface
 {
@@ -15,7 +15,7 @@ abstract class AbstractResponse extends Fluent implements ResponseInterface
     const TRANSLATION_LIST_FILE = __DIR__ . '/../../results/translation.php';
 
     /**
-     * Loaded list of results that all TransactionResults share
+     * Loaded list of codes that all TransactionResults share
      *
      * @var array
      */

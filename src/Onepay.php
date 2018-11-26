@@ -1,15 +1,15 @@
 <?php
 
-namespace Transbank\Wrapper;
+namespace DarkGhostHunter\TransbankApi;
 
-use Transbank\Wrapper\Adapters\OnepayAdapter;
-use Transbank\Wrapper\ResponseFactories\OnepayResponseFactory;
-use Transbank\Wrapper\Responses\OnepayResponse;
-use Transbank\Wrapper\TransactionFactories\OnepayTransactionFactory;
+use DarkGhostHunter\TransbankApi\Adapters\OnepayAdapter;
+use DarkGhostHunter\TransbankApi\ResponseFactories\OnepayResponseFactory;
+use DarkGhostHunter\TransbankApi\Responses\OnepayResponse;
+use DarkGhostHunter\TransbankApi\TransactionFactories\OnepayTransactionFactory;
 
 /**
  * Class Onepay
- * @package Transbank\Wrapper
+ * @package DarkGhostHunter\TransbankApi
  *
  * @method Transactions\OnepayTransaction   makeCart(array $attributes = [])
  * @method Responses\OnepayResponse         createCart(array $attributes = [])
@@ -36,7 +36,7 @@ class Onepay extends AbstractService
     /**
      * Transaction Factory to use for forwarding calls
      *
-     * @example \Transbank\Wrapper\WebpaySoap\AbstractTransactionFactory::class
+     * @example \DarkGhostHunter\TransbankApi\WebpaySoap\AbstractTransactionFactory::class
      * @var string
      */
     protected $transactionFactory;

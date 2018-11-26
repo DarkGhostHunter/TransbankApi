@@ -1,6 +1,6 @@
 <?php
 
-namespace Transbank\Wrapper\Exceptions\Onepay;
+namespace DarkGhostHunter\TransbankApi\Exceptions\Onepay;
 
 interface OnepayException
 {

@@ -172,27 +172,23 @@ Para informar el error de forma más detallada, se puede empujar en JSON el cód
 }
 ```
 
+# Flujo de estado de la transacción
+
+Una transacción puede tener múltiples estados, los cuales pueden permitir diferentes tipos
+
 # Cuerpo de una transacción
 
 ```json5
 {
-  // Identificación de la Transacción
   "id": {
-   // Identificador interno de Transbank
     "transbankId": "c0061c75-58fa-4ee8-97a9-02b14098fc10",
-    // Identificador del comercio
     "commerceId": "transaction#322" 
   },
-  // Lista que sostiene las transacciones, incluso si es sólo una
   "transactions": [ 
     {
-      // El tipo de la transacción a realizar en el endpoint, si permite más de uno. 
       "type": "normal", 
-      // Identificador interno de Transbank (otra vez, diferente en caso mall)
       "transbankOrderId": "c0061c75-58fa-4ee8-97a9-02b14098fc10",
-      // Identificador del comercio (otra vez, diferente en caso mall)
       "commerceOrderId": "transaction#322",
-      // Estado de la transacción (pagada, no-pagada, anulada, no-confirmada, expirada, etc)
       "status": "paid",
       "amount": 9990,
       "payment": {
@@ -206,9 +202,10 @@ Para informar el error de forma más detallada, se puede empujar en JSON el cód
       "timestamps": {
           "createdAt": "2018-01-01 09:30:00+0000",
           "confirmedAt": "2018-01-01 09:31:00+0000",
-          "paidAt": "2018-01-01 09:31:00+0000",
+          "authorizedAt": "2018-01-01 09:31:00+0000",
+          "abortedAt": null,
           "voidedAt": null,
-          "invalidAt": null,
+          "expiredAt": null,
       },
       "meta": {
         "urlGateway": "https://webpay4g.transbank.cl/webpay/payment",

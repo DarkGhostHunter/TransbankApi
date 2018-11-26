@@ -3,10 +3,10 @@
 namespace Tests\Unit\Services;
 
 use PHPUnit\Framework\TestCase;
-use Transbank\Wrapper\Onepay;
-use Transbank\Wrapper\Transactions\Cart;
-use Transbank\Wrapper\Transactions\OnepayTransaction;
-use Transbank\Wrapper\TransbankConfig;
+use DarkGhostHunter\TransbankApi\Onepay;
+use DarkGhostHunter\TransbankApi\Transactions\Cart;
+use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
+use DarkGhostHunter\TransbankApi\Transbank;
 
 class OnepayTest extends TestCase
 {
@@ -17,8 +17,8 @@ class OnepayTest extends TestCase
 
     protected function setUp()
     {
-        $this->transbankIntegration = TransbankConfig::environment();
-        $this->transbankProduction = TransbankConfig::environment('production');
+        $this->transbankIntegration = Transbank::environment();
+        $this->transbankProduction = Transbank::environment('production');
     }
 
     public function testInstancesFromReceivingTransbank()

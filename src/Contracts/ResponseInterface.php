@@ -1,6 +1,6 @@
 <?php
 
-namespace Transbank\Wrapper\Contracts;
+namespace DarkGhostHunter\TransbankApi\Contracts;
 
 interface ResponseInterface
 {

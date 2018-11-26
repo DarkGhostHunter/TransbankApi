@@ -3,11 +3,11 @@
 namespace Tests\Feature\Integration;
 
 use PHPUnit\Framework\TestCase;
-use Transbank\Wrapper\Exceptions\Webpay\InvalidWebpayTransactionException;
-use Transbank\Wrapper\Results\WebpayMallResult;
-use Transbank\Wrapper\Results\WebpayResult;
-use Transbank\Wrapper\TransbankConfig;
-use Transbank\Wrapper\Webpay;
+use DarkGhostHunter\TransbankApi\Exceptions\Webpay\InvalidWebpayTransactionException;
+use DarkGhostHunter\TransbankApi\Responses\WebpayMallResult;
+use DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse;
+use DarkGhostHunter\TransbankApi\Transbank;
+use DarkGhostHunter\TransbankApi\Webpay;
 
 class WebpayIntegrationTransactionsTest extends TestCase
 {
@@ -17,7 +17,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
 
     protected function setUp()
     {
-        $transbank = TransbankConfig::environment();
+        $transbank = Transbank::environment();
 
         $transbank->setDefaults('webpay', [
             'plusReturnUrl'         => 'http://app.com/webpay/result',
@@ -44,7 +44,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
             'buyOrder' => 'testBuyOrder',
         ]);
 
-        $this->assertInstanceOf(WebpayResult::class, $normal);
+        $this->assertInstanceOf(WebpayPlusResponse::class, $normal);
         $this->assertTrue(is_string($normal->token));
         $this->assertTrue(is_string(filter_var($normal->url, FILTER_VALIDATE_URL)));
 
@@ -150,7 +150,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
             'responseUrl' => 'https://app.com/oneclick/result'
         ]);
 
-        $this->assertInstanceOf(WebpayResult::class, $registration);
+        $this->assertInstanceOf(WebpayPlusResponse::class, $registration);
         $this->assertTrue(is_string($registration->token));
         $this->assertTrue(is_string(filter_var($registration->urlWebpay, FILTER_VALIDATE_URL)));
     }

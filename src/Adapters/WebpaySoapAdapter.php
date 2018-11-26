@@ -1,16 +1,16 @@
 <?php
 
-namespace Transbank\Wrapper\Adapters;
+namespace DarkGhostHunter\TransbankApi\Adapters;
 
-use Transbank\Wrapper\Contracts\TransactionInterface;
-use Transbank\Wrapper\Exceptions\Webpay\InvalidWebpayTransactionException;
-use Transbank\Wrapper\Exceptions\Webpay\ServiceSdkUnavailableException;
-use Transbank\Wrapper\Transactions\WebpayTransaction;
-use Transbank\Wrapper\Transactions\WebpayMallTransaction;
-use Transbank\Wrapper\WebpaySoap\WebpayCapture;
-use Transbank\Wrapper\WebpaySoap\WebpayNormal;
-use Transbank\Wrapper\WebpaySoap\WebpayNullify;
-use Transbank\Wrapper\WebpaySoap\WebpayOneclick;
+use DarkGhostHunter\TransbankApi\Contracts\TransactionInterface;
+use DarkGhostHunter\TransbankApi\Exceptions\Webpay\InvalidWebpayTransactionException;
+use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ServiceSdkUnavailableException;
+use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
+use DarkGhostHunter\TransbankApi\Transactions\WebpayMallTransaction;
+use DarkGhostHunter\TransbankApi\WebpaySoap\WebpayCapture;
+use DarkGhostHunter\TransbankApi\WebpaySoap\WebpayNormal;
+use DarkGhostHunter\TransbankApi\WebpaySoap\WebpayNullify;
+use DarkGhostHunter\TransbankApi\WebpaySoap\WebpayOneclick;
 
 class WebpaySoapAdapter extends AbstractAdapter
 {
@@ -18,7 +18,7 @@ class WebpaySoapAdapter extends AbstractAdapter
     /**
      * WebpaySoap holder
      *
-     * @var \Transbank\Wrapper\WebpaySoap\Transaction|WebpayNormal|WebpayCapture|WebpayNullify|WebpayOneclick
+     * @var \DarkGhostHunter\TransbankApi\WebpaySoap\Transaction|WebpayNormal|WebpayCapture|WebpayNullify|WebpayOneclick
      */
     protected $processor;
 
@@ -212,7 +212,7 @@ class WebpaySoapAdapter extends AbstractAdapter
      * @param string $options
      * @return mixed
      * @throws ServiceSdkUnavailableException
-     * @throws \Transbank\Wrapper\Exceptions\Webpay\ErrorResponseException
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
      */
     public function confirm($transaction, $options = null)
     {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Transbank\Wrapper\Exceptions\Webpay;
+namespace DarkGhostHunter\TransbankApi\Exceptions\Webpay;
 
 use Throwable;
-use Transbank\Wrapper\Contracts\TransactionInterface;
-use Transbank\Wrapper\Exceptions\TransbankException;
+use DarkGhostHunter\TransbankApi\Contracts\TransactionInterface;
+use DarkGhostHunter\TransbankApi\Exceptions\TransbankException;
 
 class InvalidWebpayTransactionException extends \Exception implements TransbankException, WebpayException
 {

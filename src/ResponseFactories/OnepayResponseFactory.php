@@ -1,6 +1,6 @@
 <?php
 
-namespace Transbank\Wrapper\ResponseFactories;
+namespace DarkGhostHunter\TransbankApi\ResponseFactories;
 
 class OnepayResponseFactory extends AbstractResponseFactory
 {

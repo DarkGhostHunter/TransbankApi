@@ -1,11 +1,11 @@
 <?php
 
-namespace Transbank\Wrapper\WebpaySoap;
+namespace DarkGhostHunter\TransbankApi\WebpaySoap;
 
 use LuisUrrutia\TransbankSoap\Validation;
-use Transbank\Wrapper\Connectors\SoapConnector;
-use Transbank\Wrapper\Exceptions\Webpay\ErrorResponseException;
-use Transbank\Wrapper\Exceptions\Webpay\InvalidWebpayTransactionException;
+use DarkGhostHunter\TransbankApi\Connectors\SoapConnector;
+use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException;
+use DarkGhostHunter\TransbankApi\Exceptions\Webpay\InvalidWebpayTransactionException;
 
 abstract class Transaction
 {

@@ -1,16 +1,16 @@
 <?php
 
-namespace Transbank\Wrapper\WebpaySoap;
+namespace DarkGhostHunter\TransbankApi\WebpaySoap;
 
 use Exception;
-use Transbank\Wrapper\Helpers\Fluent;
+use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 
 /**
  * Class WebpayCapture
  *
  * This class allows the commerce to capture an transaction made through WebpaySoap
  *
- * @package Transbank\Wrapper\WebpaySoap
+ * @package DarkGhostHunter\TransbankApi\WebpaySoap
  */
 class WebpayCapture extends Transaction
 {
@@ -29,7 +29,7 @@ class WebpayCapture extends Transaction
      * @param string $buyOrder
      * @param null $commerceId
      * @return mixed
-     * @throws \Transbank\Wrapper\Exceptions\Webpay\ErrorResponseException
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
      */
     public function capture($authorizationCode, $captureAmount, $buyOrder, $commerceId = null)
     {

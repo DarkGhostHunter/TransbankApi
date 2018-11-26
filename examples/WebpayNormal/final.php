@@ -2,7 +2,7 @@
 
 include_once '../../vendor/autoload.php';
 
-$webpay = \Transbank\Wrapper\TransbankConfig::environment()->webpay();
+$webpay = \DarkGhostHunter\TransbankApi\Transbank::environment()->webpay();
 
 echo '<pre>';
 print_r($_POST);

@@ -1,13 +1,13 @@
 <?php
 
-namespace Transbank\Wrapper\WebpaySoap;
+namespace DarkGhostHunter\TransbankApi\WebpaySoap;
 
-use Transbank\Wrapper\Helpers\Fluent;
+use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 
 /**
  * Class WebpayNormal
  *
- * @package Transbank\Wrapper\WebpaySoap
+ * @package DarkGhostHunter\TransbankApi\WebpaySoap
  */
 class WebpayNormal extends Transaction
 {
@@ -31,7 +31,7 @@ class WebpayNormal extends Transaction
      * @param string $urlFinal
      * @param $amountOrStores
      * @return array
-     * @throws \Transbank\Wrapper\Exceptions\Webpay\ErrorResponseException
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
      */
     public function commit(string $buyOrder,
                            ?string $sessionId,
@@ -88,7 +88,7 @@ class WebpayNormal extends Transaction
     }
 
     /**
-     * Obtains the Transaction results from WebpaySoap
+     * Obtains the Transaction results from Webpay Soap
      *
      * @param string $token
      * @return array

@@ -1,8 +1,8 @@
 <?php
 
-namespace Transbank\Wrapper\Transactions;
+namespace DarkGhostHunter\TransbankApi\Transactions;
 
-use Transbank\Wrapper\Helpers\Fluent;
+use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 
 class Item extends Fluent
 {

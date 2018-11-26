@@ -4,7 +4,7 @@ include_once '../../vendor/autoload.php';
 
 echo $_POST['token_ws'];
 
-$webpay = \Transbank\Wrapper\TransbankConfig::environment()->webpay();
+$webpay = \DarkGhostHunter\TransbankApi\Transbank::environment()->webpay();
 
 $result = $webpay->retrieveMallNormal($_POST['token_ws']);
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Transbank\Wrapper\Adapters;
+namespace DarkGhostHunter\TransbankApi\Adapters;
 
-use Transbank\Wrapper\Contracts\AdapterInterface;
+use DarkGhostHunter\TransbankApi\Contracts\AdapterInterface;
 
 abstract class AbstractAdapter implements AdapterInterface
 {

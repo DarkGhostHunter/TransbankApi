@@ -1,9 +1,9 @@
 <?php
 
-namespace Transbank\Wrapper\Contracts;
+namespace DarkGhostHunter\TransbankApi\Contracts;
 
-use Transbank\Wrapper\Responses\AbstractResponse;
-use Transbank\Wrapper\TransbankConfig;
+use DarkGhostHunter\TransbankApi\Responses\AbstractResponse;
+use DarkGhostHunter\TransbankApi\Transbank;
 
 /**
  * Interface TransbankServiceInterface
@@ -11,16 +11,16 @@ use Transbank\Wrapper\TransbankConfig;
  * The new service must receive a Transbank Configuration and use that to
  * connect to Transbank Services.
  *
- * @package Transbank\Wrapper\Contracts
+ * @package DarkGhostHunter\TransbankApi\Contracts
  */
 interface ServiceInterface
 {
     /**
      * TransbankServiceInterface constructor.
      *
-     * @param TransbankConfig $config
+     * @param Transbank $config
      */
-    public function __construct(TransbankConfig $config);
+    public function __construct(Transbank $config);
 
     /**
      * Returns if the service is using a Production environment
@@ -70,8 +70,8 @@ interface ServiceInterface
     /**
      * Returns a new service instance using the Transbank Configuration
      *
-     * @param TransbankConfig $config
+     * @param Transbank $config
      * @return ServiceInterface|$this
      */
-    public static function fromConfig(TransbankConfig $config);
+    public static function fromConfig(Transbank $config);
 }

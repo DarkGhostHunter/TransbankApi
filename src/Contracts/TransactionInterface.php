@@ -1,6 +1,6 @@
 <?php
 
-namespace Transbank\Wrapper\Contracts;
+namespace DarkGhostHunter\TransbankApi\Contracts;
 
 interface TransactionInterface
 {
@@ -42,14 +42,14 @@ interface TransactionInterface
     /**
      * Commits the transaction to Transbank and return a response
      *
-     * @return \Transbank\Wrapper\Results\AbstractResult
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse
      */
     public function commit();
 
     /**
      * Forcefully commits the transaction to Transbank
      *
-     * @return \Transbank\Wrapper\Results\AbstractResult
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse
      */
     public function forceCommit();
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace Transbank\Wrapper\WebpaySoap;
+namespace DarkGhostHunter\TransbankApi\WebpaySoap;
 
 use Exception;
-use Transbank\Wrapper\Helpers\Fluent;
+use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 
 class WebpayOneclick extends Transaction
 {
@@ -21,7 +21,7 @@ class WebpayOneclick extends Transaction
      * @param $email
      * @param $urlReturn
      * @return array
-     * @throws \Transbank\Wrapper\Exceptions\Webpay\ErrorResponseException
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
      */
     public function register($username, $email, $urlReturn)
     {
@@ -49,7 +49,7 @@ class WebpayOneclick extends Transaction
      *
      * @param string $token
      * @return mixed
-     * @throws \Transbank\Wrapper\Exceptions\Webpay\ErrorResponseException
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
      */
     public function confirm($token)
     {
@@ -77,7 +77,7 @@ class WebpayOneclick extends Transaction
      * @param $tbkUser
      * @param $username
      * @return mixed
-     * @throws \Transbank\Wrapper\Exceptions\Webpay\ErrorResponseException
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
      */
     public function unregister($tbkUser, $username)
     {
@@ -109,7 +109,7 @@ class WebpayOneclick extends Transaction
      * @param $username
      * @param $amount
      * @return mixed
-     * @throws \Transbank\Wrapper\Exceptions\Webpay\ErrorResponseException
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
      */
     public function charge($buyOrder, $tbkUser, $username, $amount)
     {
@@ -139,7 +139,7 @@ class WebpayOneclick extends Transaction
      *
      * @param $buyOrder
      * @return mixed
-     * @throws \Transbank\Wrapper\Exceptions\Webpay\ErrorResponseException
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
      */
     public function reverse($buyOrder)
     {

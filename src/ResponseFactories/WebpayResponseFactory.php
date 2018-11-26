@@ -1,6 +1,6 @@
 <?php
 
-namespace Transbank\Wrapper\ResponseFactories;
+namespace DarkGhostHunter\TransbankApi\ResponseFactories;
 
 class WebpayResponseFactory extends AbstractResponseFactory
 {
@@ -14,8 +14,8 @@ class WebpayResponseFactory extends AbstractResponseFactory
      * Retrieves and Confirms a Webpay Plus Normal Transaction
      *
      * @param string $transaction
-     * @return \Transbank\Wrapper\Contracts\ResponseInterface|\Transbank\Wrapper\Responses\WebpayPlusResponse
-     * @throws \Transbank\Wrapper\Exceptions\Webpay\RetrievingNoTransactionTypeException
+     * @return \DarkGhostHunter\TransbankApi\Contracts\ResponseInterface|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\RetrievingNoTransactionTypeException
      */
     public function getNormal(string $transaction)
     {
@@ -26,7 +26,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
      * Retrieves a Webpay Plus Normal Transaction
      *
      * @param string $transaction
-     * @return \Transbank\Wrapper\Responses\WebpayPlusResponse
+     * @return \DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
      */
     public function retrieveNormal(string $transaction)
     {
@@ -54,8 +54,8 @@ class WebpayResponseFactory extends AbstractResponseFactory
      * Retrieves and Confirms a Webpay Plus Mall Normal Transaction
      *
      * @param string $transaction
-     * @return \Transbank\Wrapper\Contracts\ResponseInterface|\Transbank\Wrapper\Responses\WebpayPlusMallResponse
-     * @throws \Transbank\Wrapper\Exceptions\Webpay\RetrievingNoTransactionTypeException
+     * @return \DarkGhostHunter\TransbankApi\Contracts\ResponseInterface|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\RetrievingNoTransactionTypeException
      */
     public function getMallNormal(string $transaction)
     {
@@ -66,7 +66,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
      * Retrieves a Webpay Plus Mall Normal Transaction
      *
      * @param string $transaction
-     * @return \Transbank\Wrapper\Contracts\ResponseInterface|\Transbank\Wrapper\Responses\WebpayPlusMallResponse
+     * @return \DarkGhostHunter\TransbankApi\Contracts\ResponseInterface|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse
      */
     public function retrieveMallNormal(string $transaction)
     {
@@ -94,8 +94,8 @@ class WebpayResponseFactory extends AbstractResponseFactory
      * Retrieves and Confirms a Webpay Plus Deferred Transaction
      *
      * @param string $transaction
-     * @return \Transbank\Wrapper\Responses\WebpayPlusMallResponse|\Transbank\Wrapper\Responses\WebpayPlusResponse
-     * @throws \Transbank\Wrapper\Exceptions\Webpay\RetrievingNoTransactionTypeException
+     * @return \DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\RetrievingNoTransactionTypeException
      */
     public function getDefer(string $transaction)
     {
@@ -106,7 +106,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
      * Retrieves a Webpay Plus Deferred Transaction
      *
      * @param string $transaction
-     * @return \Transbank\Wrapper\Responses\WebpayPlusMallResponse|\Transbank\Wrapper\Responses\WebpayPlusResponse
+     * @return \DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
      */
     public function retrieveDefer(string $transaction)
     {

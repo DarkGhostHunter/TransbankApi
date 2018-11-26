@@ -3,15 +3,14 @@
 
 namespace Tests\Unit\Factories;
 
+use DarkGhostHunter\TransbankApi\Responses\OnepayResponse;
 use PHPUnit\Framework\TestCase;
-use Transbank\Wrapper\Adapters\OnepayAdapter;
-use Transbank\Wrapper\Adapters\WebpaySoapAdapter;
-use Transbank\Wrapper\Contracts\AdapterInterface;
-use Transbank\Wrapper\Onepay;
-use Transbank\Wrapper\Results\OnepayResult;
-use Transbank\Wrapper\Transactions\OnepayTransaction;
-use Transbank\Wrapper\TransbankConfig;
-use Transbank\Wrapper\Webpay;
+use DarkGhostHunter\TransbankApi\Adapters\OnepayAdapter;
+use DarkGhostHunter\TransbankApi\Adapters\WebpaySoapAdapter;
+use DarkGhostHunter\TransbankApi\Contracts\AdapterInterface;
+use DarkGhostHunter\TransbankApi\Onepay;
+use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
+use DarkGhostHunter\TransbankApi\Transbank;
 
 class OnepayTransactionsTest extends TestCase
 {
@@ -62,8 +61,8 @@ class OnepayTransactionsTest extends TestCase
 
     protected function setOnepay()
     {
-        $transbankIntegration = TransbankConfig::environment();
-        $transbankProduction = TransbankConfig::environment('production', [
+        $transbankIntegration = Transbank::environment();
+        $transbankProduction = Transbank::environment('production', [
             'onepay' => $this->mockCredentials
         ]);
         $transbankIntegration->setDefaults('onepay', $this->mockDefaults);
@@ -125,12 +124,12 @@ class OnepayTransactionsTest extends TestCase
 
         $results = $this->onepayIntegration->createCart($this->mockCart);
 
-        $this->assertInstanceOf(OnepayResult::class, $results);
+        $this->assertInstanceOf(OnepayResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
 
         $results = $this->onepayProduction->createCart($this->mockCart);
 
-        $this->assertInstanceOf(OnepayResult::class, $results);
+        $this->assertInstanceOf(OnepayResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
     }
 

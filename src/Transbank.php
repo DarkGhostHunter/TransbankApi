@@ -1,17 +1,17 @@
 <?php
 
-namespace Transbank\Wrapper;
+namespace DarkGhostHunter\TransbankApi;
 
 use Exception;
-use Transbank\Wrapper\Exceptions\Credentials\CredentialInvalidException;
-use Transbank\Wrapper\Exceptions\Transbank\InvalidServiceException;
+use DarkGhostHunter\TransbankApi\Exceptions\Credentials\CredentialInvalidException;
+use DarkGhostHunter\TransbankApi\Exceptions\Transbank\InvalidServiceException;
 
 /**
  * Class TransbankConfig
  *
- * @package Transbank\Wrapper
+ * @package DarkGhostHunter\TransbankApi
  */
-class TransbankConfig
+class Transbank
 {
     /**
      * Magic word to match for production environments
@@ -217,7 +217,7 @@ class TransbankConfig
      *
      * @param string|null $environment
      * @param array $credentials
-     * @return TransbankConfig
+     * @return Transbank
      * @throws Exception
      */
     public static function environment(string $environment = null, array $credentials = [])

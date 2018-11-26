@@ -1,16 +1,16 @@
 <?php
 
-namespace Transbank\Wrapper\WebpaySoap;
+namespace DarkGhostHunter\TransbankApi\WebpaySoap;
 
 use Exception;
-use Transbank\Wrapper\Helpers\Fluent;
+use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 
 /**
  * Class WebpayNullify
  *
  * This class allows the commerce to nullify a Transaction, totally or parcially.
  *
- * @package Transbank\Wrapper\WebpaySoap
+ * @package DarkGhostHunter\TransbankApi\WebpaySoap
  */
 class WebpayNullify extends Transaction
 {
@@ -30,7 +30,7 @@ class WebpayNullify extends Transaction
      * @param float $nullifyAmount
      * @param int $commerceCode
      * @return mixed
-     * @throws \Transbank\Wrapper\Exceptions\Webpay\ErrorResponseException
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
      */
     public function nullify($authorizationCode, $authorizedAmount, $buyOrder, $nullifyAmount, $commerceCode)
     {

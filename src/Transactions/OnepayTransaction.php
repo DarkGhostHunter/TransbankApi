@@ -1,15 +1,15 @@
 <?php
 
-namespace Transbank\Wrapper\Transactions;
+namespace DarkGhostHunter\TransbankApi\Transactions;
 
 use Closure;
-use Transbank\Wrapper\Exceptions\Onepay\CartEmptyException;
-use Transbank\Wrapper\Exceptions\Onepay\CartNegativeAmountException;
-use Transbank\Wrapper\Transactions\Concerns\HasItems;
+use DarkGhostHunter\TransbankApi\Exceptions\Onepay\CartEmptyException;
+use DarkGhostHunter\TransbankApi\Exceptions\Onepay\CartNegativeAmountException;
+use DarkGhostHunter\TransbankApi\Transactions\Concerns\HasItems;
 
 /**
  * Class OnepayTransaction
- * @package Transbank\Wrapper\Transactions
+ * @package DarkGhostHunter\TransbankApi\Transactions
  */
 class OnepayTransaction extends AbstractServiceTransaction
 {

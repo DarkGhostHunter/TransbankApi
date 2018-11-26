@@ -1,16 +1,16 @@
 <?php
 
-namespace Transbank\Wrapper\Adapters;
+namespace DarkGhostHunter\TransbankApi\Adapters;
 
 use Transbank\Onepay\Item;
 use Transbank\Onepay\OnepayBase;
 use Transbank\Onepay\Refund;
 use Transbank\Onepay\ShoppingCart;
 use Transbank\Onepay\Transaction;
-use Transbank\Wrapper\Contracts\TransactionInterface;
-use Transbank\Wrapper\Exceptions\Onepay\OnepaySdkException;
-use Transbank\Wrapper\Exceptions\Transbank\TransbankSdkException;
-use Transbank\Wrapper\Transactions\OnepayTransaction;
+use DarkGhostHunter\TransbankApi\Contracts\TransactionInterface;
+use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepaySdkException;
+use DarkGhostHunter\TransbankApi\Exceptions\Transbank\TransbankSdkException;
+use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 
 class OnepayAdapter extends AbstractAdapter
 {
@@ -39,7 +39,7 @@ class OnepayAdapter extends AbstractAdapter
     /**
      * Commits a transaction into the Transbank SDK
      *
-     * @param TransactionInterface|\Transbank\Wrapper\Transactions\OnepayTransaction $transaction
+     * @param TransactionInterface|\DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction $transaction
      * @param mixed|null $options
      * @return array
      * @throws \Exception

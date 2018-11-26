@@ -1,27 +1,21 @@
 <?php
 
-namespace Transbank\Wrapper;
+namespace DarkGhostHunter\TransbankApi;
 
 use Exception;
-use Transbank\Wrapper\Adapters\WebpaySoapAdapter;
-use Transbank\Wrapper\Exceptions\Webpay\RetrievingNoTransactionTypeException;
-use Transbank\Wrapper\Responses\WebpayOneclickResponse;
-use Transbank\Wrapper\Responses\WebpayPlusMallResponse;
-use Transbank\Wrapper\Responses\WebpayPlusResponse;
-use Transbank\Wrapper\Exceptions\Credentials\CredentialInvalidException;
-use Transbank\Wrapper\Exceptions\Credentials\CredentialsNotReadableException;
-use Transbank\Wrapper\Helpers\Helpers;
-use Transbank\Wrapper\ResponseFactories\WebpayResponseFactory;
-use Transbank\Wrapper\Results\AbstractResult;
-use Transbank\Wrapper\Results\WebpayMallResult;
-use Transbank\Wrapper\Results\WebpayResult;
-use Transbank\Wrapper\TransactionFactories\WebpayTransactionFactory;
-use Transbank\Wrapper\Transactions\AbstractServiceTransaction;
-use Transbank\Wrapper\Transactions\WebpayTransaction;
+use DarkGhostHunter\TransbankApi\Adapters\WebpaySoapAdapter;
+use DarkGhostHunter\TransbankApi\Exceptions\Webpay\RetrievingNoTransactionTypeException;
+use DarkGhostHunter\TransbankApi\Responses\WebpayOneclickResponse;
+use DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse;
+use DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse;
+use DarkGhostHunter\TransbankApi\Exceptions\Credentials\CredentialsNotReadableException;
+use DarkGhostHunter\TransbankApi\Helpers\Helpers;
+use DarkGhostHunter\TransbankApi\ResponseFactories\WebpayResponseFactory;
+use DarkGhostHunter\TransbankApi\TransactionFactories\WebpayTransactionFactory;
 
 /**
  * Class WebpaySoap
- * @package Transbank\Wrapper
+ * @package DarkGhostHunter\TransbankApi
  * 
  * @method Transactions\WebpayTransaction       makeNormal(array $attributes = [])
  * @method Responses\WebpayPlusResponse             createNormal(array $attributes)

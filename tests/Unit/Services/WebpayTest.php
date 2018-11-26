@@ -5,10 +5,10 @@ namespace Tests\Unit\Services;
 
 
 use PHPUnit\Framework\TestCase;
-use Transbank\Wrapper\Exceptions\Credentials\CredentialInvalidException;
-use Transbank\Wrapper\Results\WebpayResult;
-use Transbank\Wrapper\TransbankConfig;
-use Transbank\Wrapper\Webpay;
+use DarkGhostHunter\TransbankApi\Exceptions\Credentials\CredentialInvalidException;
+use DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse;
+use DarkGhostHunter\TransbankApi\Transbank;
+use DarkGhostHunter\TransbankApi\Webpay;
 
 class WebpayTest extends TestCase
 {
@@ -19,8 +19,8 @@ class WebpayTest extends TestCase
 
     protected function setUp()
     {
-        $this->transbankIntegration = TransbankConfig::environment();
-        $this->transbankProduction = TransbankConfig::environment('production');
+        $this->transbankIntegration = Transbank::environment();
+        $this->transbankProduction = Transbank::environment('production');
     }
 
     public function testInstancesFromReceivingTransbank()

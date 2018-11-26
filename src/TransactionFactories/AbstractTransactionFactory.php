@@ -1,9 +1,9 @@
 <?php
 
-namespace Transbank\Wrapper\TransactionFactories;
+namespace DarkGhostHunter\TransbankApi\TransactionFactories;
 
-use Transbank\Wrapper\AbstractService;
-use Transbank\Wrapper\Transactions\AbstractServiceTransaction;
+use DarkGhostHunter\TransbankApi\AbstractService;
+use DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction;
 
 abstract class AbstractTransactionFactory
 {

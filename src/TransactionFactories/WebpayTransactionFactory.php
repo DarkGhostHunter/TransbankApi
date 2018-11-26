@@ -1,9 +1,9 @@
 <?php
 
-namespace Transbank\Wrapper\TransactionFactories;
+namespace DarkGhostHunter\TransbankApi\TransactionFactories;
 
-use Transbank\Wrapper\Transactions\WebpayTransaction;
-use Transbank\Wrapper\Transactions\WebpayMallTransaction;
+use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
+use DarkGhostHunter\TransbankApi\Transactions\WebpayMallTransaction;
 
 class WebpayTransactionFactory extends AbstractTransactionFactory
 {
@@ -19,7 +19,7 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
      *
      * @param string $type
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|WebpayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|WebpayTransaction
      */
     protected function makeTransaction(string $type, array $attributes = [])
     {
@@ -31,7 +31,7 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
      *
      * @param string $type
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|WebpayMallTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|WebpayMallTransaction
      */
     protected function makeTransactionMall(string $type, array $attributes = [])
     {
@@ -45,10 +45,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     */
 
     /**
-     * Makes a new WebpaySoap Plus Normal transaction
+     * Makes a new Webpay Plus Normal transaction
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|WebpayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|WebpayTransaction
      */
     public function makeNormal(array $attributes = [])
     {
@@ -56,10 +56,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     }
 
     /**
-     * Commits a new WebpaySoap Plus Normal transaction and returns the results
+     * Commits a new Webpay Plus Normal transaction and returns the results
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Results\AbstractResult|\Transbank\Wrapper\Results\WebpayResult
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
      */
     public function createNormal(array $attributes)
     {
@@ -73,10 +73,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     */
 
     /**
-     * Makes a new WebpaySoap Plus Mall Normal transaction
+     * Makes a new Webpay Plus Mall Normal transaction
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|WebpayMallTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|WebpayMallTransaction
      */
     public function makeMallNormal(array $attributes = [])
     {
@@ -84,10 +84,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     }
 
     /**
-     * Commits a new WebpaySoap Plus Mall Normal transaction and returns the results
+     * Commits a new Webpay Plus Mall Normal transaction and returns the results
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Results\AbstractResult|\Transbank\Wrapper\Results\WebpayMallResult
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse
      */
     public function createMallNormal(array $attributes)
     {
@@ -104,7 +104,7 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
      * Makes a new Webpay Plus Deferred transaction
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|WebpayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|WebpayTransaction
      */
     public function makeDefer(array $attributes = [])
     {
@@ -112,10 +112,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     }
 
     /**
-     * Commits a new WebpaySoap Plus Deferred transaction and returns the results
+     * Commits a new Webpay Plus Deferred transaction and returns the results
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Results\AbstractResult|\Transbank\Wrapper\Results\WebpayResult
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
      */
     public function createDefer(array $attributes)
     {
@@ -129,10 +129,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     */
 
     /**
-     * Makes a new WebpaySoap Plus Mall Deferred transaction
+     * Makes a new Webpay Plus Mall Deferred transaction
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|WebpayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|WebpayTransaction
      */
     public function makeMallDefer(array $attributes = [])
     {
@@ -140,10 +140,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     }
 
     /**
-     * Commits a new WebpaySoap Plus Mall Deferred transaction and returns the results
+     * Commits a new Webpay Plus Mall Deferred transaction and returns the results
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Results\AbstractResult|\Transbank\Wrapper\Results\WebpayResult
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
      */
     public function createMallDefer(array $attributes)
     {
@@ -157,10 +157,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     */
 
     /**
-     * Makes a new WebpaySoap Plus Deferred transaction
+     * Makes a new Webpay Plus Deferred transaction
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|WebpayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|WebpayTransaction
      */
     public function makeCapture(array $attributes = [])
     {
@@ -168,10 +168,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     }
 
     /**
-     * Commits a new WebpaySoap Plus Deferred transaction and returns the results
+     * Commits a new Webpay Plus Deferred transaction and returns the results
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Results\AbstractResult|\Transbank\Wrapper\Results\WebpayResult
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
      */
     public function createCapture(array $attributes)
     {
@@ -185,10 +185,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     */
 
     /**
-     * Makes a new WebpaySoap Plus Mall Deferred transaction
+     * Makes a new Webpay Plus Mall Deferred transaction
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|WebpayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|WebpayTransaction
      */
     public function makeMallCapture(array $attributes = [])
     {
@@ -199,7 +199,7 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
      * Commits a new Webpay Plus Mall Capture transaction and returns the results
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Results\AbstractResult|\Transbank\Wrapper\Results\WebpayResult
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
      */
     public function createMallCapture(array $attributes)
     {
@@ -213,10 +213,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     */
 
     /**
-     * Makes a new WebpaySoap Plus Nullify transaction
+     * Makes a new Webpay Plus Nullify transaction
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|WebpayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|WebpayTransaction
      */
     public function makeNullify(array $attributes = [])
     {
@@ -224,10 +224,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     }
 
     /**
-     * Commits a new WebpaySoap Plus Nullify transaction and returns the results
+     * Commits a new Webpay Plus Nullify transaction and returns the results
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Results\AbstractResult|\Transbank\Wrapper\Results\WebpayResult
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
      */
     public function createNullify(array $attributes)
     {
@@ -241,10 +241,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     */
 
     /**
-     * Makes a new WebpaySoap Oneclick Registration transaction
+     * Makes a new Webpay Oneclick Registration transaction
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|WebpayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|WebpayTransaction
      */
     public function makeRegistration(array $attributes = [])
     {
@@ -252,10 +252,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     }
 
     /**
-     * Commits a new WebpaySoap Oneclick Registration transaction and returns the results
+     * Commits a new Webpay Oneclick Registration transaction and returns the results
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Results\AbstractResult|\Transbank\Wrapper\Results\WebpayResult
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
      */
     public function createRegistration(array $attributes)
     {
@@ -269,10 +269,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     */
 
     /**
-     * Makes a new WebpaySoap Oneclick Unregistration transaction
+     * Makes a new Webpay Oneclick Unregistration transaction
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|WebpayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|WebpayTransaction
      */
     public function makeUnregistration(array $attributes = [])
     {
@@ -280,10 +280,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     }
 
     /**
-     * Commits a new WebpaySoap Oneclick Unregistration transaction and returns the results
+     * Commits a new Webpay Oneclick Unregistration transaction and returns the results
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Results\AbstractResult|\Transbank\Wrapper\Results\WebpayResult
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
      */
     public function createUnregistration(array $attributes)
     {
@@ -297,10 +297,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     */
 
     /**
-     * Makes a new WebpaySoap Oneclick Charge transaction
+     * Makes a new Webpay Oneclick Charge transaction
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|WebpayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|WebpayTransaction
      */
     public function makeCharge(array $attributes = [])
     {
@@ -308,10 +308,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     }
 
     /**
-     * Commits a new WebpaySoap Oneclick Charge transaction and returns the results
+     * Commits a new Webpay Oneclick Charge transaction and returns the results
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Results\AbstractResult|\Transbank\Wrapper\Results\WebpayResult
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
      */
     public function createCharge(array $attributes)
     {
@@ -325,10 +325,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     */
 
     /**
-     * Makes a new WebpaySoap Oneclick Reverse Charge transaction
+     * Makes a new Webpay Oneclick Reverse Charge transaction
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|WebpayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|WebpayTransaction
      */
     public function makeReverseCharge(array $attributes = [])
     {
@@ -336,10 +336,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     }
 
     /**
-     * Commits a new WebpaySoap Oneclick Reverse Charge transaction and returns the results
+     * Commits a new Webpay Oneclick Reverse Charge transaction and returns the results
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Results\AbstractResult|\Transbank\Wrapper\Results\WebpayResult
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
      */
     public function createReverseCharge(array $attributes)
     {
@@ -353,10 +353,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     */
 
     /**
-     * Makes a new WebpaySoap Oneclick Mall Charge transaction
+     * Makes a new Webpay Oneclick Mall Charge transaction
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|WebpayMallTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|WebpayMallTransaction
      */
     public function makeMallCharge(array $attributes = [])
     {
@@ -364,10 +364,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     }
 
     /**
-     * Commits a new WebpaySoap Oneclick Mall Charge transaction and returns the results
+     * Commits a new Webpay Oneclick Mall Charge transaction and returns the results
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Results\AbstractResult|\Transbank\Wrapper\Results\WebpayMallResult
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse
      */
     public function createMallCharge(array $attributes = [])
     {
@@ -381,10 +381,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     */
 
     /**
-     * Makes a new WebpaySoap Oneclick Mall Reverse Charge transaction
+     * Makes a new Webpay Oneclick Mall Reverse Charge transaction
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|WebpayMallTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|WebpayMallTransaction
      */
     public function makeMallReverseCharge(array $attributes = [])
     {
@@ -392,10 +392,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     }
 
     /**
-     * Commits a new WebpaySoap Oneclick Mall Reverse Charge transaction and returns the results
+     * Commits a new Webpay Oneclick Mall Reverse Charge transaction and returns the results
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Results\AbstractResult|\Transbank\Wrapper\Results\WebpayMallResult
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse
      */
     public function createMallReverseCharge(array $attributes = [])
     {
@@ -409,10 +409,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     */
 
     /**
-     * Makes a new WebpaySoap Oneclick Mall Nullify transaction
+     * Makes a new Webpay Oneclick Mall Nullify transaction
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|WebpayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|WebpayTransaction
      */
     public function makeMallNullify(array $attributes = [])
     {
@@ -420,10 +420,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     }
 
     /**
-     * Commits a new WebpaySoap Oneclick Mall Nullify transaction and returns the results
+     * Commits a new Webpay Oneclick Mall Nullify transaction and returns the results
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Results\AbstractResult|\Transbank\Wrapper\Results\WebpayMallResult
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse
      */
     public function createMallNullify(array $attributes = [])
     {
@@ -437,10 +437,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     */
 
     /**
-     * Makes a new WebpaySoap Oneclick Mall Reverse Nullify transaction
+     * Makes a new Webpay Oneclick Mall Reverse Nullify transaction
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Transactions\AbstractServiceTransaction|WebpayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|WebpayTransaction
      */
     public function makeMallReverseNullify(array $attributes = [])
     {
@@ -448,10 +448,10 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     }
 
     /**
-     * Commits a new WebpaySoap Oneclick Mall Reverse Nullify transaction and returns the results
+     * Commits a new Webpay Oneclick Mall Reverse Nullify transaction and returns the results
      *
      * @param array $attributes
-     * @return \Transbank\Wrapper\Results\AbstractResult|\Transbank\Wrapper\Results\WebpayMallResult
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse
      */
     public function createMallReverseNullify(array $attributes = [])
     {

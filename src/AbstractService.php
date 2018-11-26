@@ -1,19 +1,17 @@
 <?php
 
-namespace Transbank\Wrapper;
+namespace DarkGhostHunter\TransbankApi;
 
 use BadMethodCallException;
 use Exception;
-use Transbank\Wrapper\Contracts\AdapterInterface;
-use Transbank\Wrapper\Contracts\ServiceInterface;
-use Transbank\Wrapper\Contracts\TransactionInterface;
-use Transbank\Wrapper\Helpers\Helpers;
-use Transbank\Wrapper\Results\AbstractResult;
-use Transbank\Wrapper\Transactions\AbstractServiceTransaction;
+use DarkGhostHunter\TransbankApi\Contracts\AdapterInterface;
+use DarkGhostHunter\TransbankApi\Contracts\ServiceInterface;
+use DarkGhostHunter\TransbankApi\Contracts\TransactionInterface;
+use DarkGhostHunter\TransbankApi\Helpers\Helpers;
 
 /**
  * Class AbstractService
- * @package Transbank\Wrapper
+ * @package DarkGhostHunter\TransbankApi
  */
 abstract class AbstractService implements ServiceInterface
 {
@@ -27,7 +25,7 @@ abstract class AbstractService implements ServiceInterface
     /**
      * Transbank Configuration to use for the Service
      *
-     * @var TransbankConfig
+     * @var Transbank
      */
     protected $transbankConfig;
 
@@ -75,10 +73,10 @@ abstract class AbstractService implements ServiceInterface
     /**
      * WebpaySoap constructor.
      *
-     * @param TransbankConfig $transbankConfig
+     * @param Transbank $transbankConfig
      * @throws \Exception
      */
-    public function __construct(TransbankConfig $transbankConfig)
+    public function __construct(Transbank $transbankConfig)
     {
         $this->transbankConfig = $transbankConfig;
 
@@ -389,11 +387,11 @@ abstract class AbstractService implements ServiceInterface
     /**
      * Returns a new service instance using the Transbank Configuration
      *
-     * @param TransbankConfig $config
+     * @param Transbank $config
      * @return AbstractService|$this
      * @throws \Exception
      */
-    public static function fromConfig(TransbankConfig $config)
+    public static function fromConfig(Transbank $config)
     {
         return new static($config);
     }

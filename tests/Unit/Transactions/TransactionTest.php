@@ -3,9 +3,9 @@
 namespace Tests\Unit\Transactions;
 
 use PHPUnit\Framework\TestCase;
-use Transbank\Wrapper\AbstractService;
-use Transbank\Wrapper\Transactions\AbstractServiceTransaction;
-use Transbank\Wrapper\TransbankConfig;
+use DarkGhostHunter\TransbankApi\AbstractService;
+use DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction;
+use DarkGhostHunter\TransbankApi\Transbank;
 
 class TransactionTest extends TestCase
 {
@@ -36,7 +36,7 @@ class TransactionTest extends TestCase
 
         $this->transaction = new AbstractServiceTransaction();
 
-        $transbank = \Mockery::mock(TransbankConfig::class);
+        $transbank = \Mockery::mock(Transbank::class);
         $transbank->expects('getDefaults')
             ->once()
             ->andReturn($this->mockDefaults);

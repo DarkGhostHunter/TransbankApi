@@ -2,7 +2,7 @@
 
 include_once '../../vendor/autoload.php';
 
-$onepay = Transbank\Wrapper\TransbankConfig::environment()->onepay();
+$onepay = DarkGhostHunter\TransbankApi\Transbank::environment()->onepay();
 
 $result = $onepay->createNullify([
     'occ'                   => $_POST['occ'],

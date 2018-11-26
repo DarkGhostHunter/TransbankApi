@@ -1,9 +1,9 @@
 <?php
 
-namespace Transbank\Wrapper\Exceptions\Credentials;
+namespace DarkGhostHunter\TransbankApi\Exceptions\Credentials;
 
 use Throwable;
-use Transbank\Wrapper\Exceptions\TransbankException;
+use DarkGhostHunter\TransbankApi\Exceptions\TransbankException;
 
 class CredentialInvalidException extends \Exception implements TransbankException
 {

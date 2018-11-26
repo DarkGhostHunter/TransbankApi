@@ -1,15 +1,15 @@
 <?php
 
-namespace Transbank\Wrapper\Transactions;
+namespace DarkGhostHunter\TransbankApi\Transactions;
 
-use Transbank\Wrapper\Helpers\Helpers;
+use DarkGhostHunter\TransbankApi\Helpers\Helpers;
 
 /**
  * Class WebpayTransaction
- * @package Transbank\Wrapper\Transactions
+ * @package DarkGhostHunter\TransbankApi\Transactions
  *
- * @method \Transbank\Wrapper\Results\WebpayResult commit()
- * @method \Transbank\Wrapper\Results\WebpayResult forceCommit()
+ * @method \DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse commit()
+ * @method \DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse forceCommit()
  */
 class WebpayTransaction extends AbstractServiceTransaction
 {

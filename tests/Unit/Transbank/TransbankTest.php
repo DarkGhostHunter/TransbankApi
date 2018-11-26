@@ -3,9 +3,9 @@
 namespace Tests\Unit\Transbank;
 
 use PHPUnit\Framework\TestCase;
-use Transbank\Wrapper\Exceptions\Credentials\CredentialInvalidException;
-use Transbank\Wrapper\Exceptions\Transbank\InvalidServiceException;
-use Transbank\Wrapper\TransbankConfig;
+use DarkGhostHunter\TransbankApi\Exceptions\Credentials\CredentialInvalidException;
+use DarkGhostHunter\TransbankApi\Exceptions\Transbank\InvalidServiceException;
+use DarkGhostHunter\TransbankApi\Transbank;
 
 class TransbankTest extends TestCase
 {
@@ -32,13 +32,13 @@ class TransbankTest extends TestCase
      */
     public function testCreatesIntegrationEnvironment()
     {
-        $transbank_a = TransbankConfig::environment();
-        $transbank_b = TransbankConfig::environment('notProduction');
-        $transbank_c = TransbankConfig::environment('integration');
+        $transbank_a = Transbank::environment();
+        $transbank_b = Transbank::environment('notProduction');
+        $transbank_c = Transbank::environment('integration');
 
-        $this->assertInstanceOf(TransbankConfig::class, $transbank_a);
-        $this->assertInstanceOf(TransbankConfig::class, $transbank_b);
-        $this->assertInstanceOf(TransbankConfig::class, $transbank_c);
+        $this->assertInstanceOf(Transbank::class, $transbank_a);
+        $this->assertInstanceOf(Transbank::class, $transbank_b);
+        $this->assertInstanceOf(Transbank::class, $transbank_c);
 
         $this->assertTrue($transbank_a->isIntegration());
         $this->assertTrue($transbank_b->isIntegration());
@@ -55,9 +55,9 @@ class TransbankTest extends TestCase
 
     public function testCreatesProductionEnvironment()
     {
-        $transbank = TransbankConfig::environment('production');
+        $transbank = Transbank::environment('production');
 
-        $this->assertInstanceOf(TransbankConfig::class, $transbank);
+        $this->assertInstanceOf(Transbank::class, $transbank);
         $this->assertTrue($transbank->isProduction());
         $this->assertFalse($transbank->isIntegration());
 
@@ -66,7 +66,7 @@ class TransbankTest extends TestCase
 
     public function testSetProductionCredentialsAtInstancing()
     {
-        $transbank = TransbankConfig::environment('production', [
+        $transbank = Transbank::environment('production', [
             'webpay' => $this->mockCredentials
         ]);
 
@@ -78,14 +78,14 @@ class TransbankTest extends TestCase
     {
         $this->expectException(\Exception::class);
 
-        TransbankConfig::environment('production', [
+        Transbank::environment('production', [
             'invalid_service' => $this->mockCredentials
         ]);
     }
 
     public function testSetsProductionCredentialsOnMethod()
     {
-        $transbank = TransbankConfig::environment('production');
+        $transbank = Transbank::environment('production');
 
         $transbank->setCredentials('webpay', $this->mockCredentials);
 
@@ -97,15 +97,15 @@ class TransbankTest extends TestCase
     {
         $this->expectException(\Exception::class);
 
-        $transbank = TransbankConfig::environment('production');
+        $transbank = Transbank::environment('production');
 
         $transbank->setCredentials('INVALID_SERVICE', $this->mockCredentials);
     }
 
     public function testSetsDefaults()
     {
-        $transbank_integration = TransbankConfig::environment();
-        $transbank_production = TransbankConfig::environment('production');
+        $transbank_integration = Transbank::environment();
+        $transbank_production = Transbank::environment('production');
 
         $transbank_integration->setDefaults('webpay', $this->mockDefaults);
         $transbank_production->setDefaults('webpay', $this->mockDefaults);
@@ -120,7 +120,7 @@ class TransbankTest extends TestCase
     {
         $this->expectException(\Exception::class);
 
-        $transbank = TransbankConfig::environment();
+        $transbank = Transbank::environment();
 
         $transbank->setDefaults('INVALID_SERVICE', $this->mockDefaults);
     }
@@ -129,14 +129,14 @@ class TransbankTest extends TestCase
     {
         $this->expectException(\Exception::class);
 
-        $transbank = TransbankConfig::environment('production');
+        $transbank = Transbank::environment('production');
 
         $transbank->setDefaults('INVALID_SERVICE', $this->mockDefaults);
     }
 
     public function testRetrievesDefaultOption()
     {
-        $transbank = TransbankConfig::environment('production');
+        $transbank = Transbank::environment('production');
 
         $transbank->setDefaults('webpay', $this->mockDefaults);
 
@@ -149,7 +149,7 @@ class TransbankTest extends TestCase
 
     public function testReturnsNullOnInvalidDefaultOption()
     {
-        $transbank = TransbankConfig::environment('production');
+        $transbank = Transbank::environment('production');
 
         $transbank->setDefaults('webpay', $this->mockDefaults);
 
@@ -158,7 +158,7 @@ class TransbankTest extends TestCase
 
     public function testReturnsNullOnInvalidServiceOption()
     {
-        $transbank = TransbankConfig::environment('production');
+        $transbank = Transbank::environment('production');
 
         $transbank->setDefaults('webpay', $this->mockDefaults);
 
@@ -171,7 +171,7 @@ class TransbankTest extends TestCase
     {
         $this->expectException(CredentialInvalidException::class);
 
-        $transbank = TransbankConfig::environment('production');
+        $transbank = Transbank::environment('production');
 
         $transbank->setCredentials('webpay', [
             'asdads' => [],
@@ -184,7 +184,7 @@ class TransbankTest extends TestCase
     {
         $this->expectException(InvalidServiceException::class);
 
-        $transbank = TransbankConfig::environment('production');
+        $transbank = Transbank::environment('production');
 
         $transbank->setCredentials('asdasdasd', [
             'asdads' => [],

@@ -2,7 +2,7 @@
 
 include_once '../../vendor/autoload.php';
 
-$transbank = Transbank\Wrapper\TransbankConfig::environment();
+$transbank = DarkGhostHunter\TransbankApi\Transbank::environment();
 
 $transbank->setDefaults('onepay', [
     'channel'               => 'web',

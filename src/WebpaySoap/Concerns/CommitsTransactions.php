@@ -1,13 +1,14 @@
 <?php
 
 
-namespace Transbank\Wrapper\WebpaySoap\Concerns;
+namespace DarkGhostHunter\TransbankApi\WebpaySoap\Concerns;
 
 /**
- * Trait InitializesTransactions
- * @package Transbank\Wrapper\WebpaySoap\Concerns
+ * Trait CommitsTransactions
  *
- * @mixin \Transbank\Wrapper\WebpaySoap\Transaction
+ * @package DarkGhostHunter\TransbankApi\WebpaySoap\Concerns
+ *
+ * @mixin \DarkGhostHunter\TransbankApi\WebpaySoap\Transaction
  */
 trait CommitsTransactions
 {

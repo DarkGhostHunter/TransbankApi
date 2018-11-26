@@ -1,9 +1,9 @@
 <?php
 
-namespace Transbank\Wrapper\Transactions\Concerns;
+namespace DarkGhostHunter\TransbankApi\Transactions\Concerns;
 
-use Transbank\Wrapper\Helpers\Helpers;
-use Transbank\Wrapper\Transactions\Item;
+use DarkGhostHunter\TransbankApi\Helpers\Helpers;
+use DarkGhostHunter\TransbankApi\Transactions\Item;
 
 trait HasItems
 {

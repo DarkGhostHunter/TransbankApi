@@ -1,11 +1,11 @@
 <?php
 
-namespace Transbank\Wrapper\Transactions;
+namespace DarkGhostHunter\TransbankApi\Transactions;
 
-use Transbank\Wrapper\AbstractService;
-use Transbank\Wrapper\Contracts\ServiceInterface;
-use Transbank\Wrapper\Contracts\TransactionInterface;
-use Transbank\Wrapper\Helpers\Fluent;
+use DarkGhostHunter\TransbankApi\AbstractService;
+use DarkGhostHunter\TransbankApi\Contracts\ServiceInterface;
+use DarkGhostHunter\TransbankApi\Contracts\TransactionInterface;
+use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 
 abstract class AbstractServiceTransaction extends Fluent implements TransactionInterface
 {
@@ -31,16 +31,16 @@ abstract class AbstractServiceTransaction extends Fluent implements TransactionI
     protected $performed = false;
 
     /**
-     * Saves the Transaction Results
+     * Saves the Transaction Response
      *
-     * @var \Transbank\Wrapper\Responses\AbstractResponse
+     * @var \DarkGhostHunter\TransbankApi\Responses\AbstractResponse
      */
     protected $response;
 
     /**
      * Performs the transaction commitment to Transbank
      *
-     * @return \Transbank\Wrapper\Responses\AbstractResponse
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse
      */
     protected function performCommit()
     {
@@ -122,7 +122,7 @@ abstract class AbstractServiceTransaction extends Fluent implements TransactionI
     /**
      * Commits the transaction to Transbank and return a AbstractResult
      *
-     * @return \Transbank\Wrapper\Responses\AbstractResponse
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse
      */
     public function commit()
     {
@@ -132,7 +132,7 @@ abstract class AbstractServiceTransaction extends Fluent implements TransactionI
     /**
      * Forcefully commits the transaction to Transbank
      *
-     * @return \Transbank\Wrapper\Responses\AbstractResponse
+     * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse
      */
     public function forceCommit()
     {

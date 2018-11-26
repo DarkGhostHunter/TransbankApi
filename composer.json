@@ -36,7 +36,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Transbank\\Wrapper\\": "src"
+      "DarkGhostHunter\\TransbankApi\\": "src"
     }
   },
   "autoload-dev": {

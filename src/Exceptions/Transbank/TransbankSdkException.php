@@ -1,9 +1,9 @@
 <?php
 
-namespace Transbank\Wrapper\Exceptions\Transbank;
+namespace DarkGhostHunter\TransbankApi\Exceptions\Transbank;
 
 use Throwable;
-use Transbank\Wrapper\Exceptions\TransbankException;
+use DarkGhostHunter\TransbankApi\Exceptions\TransbankException;
 
 class TransbankSdkException extends \Exception implements TransbankException
 {
