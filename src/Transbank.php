@@ -159,13 +159,16 @@ class Transbank
      * @param string $service
      * @param array $credentials
      * @return void
-     * @throws Exception
+     * @throws CredentialInvalidException
+     * @throws InvalidServiceException
      */
     public function setCredentials(string $service, array $credentials)
     {
+        var_dump($credentials);
+
         if (in_array($service, self::AVAILABLE_SERVICES)) {
             foreach ($credentials as $credential) {
-                if (!is_string($credentials)) {
+                if (!is_string($credential)) {
                     throw new CredentialInvalidException($service, $credential);
                 }
             }
