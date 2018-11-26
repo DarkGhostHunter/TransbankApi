@@ -155,9 +155,9 @@ Por ejemplo, lo que rompe el flujo de la transacción son:
 * Transacción no encontrada (404)
 * Faltan datos (412)
 * Firmas inválidas (401)
-* Operación no autorizada para el comercio (403)
-* Conflicto de recurso (mismo ID, o acción ya sometida) (409)
-* Transacción de monto cero (402)
+* Operación no autorizada (comercio no tiene autorización, la transacción no tiene autorización, etc). (403)
+* Conflicto de recurso (mismo ID, o acción ya fue hecha con anterioridad) (409)
+* Transacción de monto cero (srsly? cero?) (402)
 
 Pero cosas que no rompen el flujo de la transacción son, por ejemplo, cuando se informa que la transacción no fue pagada por el cliente (cambio de estado).
 
@@ -174,13 +174,30 @@ Para informar el error de forma más detallada, se puede empujar en JSON el cód
 
 # Flujo de estado de la transacción
 
-Una transacción puede tener múltiples estados, los cuales pueden permitir diferentes tipos
+Una transacción puede tener un sólo estado, pero explicativo:
+
+```
+[Crear Transacción]
+  --> Pendiente
+      --> Autorizado/Pagado
+      --> Expirado (ningún cambio después del tiempo de vida)
+      --> Abortado (El usuario abortó)
+      --> Rechazado (La institución financiera rechazó)
+  --> Confirmado (Y Validado) / No Confirmado (e inválido)
+  --> Anulado
+```
+
+Así se evita saber qué pasó con la transacción. Estos no son errores, son estados de la transacción, y es deber de la aplicación del comercio considerar si uno de ellos amerita un error grave o recomenzar el flujo de la transacción.
+
+Por ejemplo, un cargo automático vía Oneclick que es rechazado amerita un `Exception` y detener toda lógica, pero para otra aplicación quizás no dado que es esperable. 
 
 # Cuerpo de una transacción
 
+Esto es sólo un ejemplo
+
 ```json5
 {
-  "id": {
+  "ids": {
     "transbankId": "c0061c75-58fa-4ee8-97a9-02b14098fc10",
     "commerceId": "transaction#322" 
   },
@@ -207,17 +224,15 @@ Una transacción puede tener múltiples estados, los cuales pueden permitir dife
           "voidedAt": null,
           "expiredAt": null,
       },
-      "meta": {
-        "urlGateway": "https://webpay4g.transbank.cl/webpay/payment",
-        "urlVoucher": "https://webpay4g.transbank.cl/webpay/voucher",
-        "description": "This is my custom description, generated from my App."
-      }
+      "description": "This is my custom description, generated from my App."
     }
-  ]
+  ],
+  "meta": {
+    "urlGateway": "https://webpay4g.transbank.cl/webpay/payment",
+    "urlVoucher": "https://webpay4g.transbank.cl/webpay/voucher",
+  }
 }
 ```
-
-Lo anterior además evita tener que cargar la lista de errores (y sus traducciones) desde el SDK, ya que la información del error residiría en el API REST. El SDK sería capaz de crear un `Exception` basado en la información que se recibe. 
 
 ## Variables expresivas y coherentes
 
@@ -237,7 +252,3 @@ Todos los valores de tiempo deben indicar sobre qué acción es, e indicar el va
 La razón de esto es permitir que el comercio pueda manejar la diferencia horaria con mayor facilidad, y sea agnóstico al cambio de horario de verano o territorio (Isla de Pascua, Antártida, etcétera).
 
 Como es estándar, esto permite al comercio ocupar cualquier herramienta para pasar el string a un formato que pueda entender.
-
-### URLs
-
-// TODO
