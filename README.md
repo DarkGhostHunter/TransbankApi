@@ -1,4 +1,5 @@
 # TransbankApi - @dev
+[![Build Status](https://travis-ci.com/DarkGhostHunter/transbank-wrapper.svg?branch=master)](https://travis-ci.com/DarkGhostHunter/transbank-wrapper)
 
 `TransbankApi` es una especie de wrapper no-oficial de [Transbank SDK](https://github.com/TransbankDevelopers/transbank-sdk-php) para mejorar la experiencia de integración y uso.
 
