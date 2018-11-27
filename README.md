@@ -1,5 +1,5 @@
 # TransbankApi - @dev
-[![Build Status](https://travis-ci.com/DarkGhostHunter/transbank-wrapper.svg?branch=master)](https://travis-ci.com/DarkGhostHunter/transbank-wrapper)
+[![Build Status](https://travis-ci.com/DarkGhostHunter/TransbankApi.svg?branch=master)](https://travis-ci.com/DarkGhostHunter/TransbankApi)
 
 `TransbankApi` es una especie de wrapper no-oficial de [Transbank SDK](https://github.com/TransbankDevelopers/transbank-sdk-php) para mejorar la experiencia de integración y uso.
 
@@ -93,6 +93,12 @@ directorio/de/php/php.exe composer.phar install --no-dev
 La documentación de este paquete está [en la Wiki](https://github.com/DarkGhostHunter/transbank-wrapper/wiki).
 
 La información sobre las variables de cada transacción está en [Transbank Developers](https://www.transbankdevelopers.cl). Este paquete no modifica el nombre de las variables, sin embargo en alguna versión 2.0 lo hará para mantener la homogeneidad entre transacciones.
+
+## Ejemplos
+
+Este paquete incluye una pequeña sección de ejemplos que te permitirán probar (y ver en acción) cómo funciona la interacción con los distintos servicios Transbank en modo `integration`.
+
+Sólo dirígete al [directorio `examples`](examples) y sigue las instrucciones.
 
 ## Información para contribuir y desarrollar este Wrapper
 
