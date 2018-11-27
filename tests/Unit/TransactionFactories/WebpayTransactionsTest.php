@@ -128,8 +128,6 @@ class WebpayTransactionsTest extends TestCase
 
         $results = $this->webpayIntegration->createNormal($this->mockTransactionAttributes);
 
-        var_dump($results);
-
         $this->assertInstanceOf(WebpayPlusResponse::class, $results);
         $this->assertEquals('ok', $results->get('test'));
 
