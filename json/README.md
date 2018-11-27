@@ -34,56 +34,32 @@ Esto permitiría conseguir el recurso y sus relaciones (compras, subscripciones,
 
 No encuentro alguna razón por la cual el recurso eliminado debería poder ser vuelto a no-eliminado, salvo la conveniencia por equivocaciones del comercio o usuario.
 
-## Autenticación y Firma
+## Autenticación sin firma
 
-Considerando cómo funciona Onepay, la *seguridad* debería estar basada en, al menos, dos aspectos:
-
-1. Un código que identifica el comercio o cuenta, UUID v4.
-
-Esto permite diferenciar cada comercio usando la plataforma, evitando que identificar el comercio si éste llega a filtrarse.
-
-2. Un string secreto compartido que permite codificar el hash de lmensaje en JSON.
-
-Esto permite a Transbank verificar que el mensaje no fue modificado una vez llega desde el comercio. Por ejemplo, cuando se usan proxys.
-
-3. (Opcional) Un string secreto compartido que el comercio debe verificar cuando Transbank envía su mensaje con éste.
-
-Esto protegería el Endpoint del comercio cuando Transbank enviase una petición POST de forma asíncrona (si llega a haber uno). Si el secreto no es el que indica Transbank, el `request` no debería ser procesado. 
-
-### Ejemplo
-
-Este debería realizarse usando el Header HTTP:
+Asumiendo que todas las operaciones serán sobre HTTPS (TLS 1.2+), sólo sería necesario ingresar el `Commerce ID` como `base64` - codificarlo así permite que si en un futuro aparece una nueva forma de identificadores de comercio, se mantenga leíble.
 
 ```http request
 POST http://webpay4g.transbank.cl/webpay/plus
 Content-Type: application/json
-Authorization: Bearer c0061c75-58fa-4ee8-97a9-02b14098fc10
-Signature: OWI4MjNlYWI0MWRkYjNhMWE3NzNmZDEzZTA2Zjc1ZWYzZDE3MWFkMDEzMWRjNzRhMmVmOTljMzYzNjE2NWIxN
+Authorization: Bearer MzM4OTIxODc=
 ```
 
-* `Authorization`: permite identificar al comercio.
-* `Signature`: Es `base64(hmac-sha2(secreto, sha2(JSON)))`. Permite saber que el mensaje no ha sido modificado y corresponde al comercio.
+Esto debería ser el estándar para todas los verbos HTTP. TLS se encargaría de los ataques [MITM](https://en.wikipedia.org/wiki/Man-in-the-middle_attack). 
 
-A considerar, codificar en el `Signature` el tiempo del header `Date`. Esto permitiría a Transbank no procesar el `request` después de cierto tiempo (60 segundos?). Quedaría algo así:
+### Secreto en llamadas asíncronas
 
-```
-base64(
-    hmac-sha2(
-        secreto,
-        sha2(JSON) + sha2("Mon, 1 Nov 2018 20:26:10 GMT")
-    )
-)
-``` 
+En caso que los servicios Transbank decidan enviar peticiones asíncronas al proceso de la transacción (webhooks), estos deberían salir con string secreto entre Transbank y el comercio.
 
 ```http request
-POST http://webpay4g.transbank.cl/webpay/plus
+POST http://myapp.com/transbank/webhook
+ 
+Transbank-Webhook-Secret: 9mzhY4Yd5UjdE3GEgJRwqC3
 Content-Type: application/json
-Authorization: Bearer c0061c75-58fa-4ee8-97a9-02b14098fc10
-Date: Mon, 1 Nov 2018 20:26:10 GMT
-Signature: OWI4MjNlYWI0MWRkYjNhMWE3NzNmZDEzZTA2Zjc1ZWYzZDE3MWFkMDEzMWRjNzRhMmVmOTljMzYzNjE2NWIxN
 ```
+ 
+Como el `webhook` del comercio estaría expuesto, el secreto permitiría sólo aceptar peticiones desde Transbank, mientras que Transbank usa cualquier servidor en su poder para realizar el webhook (`http://webhook003.webpay4g.transbank.cl`, etcétera).
 
-Esto en operaciones GET no se *necesitaría*.
+Sin el secreto compartido, sería posible averiguar por fuerza bruta las transacciones, 
 
 ## URIS
 
@@ -161,7 +137,7 @@ Por ejemplo, lo que rompe el flujo de la transacción son:
 
 Pero cosas que no rompen el flujo de la transacción son, por ejemplo, cuando se informa que la transacción no fue pagada por el cliente (cambio de estado).
 
-Para informar el error de forma más detallada, se puede empujar en JSON el código específico interno y la razón, junto al código de estado HTTP.
+Para informar el error que rompe el flujo de forma más detallada, se puede empujar en JSON el código específico interno y la razón, junto al código de estado HTTP. El SDK estaría a cargo de lavantar el `Exception`.
 
 ```json5
 // HTTP 403
@@ -191,9 +167,9 @@ Así se evita saber qué pasó con la transacción. Estos no son errores, son es
 
 Por ejemplo, un cargo automático vía Oneclick que es rechazado amerita un `Exception` y detener toda lógica, pero para otra aplicación quizás no dado que es esperable. 
 
-# Cuerpo de una transacción
+# Cuerpo de una transacción completa
 
-Esto es sólo un ejemplo
+Esto es sólo un ejemplo:
 
 ```json5
 {
