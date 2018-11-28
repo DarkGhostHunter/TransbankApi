@@ -4,13 +4,6 @@ namespace DarkGhostHunter\TransbankApi\Transactions;
 
 use DarkGhostHunter\TransbankApi\Transactions\Concerns\HasItems;
 
-/**
- * Class WebpayMallTransaction
- * @package DarkGhostHunter\TransbankApi\Transactions
- *
- * @method \DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse commit()
- * @method \DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse forceCommit()
- */
 class WebpayMallTransaction extends WebpayTransaction
 {
     use HasItems;
@@ -48,7 +41,7 @@ class WebpayMallTransaction extends WebpayTransaction
      */
     public function __call($method, $parameters)
     {
-        if (strpos('Order', $method)) {
+        if (strpos('Order', $method) !== false) {
             return $this->{str_replace('Order', 'Item', $method)}($parameters);
         }
 

@@ -4,7 +4,7 @@ namespace Tests\Unit\Transactions;
 
 use PHPUnit\Framework\TestCase;
 use DarkGhostHunter\TransbankApi\AbstractService;
-use DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction;
+use DarkGhostHunter\TransbankApi\Transactions\AbstractTransaction;
 use DarkGhostHunter\TransbankApi\Transbank;
 
 class TransactionTest extends TestCase
@@ -27,14 +27,14 @@ class TransactionTest extends TestCase
         'credential' => 'value'
     ];
 
-    /** @var \Mockery\MockInterface|AbstractServiceTransaction */
+    /** @var \Mockery\MockInterface|AbstractTransaction */
     protected $transaction;
 
     protected function setUp()
     {
         $this->mockAttributes['object'] = new \stdClass();
 
-        $this->transaction = new class extends AbstractServiceTransaction {};
+        $this->transaction = new class extends AbstractTransaction {};
 
         $transbank = \Mockery::mock(Transbank::class);
         $transbank->expects('getDefaults')
@@ -51,7 +51,7 @@ class TransactionTest extends TestCase
 
     public function testCanBeInstantiated()
     {
-        $this->assertInstanceOf(AbstractServiceTransaction::class, $this->transaction);
+        $this->assertInstanceOf(AbstractTransaction::class, $this->transaction);
     }
 
     public function testDoesNotInstantiatesWithoutArray()

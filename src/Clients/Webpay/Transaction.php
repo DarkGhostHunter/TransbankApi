@@ -1,15 +1,19 @@
 <?php
 
-namespace DarkGhostHunter\TransbankApi\WebpaySoap;
+namespace DarkGhostHunter\TransbankApi\Clients\Webpay;
 
+use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use LuisUrrutia\TransbankSoap\Validation;
-use DarkGhostHunter\TransbankApi\Connectors\SoapConnector;
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException;
-use DarkGhostHunter\TransbankApi\Exceptions\Webpay\InvalidWebpayTransactionException;
 
 abstract class Transaction
 {
-    protected static $ENDPOINTS = [
+    /**
+     * Endpoints for every transaction type
+     *
+     * @var array
+     */
+    protected static $endpoints = [
         'webpay' => [
             'integration'   => 'https://webpay3gint.transbank.cl/WSWebpayTransaction/cxf/WSWebpayService?wsdl',
             'production'    => 'https://webpay3g.transbank.cl/WSWebpayTransaction/cxf/WSWebpayService?wsdl',
@@ -74,9 +78,9 @@ abstract class Transaction
      * Transaction constructor.
      *
      * @param bool $isProduction
-     * @param array $credentials
+     * @param Fluent $credentials
      */
-    public function __construct(bool $isProduction, array $credentials)
+    public function __construct(bool $isProduction, Fluent $credentials)
     {
         $this->isProduction = $isProduction;
 
@@ -104,8 +108,8 @@ abstract class Transaction
     {
         $this->connector = new SoapConnector(
             $this->endpoint,
-            $this->credentials['privateKey'],
-            $this->credentials['publicCert'],
+            $this->credentials->privateKey,
+            $this->credentials->publicCert,
             [
                 'classmap' => $this->classMap,
                 'trace' => !$this->isProduction,
@@ -126,7 +130,7 @@ abstract class Transaction
 
     protected function bootEndpoint()
     {
-        $this->endpoint = self::$ENDPOINTS[$this->endpointType][$this->isProduction ? 'production' : 'integration'];
+        $this->endpoint = self::$endpoints[$this->endpointType][$this->isProduction ? 'production' : 'integration'];
     }
 
     /*
@@ -144,18 +148,8 @@ abstract class Transaction
     {
         return (new Validation(
             $this->connector->__getLastResponse(),
-            $this->credentials['webpayCert']
+            $this->credentials->webpayCert
         ))->isValid();
-    }
-
-    /**
-     * Returns the current Endpoint in use
-     *
-     * @return string
-     */
-    protected function getEndpoint()
-    {
-        return $this->endpoint;
     }
 
     /*

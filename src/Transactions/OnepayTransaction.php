@@ -11,7 +11,7 @@ use DarkGhostHunter\TransbankApi\Transactions\Concerns\HasItems;
  * Class OnepayTransaction
  * @package DarkGhostHunter\TransbankApi\Transactions
  */
-class OnepayTransaction extends AbstractServiceTransaction
+class OnepayTransaction extends AbstractTransaction
 {
     use HasItems;
 
@@ -35,6 +35,27 @@ class OnepayTransaction extends AbstractServiceTransaction
     ];
 
     /**
+     * Attributes to check to be filled before committing
+     *
+     * @var array
+     */
+    protected $filledAttributes = [
+        'externalUniqueNumber',
+        'total',
+        'itemsQuantity',
+        'issuedAt',
+        'callbackUrl',
+        'items',
+        'callbackUrl',
+    ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Construct
+    |--------------------------------------------------------------------------
+    */
+
+    /**
      * OnepayTransaction constructor.
      *
      * @param array $attributes
@@ -49,16 +70,11 @@ class OnepayTransaction extends AbstractServiceTransaction
         parent::__construct($attributes);
     }
 
-    /**
-     * Automatically generates an External Unique Number for the Item
-     *
-     * @return string
-     * @throws \Exception
-     */
-    protected function autoGenerateEun()
-    {
-        return bin2hex(random_bytes(16));
-    }
+    /*
+    |--------------------------------------------------------------------------
+    | External Unique Number generation
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Sets logic to make an External Unique Number for the OnepayTransaction
@@ -70,6 +86,22 @@ class OnepayTransaction extends AbstractServiceTransaction
         $this->eunGenerator = $function;
     }
 
+    /**
+     * Automatically generates an External Unique Number for the Item
+     *
+     * @return string
+     * @throws \Exception
+     */
+    protected function autoGenerateEun()
+    {
+        return bin2hex(random_bytes(16));
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Logic
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Fill any empty attributes depending on the transaction type
@@ -87,15 +119,18 @@ class OnepayTransaction extends AbstractServiceTransaction
             }
         }
 
-        // Add the Total
-        $this->total = $this->getTotal();
+        // Set the time this is being committed as a timestamp
+        $this->issuedAt = time();
+
+        $this->itemsQuantity = $this->getItemsQuantityAttribute();
     }
 
 
     /**
      * Does any logic before committing the transaction to a Result
      *
-     * @throws CartNegativeAmountException|CartEmptyException
+     * @throws CartNegativeAmountException
+     * @throws CartEmptyException
      */
     protected function performPreLogic()
     {
@@ -105,11 +140,20 @@ class OnepayTransaction extends AbstractServiceTransaction
                 throw new CartEmptyException($this);
             }
 
-            if (($this->total = $this->getTotal()) < 1) {
+            if ($this->total < 1) {
                 throw new CartNegativeAmountException($this);
             }
         }
+
+        // Uppercase the channel
+        $this->channel = strtoupper($this->channel);
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Has Items Override
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Parse the Item we are getting
@@ -127,26 +171,23 @@ class OnepayTransaction extends AbstractServiceTransaction
             return new Item(array_merge($this->itemDefaults,$item));
         }
 
-        if ($item instanceof Item && $item->quantity > 0) {
-            return $item;
-        }
-
         return null;
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Items attribute helpers functions
+    |--------------------------------------------------------------------------
+    */
+
     /**
-     * Count all the Items by their quantity
+     * Returns hoy many Items this Transaction has
      *
      * @return int
      */
-    public function countItemsQuantity()
+    public function getItemsQuantityAttribute()
     {
-        $quantity = 0;
-        foreach ($this->items as $item) {
-            $quantity += $item->quantity;
-        }
-
-        return $quantity;
+        return $this->attributes['itemsQuantity'] = count($this->items) ?? 0;
     }
 
     /**
@@ -154,14 +195,20 @@ class OnepayTransaction extends AbstractServiceTransaction
      *
      * @return int
      */
-    public function getTotal()
+    public function getTotalAttribute()
     {
         $amount = 0;
         foreach ($this->items as $item) {
             $amount += (int)$item->amount;
         }
-        return $amount;
+        return $this->attributes['total'] = $amount;
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Custom Array representation
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Transform the object to an array.
@@ -175,7 +222,7 @@ class OnepayTransaction extends AbstractServiceTransaction
             $attributes = array_merge(
                 array_merge(
                     $this->attributes,
-                    ['total' => $this->getTotal()]
+                    ['total' => $this->total]
                 ),
                 ['items' => $this->items]
             );

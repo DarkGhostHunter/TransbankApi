@@ -5,9 +5,10 @@ namespace DarkGhostHunter\TransbankApi\Transactions;
 use DarkGhostHunter\TransbankApi\AbstractService;
 use DarkGhostHunter\TransbankApi\Contracts\ServiceInterface;
 use DarkGhostHunter\TransbankApi\Contracts\TransactionInterface;
+use DarkGhostHunter\TransbankApi\Exceptions\TransactionEmptyAttributeException;
 use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 
-abstract class AbstractServiceTransaction extends Fluent implements TransactionInterface
+abstract class AbstractTransaction extends Fluent implements TransactionInterface
 {
     /**
      * Service this Transaction uses
@@ -123,6 +124,7 @@ abstract class AbstractServiceTransaction extends Fluent implements TransactionI
      * Commits the transaction to Transbank and return a AbstractResult
      *
      * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse
+     * @throws TransactionEmptyAttributeException
      */
     public function commit()
     {
@@ -133,6 +135,7 @@ abstract class AbstractServiceTransaction extends Fluent implements TransactionI
      * Forcefully commits the transaction to Transbank
      *
      * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse
+     * @throws TransactionEmptyAttributeException
      */
     public function forceCommit()
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace DarkGhostHunter\TransbankApi\Connectors;
+namespace DarkGhostHunter\TransbankApi\Clients\Webpay;
 
 use DOMDocument;
 use LuisUrrutia\TransbankSoap\Process;
@@ -8,7 +8,7 @@ use SoapClient;
 
 /**
  * Class SoapConnector
- * @package DarkGhostHunter\TransbankApi\Connectors
+ * @package DarkGhostHunter\TransbankApi\Clients
  *
  * @method object acknowledgeTransaction($transaction)
  * @method object getTransactionResult($transaction)

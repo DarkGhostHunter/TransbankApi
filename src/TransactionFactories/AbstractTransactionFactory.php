@@ -3,7 +3,7 @@
 namespace DarkGhostHunter\TransbankApi\TransactionFactories;
 
 use DarkGhostHunter\TransbankApi\AbstractService;
-use DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction;
+use DarkGhostHunter\TransbankApi\Transactions\AbstractTransaction;
 
 abstract class AbstractTransactionFactory
 {
@@ -37,7 +37,7 @@ abstract class AbstractTransactionFactory
      *
      * @param string $type
      * @param array $attributes
-     * @return AbstractServiceTransaction
+     * @return AbstractTransaction
      */
     abstract protected function makeTransaction(string $type, array $attributes = []);
 
@@ -45,10 +45,10 @@ abstract class AbstractTransactionFactory
      * Injects Service, Defaults and Type to the Transaction
      *
      * @param string $type
-     * @param AbstractServiceTransaction $transaction
-     * @return AbstractServiceTransaction
+     * @param AbstractTransaction $transaction
+     * @return AbstractTransaction
      */
-    protected function prepareTransaction(string $type, AbstractServiceTransaction $transaction)
+    protected function prepareTransaction(string $type, AbstractTransaction $transaction)
     {
         // The Type of the transaction, so the Adapter can differentiate how
         // to commit it to Transbank if there is more than one.

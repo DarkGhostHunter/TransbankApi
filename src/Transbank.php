@@ -2,6 +2,7 @@
 
 namespace DarkGhostHunter\TransbankApi;
 
+use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use Exception;
 use DarkGhostHunter\TransbankApi\Exceptions\Credentials\CredentialInvalidException;
 use DarkGhostHunter\TransbankApi\Exceptions\Transbank\InvalidServiceException;
@@ -170,7 +171,7 @@ class Transbank
                     throw new CredentialInvalidException($service, $credential);
                 }
             }
-            $this->servicesCredentials[$service] = $credentials;
+            $this->servicesCredentials[$service] = new Fluent($credentials);
             return;
         }
 

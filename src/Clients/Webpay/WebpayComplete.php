@@ -1,5 +1,5 @@
 <?php
-namespace DarkGhostHunter\TransbankApi\WebpaySoap;
+namespace DarkGhostHunter\TransbankApi\Clients\Webpay;
 
 use Exception;
 use DarkGhostHunter\TransbankApi\Helpers\Fluent;

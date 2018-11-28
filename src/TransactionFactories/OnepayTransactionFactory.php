@@ -11,7 +11,7 @@ class OnepayTransactionFactory extends AbstractTransactionFactory
      *
      * @param string $type
      * @param array $attributes
-     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractServiceTransaction|OnepayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractTransaction|OnepayTransaction
      * @throws \Exception
      */
     protected function makeTransaction(string $type, array $attributes = [])

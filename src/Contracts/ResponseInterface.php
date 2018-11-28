@@ -2,6 +2,15 @@
 
 namespace DarkGhostHunter\TransbankApi\Contracts;
 
+/**
+ * Interface ResponseInterface
+ *
+ * Once Transbank returns a response from their systems, this contract allows the Service to
+ * understand what is returned, if the response is a success (or failed), and to display
+ * the error in something understandable.
+ *
+ * @package DarkGhostHunter\TransbankApi\Contracts
+ */
 interface ResponseInterface
 {
     /**
@@ -26,7 +35,7 @@ interface ResponseInterface
     public function getErrorCode();
 
     /**
-     * Detect if the Result was successful or not
+     * Sets if the Result was successful or not
      *
      * @return void
      */

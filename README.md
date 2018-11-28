@@ -1,9 +1,9 @@
 # TransbankApi - @dev
 [![Build Status](https://travis-ci.com/DarkGhostHunter/TransbankApi.svg?branch=master)](https://travis-ci.com/DarkGhostHunter/TransbankApi)
 
-`TransbankApi` es una especie de wrapper no-oficial de [Transbank SDK](https://github.com/TransbankDevelopers/transbank-sdk-php) para mejorar la experiencia de integración y uso.
+`TransbankApi` es un reemplazo al [Transbank SDK](https://github.com/TransbankDevelopers/transbank-sdk-php) con la finalidad de mejorar la experiencia de integración y uso.
 
-> Esta versión es incompatible con PHP 5. Para usar este código con PHP 5, usa la versión 1.4.3 del SDK oficial.
+> Esta versión es incompatible con PHP 5. Para usar este código con PHP 5, usa la versión 1.4.3 del [Transbank SDK](https://github.com/TransbankDevelopers/transbank-sdk-php).
 
 > Esta paquete es un trabajo en progreso ¡No lo uses en producción hasta que no esté listo! 
 
@@ -14,7 +14,7 @@
 
 ## Dependencias
 
-Este paquete descarga el SDK oficial de Transbank como dependencia, además de la [implementación de SOAP de Luis Urrutia](https://github.com/LuisUrrutia/TransbankSoap).  
+Este paquete usa Guzzle HTTP además de la [implementación de SOAP de Luis Urrutia](https://github.com/LuisUrrutia/TransbankSoap).  
 
 A su vez, el SDK oficial necesita las siguientes extensiones de PHP habilitadas:
 
@@ -35,14 +35,14 @@ Hay tres formas para instalar el paquete: usando Composer, sin composer, y todo 
 Para usar el SDK en tu proyecto puedes usar Composer, instalándolo desde la consola:
 
 ```bash
-composer require darkghosthunter/transbank-wrapper "1.0-beta"
+composer require darkghosthunter/transbank-wrapper "1.0-rc"
 ```
 
 También puedes añadir el SDK como dependencia a tu proyecto y luego ejecutar `composer update`.
 
 ```json
     "require": {
-        "darkghostgunter/transbank-wrapper": "@dev"
+        "darkghostgunter/transbank-wrapper": "1.0-rc"
     }
 ```
 

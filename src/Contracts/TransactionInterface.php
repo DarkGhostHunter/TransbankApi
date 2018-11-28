@@ -2,6 +2,16 @@
 
 namespace DarkGhostHunter\TransbankApi\Contracts;
 
+/**
+ * Interface TransactionInterface
+ *
+ * A transaction works like a resource. It holds a reference to the service object it belongs to.
+ * This allows the transaction to be committed to Transbank, and save the response inside it.
+ * Since all transactions share common properties and methods, the only thing differencing
+ * the Transaction is its 'type', which should be set by the Service.
+ *
+ * @package DarkGhostHunter\TransbankApi\Contracts
+ */
 interface TransactionInterface
 {
     /**

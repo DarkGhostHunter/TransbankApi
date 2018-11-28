@@ -2,12 +2,13 @@
 
 namespace DarkGhostHunter\TransbankApi;
 
-use BadMethodCallException;
-use Exception;
 use DarkGhostHunter\TransbankApi\Contracts\AdapterInterface;
 use DarkGhostHunter\TransbankApi\Contracts\ServiceInterface;
 use DarkGhostHunter\TransbankApi\Contracts\TransactionInterface;
 use DarkGhostHunter\TransbankApi\Helpers\Helpers;
+use DarkGhostHunter\TransbankApi\Helpers\Fluent;
+use Exception;
+use BadMethodCallException;
 
 /**
  * Class AbstractService
@@ -39,9 +40,9 @@ abstract class AbstractService implements ServiceInterface
     /**
      * Credentials to use with the Adapter
      *
-     * @var array
+     * @var \DarkGhostHunter\TransbankApi\Helpers\Fluent
      */
-    protected $credentials = [];
+    protected $credentials;
 
     /**
      * Class in charge of dispatching a Transaction
@@ -242,7 +243,7 @@ abstract class AbstractService implements ServiceInterface
     }
 
     /**
-     * Set the correct credentials set in the adapter.
+     * Set the correct credentials in the adapter.
      *
      * Whe using `integration` environments, Webpay credentials will
      * depend on the transaction type being used.
@@ -252,11 +253,13 @@ abstract class AbstractService implements ServiceInterface
     protected function setAdapterCredentials(string $type = null)
     {
         $this->adapter->setCredentials(
-            array_merge(
-                $this->isProduction()
-                    ? $this->getProductionCredentials()
-                    : $this->getIntegrationCredentials($type),
-                $this->getCredentials() ?? []
+            new Fluent(
+                array_merge(
+                    $this->isProduction()
+                        ? $this->getProductionCredentials()
+                        : $this->getIntegrationCredentials($type),
+                    $this->getCredentials() ?? []
+                )
             )
         );
     }

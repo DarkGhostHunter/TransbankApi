@@ -1,6 +1,6 @@
 <?php
 
-namespace DarkGhostHunter\TransbankApi\WebpaySoap;
+namespace DarkGhostHunter\TransbankApi\Clients\Webpay;
 
 use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 

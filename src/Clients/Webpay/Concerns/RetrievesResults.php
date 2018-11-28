@@ -1,15 +1,15 @@
 <?php
 
-namespace DarkGhostHunter\TransbankApi\WebpaySoap\Concerns;
+namespace DarkGhostHunter\TransbankApi\Clients\Webpay\Concerns;
 
 use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 
 /**
  * Trait RetrievesResults
  *
- * @package DarkGhostHunter\TransbankApi\WebpaySoap\Concerns
+ * @package DarkGhostHunter\TransbankApi\Clients\Webpay\Concerns
  *
- * @mixin \DarkGhostHunter\TransbankApi\WebpaySoap\Transaction
+ * @mixin \DarkGhostHunter\TransbankApi\Clients\Webpay\Transaction
  */
 trait RetrievesResults
 {

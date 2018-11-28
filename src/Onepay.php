@@ -36,7 +36,7 @@ class Onepay extends AbstractService
     /**
      * Transaction Factory to use for forwarding calls
      *
-     * @example \DarkGhostHunter\TransbankApi\WebpaySoap\AbstractTransactionFactory::class
+     * @example \DarkGhostHunter\TransbankApi\Clients\Webpay\AbstractTransactionFactory::class
      * @var string
      */
     protected $transactionFactory;
@@ -131,7 +131,8 @@ class Onepay extends AbstractService
      */
     public function get($transaction, $options = null)
     {
-        return parent::get([$transaction['occ'], $transaction['externalUniqueNumber']], 'onepay.cart');
+        // Add the `issuedAt` timestamp for getting the transaction
+        return parent::get($transaction + ['issuedAt' => time()], 'onepay.cart');
     }
 
     /*

@@ -2,38 +2,32 @@
 
 namespace DarkGhostHunter\TransbankApi\Adapters;
 
+use DarkGhostHunter\TransbankApi\Clients\Onepay\OnepayHttp;
 use Transbank\Onepay\Item;
-use Transbank\Onepay\OnepayBase;
 use Transbank\Onepay\Refund;
 use Transbank\Onepay\ShoppingCart;
 use Transbank\Onepay\Transaction;
 use DarkGhostHunter\TransbankApi\Contracts\TransactionInterface;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepaySdkException;
-use DarkGhostHunter\TransbankApi\Exceptions\Transbank\TransbankSdkException;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 
 class OnepayAdapter extends AbstractAdapter
 {
     /**
+     * Onepay HTTP Client
+     *
+     * @var \DarkGhostHunter\TransbankApi\Clients\Onepay\OnepayHttp
+     */
+    protected $client;
+
+    /**
      * Set ups the Onepay SDK
      *
-     * @param TransactionInterface|null $transaction
      * @throws \Exception
      */
-    protected function setUpOnepaySdk(TransactionInterface $transaction = null)
+    protected function bootClient()
     {
-        // Set the Integration type
-        OnepayBase::setCurrentIntegrationType($this->isProduction ? 'LIVE' : 'TEST');
-
-        if ($transaction) {
-            // Set the App Scheme if the transaction will use the APP channel
-            OnepayBase::setAppScheme($transaction->appScheme);
-            OnepayBase::setCallbackUrl($transaction->callbackUrl);
-        }
-
-        // Set the credentials
-        OnepayBase::setApiKey($this->credentials['apiKey']);
-        OnepayBase::setSharedSecret($this->credentials['secret']);
+        $this->client = new OnepayHttp($this->isProduction, $this->credentials);
     }
 
     /**
@@ -46,7 +40,7 @@ class OnepayAdapter extends AbstractAdapter
      */
     public function commit(TransactionInterface $transaction, $options = null)
     {
-        $this->setUpOnepaySdk($transaction);
+        $this->bootClient();
 
         switch ($transaction->getType()) {
             case 'onepay.cart':
@@ -61,54 +55,12 @@ class OnepayAdapter extends AbstractAdapter
      *
      * @param OnepayTransaction $transaction
      * @return array
-     * @throws OnepaySdkException
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayValidationException
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayResponseErrorException
      */
     protected function commitCart(OnepayTransaction $transaction)
     {
-        $cart = new ShoppingCart;
-
-        // Add each Item into the Shopping Cart
-        foreach ($transaction->getItems() as $item) {
-            $cart->add(
-                new Item(
-                    $item->description,
-                    $item->quantity,
-                    $item->amount,
-                    $item->additionalData,
-                    $item->expire
-                )
-            );
-        }
-
-        switch (strtolower($transaction->channel)) {
-            case 'mobile':  $channel = 'MOBILE';    break;
-            case 'app':     $channel = 'APP';       break;
-            case 'web':
-            default:        $channel = 'WEB';       break;
-        }
-
-        // Catch the Transbank SDK Exception, return it as part of the OnepaySdkException
-        try {
-            $result = Transaction::create(
-                $cart,
-                $channel,
-                $transaction->externalUniqueNumber
-            );
-        } catch (\Exception $exception) {
-            throw new OnepaySdkException($exception);
-        }
-
-        return [
-            'occ'                   => $result->getOcc(),
-            'ott'                   => $result->getOtt(),
-            'externalUniqueNumber'  => $result->getExternalUniqueNumber(),
-            'qrCodeAsBase64'        => $result->getQrCodeAsBase64(),
-            'issuedAt'              => $result->getIssuedAt(),
-            'signature'             => $result->getSignature(),
-            'responseCode'          => $result->getResponseCode(),
-            'description'           => $result->getDescription(),
-            'amount'                => $transaction->getTotal()
-        ];
+        return $this->client->commit($transaction);
     }
 
     /**
@@ -150,26 +102,8 @@ class OnepayAdapter extends AbstractAdapter
      */
     public function get($transaction, $options = null)
     {
-        $this->setUpOnepaySdk();
+        $this->bootClient();
 
-        try {
-            $result = Transaction::commit($transaction[0], $transaction[1]);
-        } catch (\Exception $exception) {
-            throw new OnepaySdkException($exception);
-        }
-
-        return [
-            'amount'                =>  $result->getAmount(),
-            'authorizationCode'     =>  $result->getAuthorizationCode(),
-            'buyOrder'              =>  $result->getBuyOrder(),
-            'installmentsNumber'    =>  $result->getInstallmentsNumber(),
-            'installmentsAmount'    =>  $result->getInstallmentsAmount(),
-            'issuedAt'              =>  $result->getIssuedAt(),
-            'occ'                   =>  $result->getOcc(),
-            'transactionDesc'       =>  $result->getTransactionDesc(),
-            'responseCode'          =>  $result->getResponseCode(),
-            'description'           =>  $result->getDescription(),
-        ];
-
+        return $this->client->confirm(new OnepayTransaction($transaction));
     }
 }

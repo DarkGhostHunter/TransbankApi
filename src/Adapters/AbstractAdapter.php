@@ -3,6 +3,7 @@
 namespace DarkGhostHunter\TransbankApi\Adapters;
 
 use DarkGhostHunter\TransbankApi\Contracts\AdapterInterface;
+use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 
 abstract class AbstractAdapter implements AdapterInterface
 {
@@ -16,17 +17,17 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Credentials for the Service and Transaction
      *
-     * @var array
+     * @var Fluent
      */
     protected $credentials;
 
     /**
      * Sets credentials to use against Transbank SDK
      *
-     * @param array $credentials
+     * @param Fluent $credentials
      * @return mixed
      */
-    public function setCredentials(array $credentials)
+    public function setCredentials(Fluent $credentials)
     {
         $this->credentials = $credentials;
     }

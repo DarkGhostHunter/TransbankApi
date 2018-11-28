@@ -4,14 +4,7 @@ namespace DarkGhostHunter\TransbankApi\Transactions;
 
 use DarkGhostHunter\TransbankApi\Helpers\Helpers;
 
-/**
- * Class WebpayTransaction
- * @package DarkGhostHunter\TransbankApi\Transactions
- *
- * @method \DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse commit()
- * @method \DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse forceCommit()
- */
-class WebpayTransaction extends AbstractServiceTransaction
+class WebpayTransaction extends AbstractTransaction
 {
     /**
      * Set default attributes for the Item, depending on the Transaction type
@@ -64,12 +57,12 @@ class WebpayTransaction extends AbstractServiceTransaction
     }
 
     /**
-     * Run logic before committing
+     * Fills Empty Attributes
      */
-    protected function performPreLogic()
+    protected function fillEmptyAttributes()
     {
-        // Create the BuyOder with the timestamp only when this
-        // transaction is a WebpaySoap Oneclick Charge.
+        // Create the BuyOder with the required timestamp only when this
+        // transaction is a Webpay Oneclick Charge.
         if ($this->type === 'oneclick.charge' && strlen((string)$this->buyOrder) < 14) {
             $this->buyOrder = date('YmdHis') . (substr((string)$this->buyOrder, -3) ?? '000');
         }

@@ -2,12 +2,14 @@
 
 namespace DarkGhostHunter\TransbankApi\Contracts;
 
+use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 
 /**
  * Interface AdapterInterface
  *
- * Provides methods to use against the Transbank SDK depending on the transaction properties
- * and attributes.
+ * Provides methods to use against a Transbank Service depending on the transaction properties
+ * and credentials of the Service this eventually belong. So you can swap the way to interact
+ * with Transbank without having to change public-facing methods.
  *
  * @package DarkGhostHunter\TransbankApi\Contracts
  */
@@ -16,10 +18,10 @@ interface AdapterInterface
     /**
      * Sets credentials to use against Transbank SDK
      *
-     * @param array $credentials
+     * @param Fluent $credentials
      * @return mixed
      */
-    public function setCredentials(array $credentials);
+    public function setCredentials(Fluent $credentials);
 
     /**
      * Commits a transaction into the Transbank SDK
@@ -33,8 +35,8 @@ interface AdapterInterface
     /**
      * Retrieves and Confirms a transaction into the Transbank SDK
      *
-     * @param $transaction
-     * @param array $options
+     * @param string|array|TransactionInterface $transaction
+     * @param string|array $options
      * @return mixed
      */
     public function get($transaction, $options = null);

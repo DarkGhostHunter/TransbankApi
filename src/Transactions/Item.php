@@ -6,5 +6,5 @@ use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 
 class Item extends Fluent
 {
-    //
+    // ...
 }

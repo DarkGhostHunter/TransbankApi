@@ -1,6 +1,6 @@
 {
-  "name": "darkghosthunter/transbank-wrapper",
-  "description": "Wrapper no-oficial para Transbank SDK",
+  "name": "darkghosthunter/transbank-api",
+  "description": "Transbank SDK no oficial para PHP 7.1+",
   "keywords": [
     "payments",
     "transbank",
@@ -24,7 +24,6 @@
     "ext-mbstring": "*",
     "ext-dom": "*",
     "ext-soap": "*",
-    "transbank/transbank-sdk": "^1.4.3",
     "luisurrutia/transbank-soap": "0.0.1",
     "guzzle/guzzle": "3.9.*"
   },

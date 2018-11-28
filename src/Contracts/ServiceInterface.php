@@ -8,8 +8,9 @@ use DarkGhostHunter\TransbankApi\Transbank;
 /**
  * Interface TransbankServiceInterface
  *
- * The new service must receive a Transbank Configuration and use that to
- * connect to Transbank Services.
+ * This is the name of the Service available in Transbank. Works a pivot between
+ * the user transactions requests and Transbank responses. It must receive a
+ * Transbank Configuration and use that to connect to Transbank Services.
  *
  * @package DarkGhostHunter\TransbankApi\Contracts
  */
