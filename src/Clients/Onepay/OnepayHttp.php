@@ -105,6 +105,7 @@ class OnepayHttp extends AbstractConnector
                 ['body' => json_encode($transaction, JSON_UNESCAPED_SLASHES)]
             )->getBody()->getContents()
         );
+
         if ($response->responseCode === 'OK') {
             return $response->result;
         }

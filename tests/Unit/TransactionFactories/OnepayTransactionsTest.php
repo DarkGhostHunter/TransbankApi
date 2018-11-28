@@ -3,6 +3,7 @@
 
 namespace Tests\Unit\TransactionFactories;
 
+use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Responses\OnepayResponse;
 use PHPUnit\Framework\TestCase;
 use DarkGhostHunter\TransbankApi\Adapters\OnepayAdapter;
@@ -79,7 +80,6 @@ class OnepayTransactionsTest extends TestCase
     {
         $this->mockAdapter->shouldReceive('setCredentials')
             ->once()
-            ->with(\Mockery::type('array'))
             ->andReturnUndefined();
     }
 

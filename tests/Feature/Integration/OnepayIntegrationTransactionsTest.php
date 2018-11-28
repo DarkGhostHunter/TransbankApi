@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Integration;
 
+use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayResponseErrorException;
 use PHPUnit\Framework\TestCase;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\CartEmptyException;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\CartNegativeAmountException;
@@ -20,7 +21,7 @@ class OnepayIntegrationTransactionsTest extends TestCase
 
         $transbank->setDefaults('onepay', [
             'channel'               => 'mobile',
-            'generateOttQrCode'     => false,
+            'generateOttQrCode'     => true,
             'callbackUrl'           => 'http://app.com/onepay/result',
             'appScheme'             => 'my-app://onepay/result',
         ]);
@@ -35,7 +36,7 @@ class OnepayIntegrationTransactionsTest extends TestCase
     public function testCreatesCartInTransbank()
     {
         $cart = $this->onepay->createCart([
-            'channel' => 'APP',
+            'channel' => 'web',
             'items' => [
                 'description' => 'Zapatos',
                 'quantity' =>  1,
@@ -49,15 +50,12 @@ class OnepayIntegrationTransactionsTest extends TestCase
         $this->assertNotEmpty($cart->qrCodeAsBase64);
         $this->assertNotEmpty($cart->issuedAt);
         $this->assertNotEmpty($cart->signature);
-        $this->assertEquals('OK', $cart->responseCode);
-        $this->assertEquals('OK', $cart->description);
-        $this->assertNotEmpty($cart->amount);
     }
 
     public function testExceptionOnChannelAppWithoutScheme()
     {
 
-        $this->expectException(OnepaySdkException::class);
+        $this->expectException(OnepayResponseErrorException::class);
 
         $cart = $this->onepay->createCart([
             'channel' => 'app',

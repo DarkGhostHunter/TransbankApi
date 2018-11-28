@@ -70,7 +70,7 @@ class TransbankTest extends TestCase
             'webpay' => $this->mockCredentials
         ]);
 
-        $this->assertEquals($this->mockCredentials, $transbank->getCredentials('webpay'),
+        $this->assertEquals($this->mockCredentials, $transbank->getCredentials('webpay')->toArray(),
             '', 0.0, 10, true);
     }
 
@@ -89,7 +89,7 @@ class TransbankTest extends TestCase
 
         $transbank->setCredentials('webpay', $this->mockCredentials);
 
-        $this->assertEquals($this->mockCredentials, $transbank->getCredentials('webpay'),
+        $this->assertEquals($this->mockCredentials, $transbank->getCredentials('webpay')->toArray(),
             '', 0.0, 10, true);
     }
 

@@ -20,13 +20,6 @@ class Fluent implements ArrayAccess, JsonSerializable
     protected $attributes = [];
 
     /**
-     * Attributes to hide on serialization (JSON, array)
-     *
-     * @var array
-     */
-    protected $hidden = [];
-
-    /**
      * Fluent constructor.
      *
      * @param array $attributes
@@ -101,7 +94,7 @@ class Fluent implements ArrayAccess, JsonSerializable
      */
     public function toArray()
     {
-        return Helpers::arrayExcept($this->attributes, $this->hidden);
+        return $this->attributes;
     }
 
     /**

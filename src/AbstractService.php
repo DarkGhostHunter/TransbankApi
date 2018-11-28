@@ -219,7 +219,7 @@ abstract class AbstractService implements ServiceInterface
     {
         return $this->transbankConfig->getCredentials(
             lcfirst(Helpers::classBasename(static::class))
-        ) ?? [];
+        );
     }
 
     /**
@@ -245,8 +245,9 @@ abstract class AbstractService implements ServiceInterface
     /**
      * Set the correct credentials in the adapter.
      *
-     * Whe using `integration` environments, Webpay credentials will
-     * depend on the transaction type being used.
+     * Whe using `integration` environments, Credentials may depend on the
+     * transaction type being used, so the type is passed to the method.
+     * After that, these are overridden by any of the user credentials.
      *
      * @param string|null $type
      */
@@ -258,7 +259,7 @@ abstract class AbstractService implements ServiceInterface
                     $this->isProduction()
                         ? $this->getProductionCredentials()
                         : $this->getIntegrationCredentials($type),
-                    $this->getCredentials() ?? []
+                    (array)$this->credentials ?? []
                 )
             )
         );

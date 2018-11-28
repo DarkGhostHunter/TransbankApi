@@ -147,7 +147,7 @@ class Transbank
      * Gets a Service credentials
      *
      * @param string $service
-     * @return null
+     * @return Fluent|null
      */
     public function getCredentials(string $service)
     {

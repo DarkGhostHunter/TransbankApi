@@ -120,7 +120,7 @@ class Webpay extends AbstractService
     {
         return array_merge([
             'webpayCert' => $this->getWebpayCertForEnvironment(),
-        ], $this->transbankConfig->getCredentials('webpay'));
+        ], $this->transbankConfig->getCredentials('webpay')->toArray());
     }
 
     /**

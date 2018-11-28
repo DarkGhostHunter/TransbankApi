@@ -13,7 +13,6 @@ class WebpayTransaction extends AbstractTransaction
      */
     public function setDefaults(array $defaults)
     {
-
         switch ($this->type) {
             case 'plus.normal':
             case 'plus.defer':

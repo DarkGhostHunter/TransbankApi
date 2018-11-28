@@ -2,6 +2,8 @@
 
 namespace DarkGhostHunter\TransbankApi\Responses;
 
+use DarkGhostHunter\TransbankApi\Helpers\Helpers;
+
 class OnepayResponse extends AbstractResponse
 {
     /**
@@ -20,7 +22,6 @@ class OnepayResponse extends AbstractResponse
      */
     protected $tokenName = 'TBK_TOKEN';
 
-
     /**
      * Detect if the Result was successful or not
      *
@@ -28,8 +29,16 @@ class OnepayResponse extends AbstractResponse
      */
     public function setStatus()
     {
-        if (!($this->isSuccess = $this->responseCode === 'OK')) {
-            $this->errorCode = $this->responseCode;
-        };
+        $this->isSuccess = true;
+    }
+
+    /**
+     * Transform the object to an array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return Helpers::arrayExcept($this->attributes, $this->hidden);
     }
 }

@@ -72,7 +72,7 @@ class WebpayTransactionsTest extends TestCase
     {
         $this->mockAdapter->shouldReceive('setCredentials')
             ->once()
-            ->with(\Mockery::type('array'))
+            ->with(\Mockery::type('object'))
             ->andReturnUndefined();
     }
 
