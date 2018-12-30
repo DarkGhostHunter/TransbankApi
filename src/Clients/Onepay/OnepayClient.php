@@ -25,8 +25,8 @@ class OnepayClient extends AbstractClient
      * @var array
      */
     protected static $endpoints = [
-        'integration'   => 'https://onepay.ionix.cl',
-        'production'    => 'https://www.onepay.cl',
+        'integration' => 'https://onepay.ionix.cl',
+        'production' => 'https://www.onepay.cl',
     ];
 
     /**
@@ -60,7 +60,7 @@ class OnepayClient extends AbstractClient
      */
     protected function bootEndpoint()
     {
-        $this->endpoint = self::$endpoints[$this->isProduction ? 'production' : 'integration'];
+        $this->endpoint = self::$endpoints[$this->isProduction ? 'production' : 'integration'] . self::PATH;
     }
 
     /**
@@ -71,8 +71,8 @@ class OnepayClient extends AbstractClient
     protected function bootHttpClient()
     {
         $this->httpClient = new Client([
-            'base_uri' => $this->endpoint . self::PATH,
-            'timeout'  => 15.0,
+            'base_uri' => $this->endpoint,
+            'timeout' => 15.0,
             'verify' => true,
             'headers' => [
                 'Content-type: application/json'
@@ -104,7 +104,8 @@ class OnepayClient extends AbstractClient
 
         $content = json_decode($response->getBody()->getContents());
 
-        if ($content->responseCode === 'OK') {
+        // Proceed only if the Status Code is OK and the "responseCode" is "OK".
+        if ($response->getStatusCode() === 200 && $content->responseCode === 'OK') {
             return $content->result;
         }
 
@@ -175,12 +176,48 @@ class OnepayClient extends AbstractClient
 
     /*
     |--------------------------------------------------------------------------
+    | Signature helper
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Creates a signable string from the properties of the transaction
+     *
+     * @param $properties
+     * @param $transaction
+     * @return string
+     */
+    protected function createSignableString(array $properties, $transaction)
+    {
+        $data = '';
+
+        foreach ($properties as $property) {
+            $data .= mb_strlen($transaction->{$property}) . $transaction->{$property};
+        }
+
+        return $data;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
     | Verification
     |--------------------------------------------------------------------------
     */
 
-    protected function verify($response, $data, $transaction)
+    /**
+     * Verifies if the Response signature matches the transaction data signature
+     *
+     * @param $response
+     * @param $properties
+     * @param $transaction
+     * @return bool
+     * @throws OnepayValidationException
+     */
+    protected function verify($response, $properties, $transaction)
     {
+        $data = $this->createSignableString($properties, $response);
+
         $signature = base64_encode(
             hash_hmac('sha256', $data, $this->credentials->secret, true)
         );
@@ -202,11 +239,13 @@ class OnepayClient extends AbstractClient
      */
     protected function verifyCommitResponse($response, $transaction)
     {
-        $data = mb_strlen($response->occ) . $response->occ;
-        $data .= mb_strlen($response->externalUniqueNumber) . $response->externalUniqueNumber;
-        $data .= mb_strlen($response->issuedAt) . $response->issuedAt;
+        $properties = [
+            'occ',
+            'externalUniqueNumber',
+            'issuedAt',
+        ];
 
-        return $this->verify($response, $data, $transaction);
+        return $this->verify($response, $properties, $transaction);
     }
 
     /**
@@ -219,15 +258,17 @@ class OnepayClient extends AbstractClient
      */
     protected function verifyConfirmResponse($response, $transaction)
     {
-        $data = mb_strlen($response->occ) . $response->occ
-            . mb_strlen($response->authorizationCode) . $response->authorizationCode
-            . mb_strlen($response->issuedAt) . $response->issuedAt
-            . mb_strlen($response->amount) . $response->amount
-            . mb_strlen($response->installmentsAmount) . $response->installmentsAmount
-            . mb_strlen($response->installmentsNumber) . $response->installmentsNumber
-            . mb_strlen($response->buyOrder) . $response->buyOrder;
+        $properties = [
+            'occ',
+            'authorizationCode',
+            'issuedAt',
+            'amount',
+            'installmentsAmount',
+            'installmentsNumber',
+            'buyOrder',
+        ];
 
-        return $this->verify($response, $data, $transaction);
+        return $this->verify($response, $properties, $transaction);
     }
 
     /*
@@ -240,11 +281,13 @@ class OnepayClient extends AbstractClient
      * Returns a signed a OnepayTransaction using the Credential's Secret
      *
      * @param OnepayTransaction|OnepayNullifyTransaction $transaction
-     * @param string $data
+     * @param array $properties
      * @return OnepayTransaction|OnepayNullifyTransaction
      */
-    protected function sign($transaction, string $data)
+    protected function sign($transaction, array $properties)
     {
+        $data = $this->createSignableString($properties, $transaction);
+
         return $transaction
             ->appKey($this->credentials->appKey)
             ->apiKey($this->credentials->apiKey)
@@ -269,7 +312,7 @@ class OnepayClient extends AbstractClient
             'callbackUrl',
         ];
 
-        return $this->createSignableString($properties, $transaction);
+        return $this->sign($transaction, $properties);
     }
 
     /**
@@ -286,7 +329,7 @@ class OnepayClient extends AbstractClient
             'issuedAt',
         ];
 
-        return $this->createSignableString($properties, $transaction);
+        return $this->sign($transaction, $properties);
     }
 
     /**
@@ -305,24 +348,6 @@ class OnepayClient extends AbstractClient
             'nullifyAmount',
         ];
 
-        return $this->createSignableString($properties, $transaction);
-    }
-
-    /**
-     * Returns a new transaction with proper signature
-     *
-     * @param $properties
-     * @param $transaction
-     * @return OnepayTransaction
-     */
-    protected function createSignableString($properties, $transaction)
-    {
-        $data = '';
-
-        foreach ($properties as $property) {
-            $data .= mb_strlen($transaction->{$property}) . $transaction->{$property};
-        }
-
-        return $this->sign($transaction, $data);
+        return $this->sign($transaction, $properties);
     }
 }

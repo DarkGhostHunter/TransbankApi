@@ -69,13 +69,13 @@ class WebpayIntegrationTransactionsTest extends TestCase
             'buyOrder' => 'parent-order-123123',
             'items' => [
                 [
-                    'storeCode' => 597044444402,
+                    'commerceCode' => 597044444402,
                     'amount' => 2000,
                     'buyOrder' => '597044444402-1',
                     'sessionId' => 'session-id-1'
                 ],
                 [
-                    'storeCode' => 597044444403,
+                    'commerceCode' => 597044444403,
                     'amount' => 2000,
                     'buyOrder' => '597044444403-1',
                     'sessionId' => 'session-id-2'

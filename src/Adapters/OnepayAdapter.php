@@ -4,7 +4,6 @@ namespace DarkGhostHunter\TransbankApi\Adapters;
 
 use DarkGhostHunter\TransbankApi\Clients\Onepay\OnepayClient;
 use DarkGhostHunter\TransbankApi\Contracts\TransactionInterface;
-use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepaySdkException;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayNullifyTransaction;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 
@@ -30,7 +29,7 @@ class OnepayAdapter extends AbstractAdapter
     /**
      * Commits a transaction into the Transbank SDK
      *
-     * @param TransactionInterface|\DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction $transaction
+     * @param TransactionInterface|\DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction|\DarkGhostHunter\TransbankApi\Transactions\OnepayNullifyTransaction $transaction
      * @param mixed|null $options
      * @return array
      * @throws \Exception

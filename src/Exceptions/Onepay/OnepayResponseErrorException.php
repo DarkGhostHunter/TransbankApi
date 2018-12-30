@@ -2,8 +2,8 @@
 
 namespace DarkGhostHunter\TransbankApi\Exceptions\Onepay;
 
-use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 use DarkGhostHunter\TransbankApi\Exceptions\TransbankException;
+use Throwable;
 
 class OnepayResponseErrorException extends \Exception implements TransbankException, OnepayException
 {
@@ -12,12 +12,16 @@ class OnepayResponseErrorException extends \Exception implements TransbankExcept
      * OnepayResponseErrorException constructor.
      * @param $error
      * @param $description
-     * @param OnepayTransactionOnepayNullifyTransaction $transaction
+     * @param \DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction|\DarkGhostHunter\TransbankApi\Transactions\OnepayNullifyTransaction $transaction
+     * @param int $code
+     * @param Throwable|null $previous
      */
-    public function __construct($error, $description, $transaction)
+    public function __construct($error, $description, $transaction, int $code = 0, Throwable $previous = null)
     {
         parent::__construct(
-            "Onepay has returned an error: [$error] $description. Transaction: $transaction"
+            "Onepay has returned an error: [$error] $description. Transaction: $transaction",
+            $code,
+            $previous
         );
     }
 }

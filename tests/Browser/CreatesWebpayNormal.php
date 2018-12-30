@@ -37,10 +37,8 @@ class CreatesWebpayNormal extends PantherTestCase
             'buyOrder' => 'testBuyOrder',
         ]);
 
-        var_dump($normal);
-
         $client = static::createPantherClient();
         $crawler = $client->request('POST', '/mypage');
-        $this->assertContains('My Title', $crawler->filter('title')->html());
+        $this->assertContains('Webpay', $crawler->filter('title')->html());
     }
 }

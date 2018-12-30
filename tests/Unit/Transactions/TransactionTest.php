@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Transactions;
 
+use DarkGhostHunter\TransbankApi\Contracts;
 use PHPUnit\Framework\TestCase;
 use DarkGhostHunter\TransbankApi\AbstractService;
 use DarkGhostHunter\TransbankApi\Transactions\AbstractTransaction;
@@ -34,7 +35,9 @@ class TransactionTest extends TestCase
     {
         $this->mockAttributes['object'] = new \stdClass();
 
-        $this->transaction = new class extends AbstractTransaction {};
+        $this->transaction = new class extends AbstractTransaction
+        {
+        };
 
         $transbank = \Mockery::mock(Transbank::class);
         $transbank->expects('getDefaults')
@@ -44,9 +47,71 @@ class TransactionTest extends TestCase
             ->once()
             ->andReturn($this->mockCredentials);
 
-        $this->mockService = \Mockery::mock(AbstractService::class, [$transbank,
-            'boot' => null
-        ]);
+//        $this->mockService = \Mockery::mock(AbstractService::class, [$transbank])
+//            ->shouldAllowMockingProtectedMethods();
+
+        $this->mockService = $this->createMockService($transbank);
+    }
+
+    protected function createMockService($transbank)
+    {
+        return new class($transbank) extends AbstractService
+        {
+
+            /**
+             * Instantiates (and/or boots) the Adapter for the Service
+             *
+             * @return void
+             */
+            public function bootAdapter()
+            {
+                // TODO: Implement bootAdapter() method.
+            }
+
+            /**
+             * Instantiates (and/or boots) the WebpayClient Factory for the Service
+             *
+             * @return void
+             */
+            public function bootTransactionFactory()
+            {
+                // TODO: Implement bootTransactionFactory() method.
+            }
+
+            /**
+             * Get the Service Credentials for the Production Environment
+             *
+             * @return array
+             */
+            protected function getProductionCredentials()
+            {
+                // TODO: Implement getProductionCredentials() method.
+            }
+
+            /**
+             * Get the Service Credentials for the Integration Environment
+             *
+             * @param string $type
+             * @return array
+             */
+            protected function getIntegrationCredentials(string $type = null)
+            {
+                // TODO: Implement getIntegrationCredentials() method.
+            }
+
+            /**
+             * Transform the adapter raw answer of a transaction commitment to a
+             * more friendly Webpay Response
+             *
+             * @param array $result
+             * @param string $type
+             * @return Contracts\ResponseInterface
+             */
+            protected function parseResponse(array $result, string $type)
+            {
+                // TODO: Implement parseResponse() method.
+            }
+        };
     }
 
     public function testCanBeInstantiated()
@@ -54,19 +119,28 @@ class TransactionTest extends TestCase
         $this->assertInstanceOf(AbstractTransaction::class, $this->transaction);
     }
 
-    public function testDoesNotInstantiatesWithoutArray()
+    public function testReceivesArray()
     {
-        $this->markTestSkipped();
+        $transaction = \Mockery::mock(AbstractTransaction::class, [
+            ['foo' => 'bar']
+        ])->makePartial();
+
+        $this->assertEquals('bar', $transaction->foo);
     }
 
-    public function testStaticInstancesFromJson()
+    public function testReceivesJson()
     {
-        $this->markTestSkipped();
+        $transaction = $this->transaction::fromJson(json_encode(['foo' => 'bar']));
+
+        $this->assertEquals('bar', $transaction->foo);
     }
 
     public function testStaticDoesNotInstancesFromInvalidJson()
     {
-        $this->markTestSkipped();
+        $this->expectException(\TypeError::class);
+
+        $json = '"{"foo"\:\\"bar"}/]"';
+        $transaction = $this->transaction::fromJson($json);
     }
 
     public function testSetAndGetService()
@@ -84,20 +158,30 @@ class TransactionTest extends TestCase
 
     public function testGetAndSetAttributes()
     {
-        $this->markTestSkipped();
+        $this->transaction->setAttributes([
+            'foo' => 'bar'
+        ]);
+        $this->transaction->setAttributes([
+            'quax' => 'exort'
+        ]);
+
+        $this->assertEquals('exort', $this->transaction->get('quax'));
+        $this->assertNull($this->transaction->get('foo'));
+
+        $this->assertEquals(['quax' => 'exort'], $this->transaction->getAttributes());
     }
 
     public function testGetAndSetType()
     {
-        $this->markTestSkipped();
+        $this->transaction->setType('foo');
+        $this->assertEquals('foo', $this->transaction->getType());
     }
 
     public function testInstantiatesWithAttributes()
     {
         $this->transaction = new $this->transaction($this->mockAttributes);
 
-        $this->assertEquals($this->mockAttributes, $this->transaction->getAttributes(),
-            '', 0.0, 10, true);
+        $this->assertEquals($this->mockAttributes, $this->transaction->getAttributes());
     }
 
     public function testMergesDefaults()
@@ -110,8 +194,7 @@ class TransactionTest extends TestCase
         ]);
 
         $this->assertEquals(array_merge($defaults, $this->mockAttributes),
-            $this->transaction->getAttributes(),
-            '', 0.0, 10, true);
+            $this->transaction->getAttributes());
     }
 
     public function testBecomesArray()
@@ -135,11 +218,6 @@ class TransactionTest extends TestCase
         $this->transaction = new $this->transaction($this->mockAttributes);
 
         $this->assertTrue(is_string((string)$this->transaction));
-    }
-
-    public function testHidesAttributesFromSerialization()
-    {
-        $this->markTestSkipped();
     }
 
     public function testCanSetAndGetAttributeAsProperty()

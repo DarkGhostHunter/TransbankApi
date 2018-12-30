@@ -7,7 +7,7 @@ $webpay = DarkGhostHunter\TransbankApi\Transbank::environment()->webpay();
 $result = $webpay->createRegistration([
     'username' => $username = 'username_' . date('Y-m-d_H-i-s'),
     'email' => 'email@commerceemaill.com',
-    'responseUrl' => 'http://localhost:8080/OneclickNormal/response.php'
+    'responseUrl' => 'http://localhost:8080/webpay-oneclick/response.php'
 ]);
 
 // Guardemos el nombre del usuario

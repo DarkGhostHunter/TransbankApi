@@ -55,7 +55,7 @@ class OnepayIntegrationTransactionsTest extends TestCase
     {
         $this->expectException(OnepayResponseErrorException::class);
 
-        $cart = $this->onepay->createCart([
+        $this->onepay->createCart([
             'channel' => 'app',
             'appScheme' => null,
             'items' => [
@@ -66,7 +66,7 @@ class OnepayIntegrationTransactionsTest extends TestCase
         ]);
     }
 
-    public function testExcCreatedCartHidesSignatureOnSerialization()
+    public function testCreatedCartHidesSignatureOnSerialization()
     {
         $cart = $this->onepay->createCart([
             'items' => [

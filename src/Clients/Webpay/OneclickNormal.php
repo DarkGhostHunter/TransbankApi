@@ -46,10 +46,10 @@ class OneclickNormal extends WebpayClient
      * @return mixed
      * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
      */
-    public function confirm(WebpayTransaction $transaction)
+    public function confirm($transaction)
     {
         $registration = (object)[
-            'token' => $transaction->token,
+            'token' => $transaction,
         ];
 
         try {

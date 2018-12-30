@@ -259,17 +259,17 @@ class Webpay extends AbstractService
      *
      * @param $transaction
      * @param $type
-     * @return bool
+     * @return WebpayPlusResponse
      */
     public function confirmTransaction($transaction, $type)
     {
         // Set the correct adapter credentials
         $this->setAdapterCredentials($type);
 
-        return ($this->parseResponse(
+        return $this->parseResponse(
             $this->adapter->confirm($transaction, $type),
             $type
-        ))->isSuccess();
+        );
     }
 
     /*

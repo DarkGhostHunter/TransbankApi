@@ -6,11 +6,13 @@ $webpay = \DarkGhostHunter\TransbankApi\Transbank::environment()->webpay();
 
 $result = $webpay->getRegistration($_POST['TBK_TOKEN']);
 
+$username = file_get_contents('username.txt');
+
 echo '<pre>';
-print_r($result);
+print_r($username);
+print_r($result->toArray());
 echo '</pre>';
 
-$username = file_get_contents('username.txt');
 
 ?>
 
