@@ -1,11 +1,16 @@
-# TransbankApi - @dev
-[![Build Status](https://travis-ci.com/DarkGhostHunter/TransbankApi.svg?branch=master)](https://travis-ci.com/DarkGhostHunter/TransbankApi)
+![rawpixel - Unsplash (UL) #SEDqvdbkDQw](https://images.unsplash.com/photo-1535603383947-c1ee27a4906f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1280&h=400&q=80)
+
+[![Latest Stable Version](https://poser.pugx.org/darkghosthunter/transbank-api/v/stable)](https://packagist.org/packages/darkghosthunter/transbank-api) [![License](https://poser.pugx.org/darkghosthunter/transbank-api/license)](https://packagist.org/packages/darkghosthunter/transbank-api)
+![](https://img.shields.io/packagist/php-v/darkghosthunter/transbank-api.svg) [![Build Status](https://travis-ci.com/DarkGhostHunter/TransbankApi.svg?branch=master)](https://travis-ci.com/DarkGhostHunter/TransbankApi) [![Coverage Status](https://coveralls.io/repos/github/DarkGhostHunter/TransbankApi/badge.svg?branch=master)](https://coveralls.io/github/DarkGhostHunter/TransbankApi?branch=master) [![Maintainability](https://api.codeclimate.com/v1/badges/c6c87a84fa8ecba894da/maintainability)](https://codeclimate.com/github/DarkGhostHunter/TransbankApi/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/c6c87a84fa8ecba894da/test_coverage)](https://codeclimate.com/github/DarkGhostHunter/TransbankApi/test_coverage)
+
+
+# Transbank API
 
 `TransbankApi` es un reemplazo al [Transbank SDK](https://github.com/TransbankDevelopers/transbank-sdk-php) con la finalidad de mejorar la experiencia de integración y uso.
 
 > Esta versión es incompatible con PHP 5. Para usar este código con PHP 5, usa el packete oficial de [Transbank SDK](https://github.com/TransbankDevelopers/transbank-sdk-php).
 
-> Esta paquete es un trabajo en progreso ¡No lo uses en producción hasta que no esté listo! 
+> Esta paquete es un trabajo en progreso ¡No lo uses en producción hasta que no esté listo! (Algo que va a ser pronto)
 
 ## Requisitos:
 
@@ -14,9 +19,9 @@
 
 ## Dependencias
 
-Este paquete usa Guzzle HTTP además de la [implementación de SOAP de Luis Urrutia](https://github.com/LuisUrrutia/TransbankSoap).  
+Este paquete usa [Guzzle HTTP 6.0](http://docs.guzzlephp.org/en/stable/) además de la [implementación de SOAP de Luis Urrutia](https://github.com/LuisUrrutia/TransbankSoap).  
 
-A su vez, el SDK oficial necesita las siguientes extensiones de PHP habilitadas:
+A su vez, este paquete necesita las siguientes extensiones de PHP habilitadas:
 
 * ext-curl
 * ext-json
@@ -35,7 +40,7 @@ Hay tres formas para instalar el paquete: usando Composer, sin composer, y todo 
 Para usar el SDK en tu proyecto puedes usar Composer, instalándolo desde la consola:
 
 ```bash
-composer require darkghosthunter/transbank-wrapper "1.0-rc"
+composer require darkghosthunter/transbank-wrapper
 ```
 
 También puedes añadir el SDK como dependencia a tu proyecto y luego ejecutar `composer update`.
@@ -55,13 +60,13 @@ Además de tener instalado la línea de comandos de PHP, debes descargar el cód
 2 - Ejecutar en el directorio del SDK:
 
 ```bash
-php composer.phar install --nodev
+php composer.phar install --no-dev
 ```
 
 3 - Requerir el SDK directamente desde tu aplicación 
 
 ```php
-require_once('/directorio/del/sdk/load.php');
+require_once('/directorio/de/transbank-api/load.php');
 ```
 
 ### Instalación remota (jodido)
@@ -75,14 +80,14 @@ Si no tienes acceso a la consola de tu servidor web, siempre puedes usar tu prop
 * Abre una ventana de consola (powershell en Windows, Terminal en MacOS, *sh en Linux) y tipea:
 
 ```bash
-directorio/de/php/php.exe composer.phar install --no-dev
+directorio/de/php.exe composer.phar install --no-dev
 ```
 
 > (Si en MacOS y Unix, omite `.exe`)
 
 * Comprime el directorio del paquete.
 
-* Sube el directorio del paquete a tu servidor y descomprímlo allí.
+* Sube el directorio del paquete a tu servidor y descomprímelo allí.
 
 > Si subes cada archivo uno por uno, puedes demorarte horas.
 
