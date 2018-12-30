@@ -7,6 +7,6 @@ class TransactionEmptyAttributeException extends \Exception implements Transbank
 
     public function __construct($type, $mustFill)
     {
-        parent::__construct("Transaction $type cannot have $mustFill empty before committing.");
+        parent::__construct("WebpayClient $type cannot have $mustFill empty before committing.");
     }
 }

@@ -7,7 +7,7 @@ use DarkGhostHunter\TransbankApi\Helpers\Helpers;
 class WebpayTransaction extends AbstractTransaction
 {
     /**
-     * Set default attributes for the Item, depending on the Transaction type
+     * Set default attributes for the Item, depending on the WebpayClient type
      *
      * @param array $defaults
      */
@@ -31,6 +31,11 @@ class WebpayTransaction extends AbstractTransaction
                     'oneclick', ['oneclickReturnUrl'], $defaults
                 );
                 break;
+            case 'patpass.subscription':
+                $defaults = $this->filterDefaults(
+                    'patpass', ['patpassReturnUrl', 'patpassFinalUrl'], $defaults
+                );
+                break;
             default:
                 $defaults = [];
                 break;
@@ -40,7 +45,7 @@ class WebpayTransaction extends AbstractTransaction
     }
 
     /**
-     * Filter the defaults for the Transaction type
+     * Filter the defaults for the WebpayClient type
      *
      * @param string $service
      * @param array $only

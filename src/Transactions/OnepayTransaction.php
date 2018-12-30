@@ -34,21 +34,6 @@ class OnepayTransaction extends AbstractTransaction
         'additionalData' => null
     ];
 
-    /**
-     * Attributes to check to be filled before committing
-     *
-     * @var array
-     */
-    protected $filledAttributes = [
-        'externalUniqueNumber',
-        'total',
-        'itemsQuantity',
-        'issuedAt',
-        'callbackUrl',
-        'items',
-        'callbackUrl',
-    ];
-
     /*
     |--------------------------------------------------------------------------
     | Construct
@@ -134,15 +119,13 @@ class OnepayTransaction extends AbstractTransaction
      */
     protected function performPreLogic()
     {
-        if ($this->getType() === 'onepay.cart') {
-            // Throw an Exception if the OnepayTransaction is being set with no amount
-            if (empty($this->items)) {
-                throw new CartEmptyException($this);
-            }
+        // Throw an Exception if the OnepayTransaction is being set with no amount
+        if (empty($this->items)) {
+            throw new CartEmptyException($this);
+        }
 
-            if ($this->total < 1) {
-                throw new CartNegativeAmountException($this);
-            }
+        if ($this->total < 1) {
+            throw new CartNegativeAmountException($this);
         }
 
         // Uppercase the channel
@@ -181,13 +164,19 @@ class OnepayTransaction extends AbstractTransaction
     */
 
     /**
-     * Returns hoy many Items this Transaction has
+     * Returns hoy many Items this WebpayClient has
      *
      * @return int
      */
     public function getItemsQuantityAttribute()
     {
-        return $this->attributes['itemsQuantity'] = count($this->items) ?? 0;
+        $total = 0;
+
+        foreach ($this->items ?? [] as $item) {
+            $total += $item->quantity ?? 0;
+        }
+
+        return $this->attributes['itemsQuantity'] = $total;
     }
 
     /**
@@ -199,7 +188,7 @@ class OnepayTransaction extends AbstractTransaction
     {
         $amount = 0;
         foreach ($this->items as $item) {
-            $amount += (int)$item->amount;
+            $amount += (int)$item->amount * $item->quantity;
         }
         return $this->attributes['total'] = $amount;
     }
@@ -222,7 +211,10 @@ class OnepayTransaction extends AbstractTransaction
             $attributes = array_merge(
                 array_merge(
                     $this->attributes,
-                    ['total' => $this->total]
+                    [
+                        'total' => $this->total,
+                        'itemsQuantity' => $this->itemsQuantity
+                    ]
                 ),
                 ['items' => $this->items]
             );

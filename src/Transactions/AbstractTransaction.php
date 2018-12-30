@@ -10,28 +10,28 @@ use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 abstract class AbstractTransaction extends Fluent implements TransactionInterface
 {
     /**
-     * Service this Transaction uses
+     * Service this WebpayClient uses
      *
      * @var AbstractService
      */
     protected $service;
 
     /**
-     * Type of Transaction
+     * Type of WebpayClient
      *
      * @var string
      */
     protected $type;
 
     /**
-     * Determines if the Transaction was sent to Transbank
+     * Determines if the WebpayClient was sent to Transbank
      *
      * @var bool
      */
     protected $performed = false;
 
     /**
-     * Saves the Transaction Response
+     * Saves the WebpayClient Response
      *
      * @var \DarkGhostHunter\TransbankApi\Responses\AbstractResponse
      */
@@ -80,7 +80,7 @@ abstract class AbstractTransaction extends Fluent implements TransactionInterfac
     }
 
     /**
-     * Set the Transaction type
+     * Set the WebpayClient type
      *
      * @param string $type
      */
@@ -90,7 +90,7 @@ abstract class AbstractTransaction extends Fluent implements TransactionInterfac
     }
 
     /**
-     * Return the Transaction type
+     * Return the WebpayClient type
      *
      * @return string
      */
@@ -100,7 +100,7 @@ abstract class AbstractTransaction extends Fluent implements TransactionInterfac
     }
 
     /**
-     * Sets the Service to be used for this Transaction
+     * Sets the Service to be used for this WebpayClient
      *
      * @param ServiceInterface $service
      */
@@ -110,7 +110,7 @@ abstract class AbstractTransaction extends Fluent implements TransactionInterfac
     }
 
     /**
-     * Returns the Service used by this Transaction
+     * Returns the Service used by this WebpayClient
      *
      * @return ServiceInterface
      */

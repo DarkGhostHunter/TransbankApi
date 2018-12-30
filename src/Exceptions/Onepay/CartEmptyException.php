@@ -13,7 +13,7 @@ class CartEmptyException extends Exception implements TransbankException, Onepay
 
     public function __construct(OnepayTransaction $transaction)
     {
-        $this->message .= "\n" . "Transaction: " . $transaction;
+        $this->message .= "\n" . "WebpayClient: " . $transaction;
 
         parent::__construct();
     }

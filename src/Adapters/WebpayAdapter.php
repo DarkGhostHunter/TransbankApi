@@ -7,21 +7,14 @@ use DarkGhostHunter\TransbankApi\Exceptions\Webpay\InvalidWebpayTransactionExcep
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ServiceSdkUnavailableException;
 use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
 use DarkGhostHunter\TransbankApi\Transactions\WebpayMallTransaction;
-use DarkGhostHunter\TransbankApi\Clients\Webpay\WebpayCapture;
-use DarkGhostHunter\TransbankApi\Clients\Webpay\WebpayNormal;
-use DarkGhostHunter\TransbankApi\Clients\Webpay\WebpayNullify;
-use DarkGhostHunter\TransbankApi\Clients\Webpay\WebpayOneclick;
+use DarkGhostHunter\TransbankApi\Clients\Webpay\PlusCapture;
+use DarkGhostHunter\TransbankApi\Clients\Webpay\PlusNormal;
+use DarkGhostHunter\TransbankApi\Clients\Webpay\PlusNullify;
+use DarkGhostHunter\TransbankApi\Clients\Webpay\OneclickNormal;
+use Exception;
 
-class WebpaySoapAdapter extends AbstractAdapter
+class WebpayAdapter extends AbstractAdapter
 {
-
-    /**
-     * WebpaySoap Client holder
-     *
-     * @var \DarkGhostHunter\TransbankApi\Clients\Webpay\Transaction|WebpayNormal|WebpayCapture|WebpayNullify|WebpayOneclick
-     */
-    protected $client;
-
     /**
      * Boots the WebpaySoap Processor for the transaction type
      *
@@ -38,22 +31,22 @@ class WebpaySoapAdapter extends AbstractAdapter
             case 'plus.defer':
             case 'plus.mall.normal':
             case 'plus.mall.defer':
-                $processor = WebpayNormal::class;
+                $processor = PlusNormal::class;
                 break;
             case 'plus.capture':
             case 'plus.mall.capture':
-                $processor = WebpayCapture::class;
+                $processor = PlusCapture::class;
                 break;
             case 'plus.nullify':
             case 'plus.mall.nullify':
-                $processor = WebpayNullify::class;
+                $processor = PlusNullify::class;
                 break;
             case 'oneclick.register':
             case 'oneclick.confirm':
             case 'oneclick.unregister':
             case 'oneclick.charge':
             case 'oneclick.reverse':
-                $processor = WebpayOneclick::class;
+                $processor = OneclickNormal::class;
                 break;
             case 'oneclick.mall.charge':
             case 'oneclick.mall.reverse':
@@ -81,70 +74,32 @@ class WebpaySoapAdapter extends AbstractAdapter
         $this->bootClient($transaction->getType());
 
         try {
-
-            // WebpaySoap doesn't throw exceptions, so we have to use our own logic to do so.
-            // Even if, it's a bit troublesome to get what the actual error is but
-            // we're doing our best shot to get something more standard.
             switch ($type = $transaction->getType()) {
                 case 'plus.normal':
                 case 'plus.defer':
-                    return $this->client->commit(
-                        $transaction->buyOrder,
-                        $transaction->sessionId,
-                        $transaction->returnUrl,
-                        $transaction->finalUrl,
-                        $transaction->amount
-                    );
                 case 'plus.mall.normal':
                 case 'plus.mall.defer':
-                    return $this->client->commit(
-                        $transaction->buyOrder,
-                        $transaction->sessionId,
-                        $transaction->returnUrl,
-                        $transaction->finalUrl,
-                        $transaction->getItems()
-                    );
+                    return $this->client->commit($transaction);
                 case 'plus.capture':
                 case 'plus.mall.capture':
-                    return $this->client->capture(
-                        $transaction->authorizationCode,
-                        $transaction->captureAmount,
-                        $transaction->buyOrder,
-                        $transaction->commerceCode
-                    );
+                    return $this->client->capture($transaction);
                 case 'plus.nullify':
                 case 'plus.mall.nullify':
-                    return $this->client->nullify(
-                        $transaction->authorizationCode,
-                        $transaction->authorizedAmount,
-                        $transaction->buyOrder,
-                        $transaction->nullifyAmount,
-                        $transaction->commerceCode ?? null
-                    );
+                    return $this->client->nullify($transaction);
                 case 'oneclick.register':
-                    return $this->client->register(
-                        $transaction->username,
-                        $transaction->email,
-                        $transaction->responseUrl
-                    );
+                    return $this->client->register($transaction);
                 case 'oneclick.confirm':
-                    return $this->client->confirm(
-                        $transaction->token
-                    );
+                    return $this->client->confirm($transaction);
                 case 'oneclick.unregister':
-                    return $this->client->unregister(
-                        $transaction->tbkUser,
-                        $transaction->username
-                    );
+                    return $this->client->unregister($transaction);
                 case 'oneclick.charge':
-                    return $this->client->charge(
-                        $transaction->buyOrder,
-                        $transaction->tbkUser,
-                        $transaction->username,
-                        $transaction->amount
-                    );
+                    return $this->client->charge($transaction);
                 case 'oneclick.reverse':
-                    return $this->client->reverse($transaction->buyOrder);
+                    return $this->client->reverse($transaction);
+                case 'patpass.subscribe':
+                case 'patpass.unsubscribe':
+                case 'patpass.extend':
+                case 'patpass.renew':
                 case 'oneclick.mall.charge':
                 case 'oneclick.mall.reverse':
                 case 'oneclick.mall.nullify':
@@ -152,7 +107,7 @@ class WebpaySoapAdapter extends AbstractAdapter
                 default:
                     throw new ServiceSdkUnavailableException();
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             throw new InvalidWebpayTransactionException($transaction, $exception);
         }
     }
@@ -165,17 +120,16 @@ class WebpaySoapAdapter extends AbstractAdapter
      * @return mixed
      * @throws ServiceSdkUnavailableException
      */
-    public function get($transaction, $options = null)
+    public function getAndConfirm($transaction, $options = null)
     {
         $this->bootClient($options);
 
         switch ($options) {
             case 'plus.normal':
             case 'plus.mall.normal':
-                return $this->client->get($transaction);
+                return $this->client->retrieve($transaction);
             case 'oneclick.register':
-                return $this->client->getOneClickTransaction()
-                    ->finishInscription($transaction);
+                return $this->client->register($transaction);
             default:
                 throw new ServiceSdkUnavailableException();
         }
@@ -190,13 +144,14 @@ class WebpaySoapAdapter extends AbstractAdapter
      * @return mixed
      * @throws ServiceSdkUnavailableException
      */
-    public function retrieve($transaction, $options = null)
+    public function get($transaction, $options = null)
     {
         $this->bootClient($options);
 
         switch ($options) {
             case 'plus.normal':
             case 'plus.mall.normal':
+            case 'patpass.subscribe':
                 return $this->client->retrieve($transaction);
                 break;
             default:
@@ -212,7 +167,6 @@ class WebpaySoapAdapter extends AbstractAdapter
      * @param string $options
      * @return mixed
      * @throws ServiceSdkUnavailableException
-     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
      */
     public function confirm($transaction, $options = null)
     {
@@ -221,6 +175,7 @@ class WebpaySoapAdapter extends AbstractAdapter
         switch ($options) {
             case 'plus.normal':
             case 'plus.mall.normal':
+            case 'patpass.subscribe':
                 return $this->client->confirm($transaction);
                 break;
             case 'oneclick.confirm':

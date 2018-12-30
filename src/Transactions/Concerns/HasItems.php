@@ -8,7 +8,7 @@ use DarkGhostHunter\TransbankApi\Transactions\Item;
 trait HasItems
 {
     /**
-     * Items in the Transaction
+     * Items in the WebpayClient
      *
      * @var array
      */
@@ -92,6 +92,16 @@ trait HasItems
     public function getItems()
     {
         return $this->items;
+    }
+
+    /**
+     * Dynamically gets the Items
+     *
+     * @return array
+     */
+    public function getItemsAttribute()
+    {
+        return $this->getItems();
     }
 
     /**

@@ -2,11 +2,12 @@
 
 namespace DarkGhostHunter\TransbankApi\Clients\Webpay;
 
+use DarkGhostHunter\TransbankApi\Clients\AbstractClient;
 use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use LuisUrrutia\TransbankSoap\Validation;
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException;
 
-abstract class Transaction
+abstract class WebpayClient extends AbstractClient
 {
     /**
      * Endpoints for every transaction type
@@ -40,13 +41,6 @@ abstract class Transaction
     protected $endpointType;
 
     /**
-     * Transbank Endpoint to connect to
-     *
-     * @var string
-     */
-    protected $endpoint;
-
-    /**
      * Class map for SOAP
      *
      * @var array
@@ -56,42 +50,10 @@ abstract class Transaction
     /**
      * Soap Connector
      *
-     * @var SoapConnector
+     * @var SoapImplementation
      */
     protected $connector;
 
-    /**
-     * Credentials for the Soap Client
-     *
-     * @var array
-     */
-    protected $credentials;
-
-    /**
-     * If Environment is production (default: no fucking way)
-     *
-     * @var bool
-     */
-    protected $isProduction = false;
-
-    /**
-     * Transaction constructor.
-     *
-     * @param bool $isProduction
-     * @param Fluent $credentials
-     */
-    public function __construct(bool $isProduction, Fluent $credentials)
-    {
-        $this->isProduction = $isProduction;
-
-        $this->credentials = $credentials;
-
-        $this->bootEndpoint();
-
-        $this->bootClassMap();
-
-        $this->bootSoapClient();
-    }
 
     /*
     |--------------------------------------------------------------------------
@@ -100,13 +62,27 @@ abstract class Transaction
     */
 
     /**
+     * Boot the connector
+     *
+     * @return void
+     */
+    protected function boot()
+    {
+        $this->bootEndpoint();
+
+        $this->bootClassMap();
+
+        $this->bootSoapClient();
+    }
+
+    /**
      * Creates a new instance of the Soap Client using the Configuration as base
      *
      * @return void
      */
     protected function bootSoapClient()
     {
-        $this->connector = new SoapConnector(
+        $this->connector = new SoapImplementation(
             $this->endpoint,
             $this->credentials->privateKey,
             $this->credentials->publicCert,
@@ -128,6 +104,11 @@ abstract class Transaction
         $this->classMap = include __DIR__ . '/classmaps.php';
     }
 
+    /**
+     * Sets the Endpoint to use depending on the environment type
+     *
+     * @return void
+     */
     protected function bootEndpoint()
     {
         $this->endpoint = self::$endpoints[$this->endpointType][$this->isProduction ? 'production' : 'integration'];
@@ -150,34 +131,6 @@ abstract class Transaction
             $this->connector->__getLastResponse(),
             $this->credentials->webpayCert
         ))->isValid();
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Exception handling
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Returns a Validation Error array
-     *
-     * @throws ErrorResponseException
-     */
-    protected function throwException()
-    {
-        throw new ErrorResponseException();
-    }
-
-    /**
-     * Returns a Connection Error array
-     *
-     * @param string $message
-     * @throws ErrorResponseException
-     */
-    protected function throwExceptionWithMessage($message)
-    {
-        $replaceArray = ['<!--' => '', '-->' => ''];
-        throw new ErrorResponseException(str_replace(array_keys($replaceArray), array_values($replaceArray), $message));
     }
 
 }

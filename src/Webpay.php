@@ -3,7 +3,7 @@
 namespace DarkGhostHunter\TransbankApi;
 
 use Exception;
-use DarkGhostHunter\TransbankApi\Adapters\WebpaySoapAdapter;
+use DarkGhostHunter\TransbankApi\Adapters\WebpayAdapter;
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\RetrievingNoTransactionTypeException;
 use DarkGhostHunter\TransbankApi\Responses\WebpayOneclickResponse;
 use DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse;
@@ -75,18 +75,31 @@ class Webpay extends AbstractService
     */
 
     /**
+     * Boot any logic needed for the Service, like the Adapter and Factories;
+     *
+     * @return void
+     */
+    protected function boot()
+    {
+        $this->bootAdapter();
+        $this->bootTransactionFactory();
+        $this->bootResponseFactory();
+    }
+
+
+    /**
      * Boot any logic needed for the Service, like the Adapter and Factory;
      *
      * @return void
      */
     public function bootAdapter()
     {
-        $this->adapter = new WebpaySoapAdapter;
+        $this->adapter = new WebpayAdapter;
         $this->adapter->setIsProduction($this->isProduction());
     }
 
     /**
-     * Instantiates (and/or boots) the Transaction Factory for the Service
+     * Instantiates (and/or boots) the WebpayClient Factory for the Service
      *
      * @return void
      */
@@ -124,7 +137,7 @@ class Webpay extends AbstractService
     }
 
     /**
-     * Retrieve the Integration Credentials depending on the Transaction type
+     * Retrieve the Integration Credentials depending on the WebpayClient type
      *
      * @param string $type
      * @return array
@@ -189,6 +202,9 @@ class Webpay extends AbstractService
             case strpos($type, 'mall') !== false:
                 $directory = 'webpay-plus-mall';
                 break;
+            case strpos($type, 'patpass') !== false:
+                $directory = 'webpay-patpass-normal';
+                break;
             default:
                 $directory = 'webpay-plus-normal';
                 break;
@@ -199,29 +215,29 @@ class Webpay extends AbstractService
 
     /*
     |--------------------------------------------------------------------------
-    | Operations
+    | Main Operations
     |--------------------------------------------------------------------------
     */
 
     /**
-     * Gets and Acknowledges a Transaction in Transbank
+     * Gets and Acknowledges a WebpayClient in Transbank
      *
      * @param $transaction
      * @param string|null $options
      * @return Contracts\ResponseInterface|WebpayPlusMallResponse|WebpayPlusResponse
      * @throws RetrievingNoTransactionTypeException
      */
-    public function get($transaction, $options = null)
+    public function getTransaction($transaction, $options = null)
     {
         if (!is_string($options) ?? null) {
             throw new RetrievingNoTransactionTypeException;
         }
 
-        return parent::get($transaction, $options);
+        return parent::getTransaction($transaction, $options);
     }
 
     /**
-     * Retrieves a Transaction
+     * Retrieves a WebpayClient
      *
      * @param $transaction
      * @param $type
@@ -233,13 +249,13 @@ class Webpay extends AbstractService
         $this->setAdapterCredentials($type);
 
         return $this->parseResponse(
-            $this->adapter->retrieve($transaction, $type),
+            $this->adapter->get($transaction, $type),
             $type
         );
     }
 
     /**
-     * Confirms a Transaction
+     * Confirms a WebpayClient
      *
      * @param $transaction
      * @param $type

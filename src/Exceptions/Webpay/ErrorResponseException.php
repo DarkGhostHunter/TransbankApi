@@ -11,8 +11,10 @@ class ErrorResponseException extends \Exception implements TransbankException, W
 
     public function __construct(string $message = "", int $code = 0, Throwable $previous = null)
     {
-        $this->message .= $message;
+        $array = ['<!--' => '', '-->' => ''];
 
-        parent::__construct($message, $code, $previous);
+        $this->message .= str_replace(array_keys($array), array_values($array), $message);
+
+        parent::__construct($message, 0, $previous);
     }
 }

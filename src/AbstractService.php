@@ -45,14 +45,14 @@ abstract class AbstractService implements ServiceInterface
     protected $credentials;
 
     /**
-     * Class in charge of dispatching a Transaction
+     * Class in charge of dispatching a WebpayClient
      *
      * @var AdapterInterface
      */
     protected $adapter;
 
     /**
-     * Transaction Factory to use for forwarding calls
+     * WebpayClient Factory to use for forwarding calls
      *
      * @var TransactionFactories\AbstractTransactionFactory
      */
@@ -98,11 +98,10 @@ abstract class AbstractService implements ServiceInterface
      *
      * @return void
      */
-    public function boot()
+    protected function boot()
     {
         $this->bootAdapter();
         $this->bootTransactionFactory();
-        $this->bootResponseFactory();
     }
 
     /**
@@ -113,18 +112,11 @@ abstract class AbstractService implements ServiceInterface
     abstract public function bootAdapter();
 
     /**
-     * Instantiates (and/or boots) the Transaction Factory for the Service
+     * Instantiates (and/or boots) the WebpayClient Factory for the Service
      *
      * @return void
      */
     abstract public function bootTransactionFactory();
-
-    /**
-     * Instantiates (and/or boots) the Result Factory for the Service
-     *
-     * @return void
-     */
-    abstract public function bootResponseFactory();
 
     /*
     |--------------------------------------------------------------------------
@@ -287,7 +279,7 @@ abstract class AbstractService implements ServiceInterface
     */
 
     /**
-     * Performs a Transaction into Transbank Services using the Adapter
+     * Performs a WebpayClient into Transbank Services using the Adapter
      *
      * @param TransactionInterface $transaction
      * @return Contracts\ResponseInterface
@@ -305,19 +297,19 @@ abstract class AbstractService implements ServiceInterface
     }
 
     /**
-     * Gets and Acknowledges a Transaction in Transbank
+     * Gets and Acknowledges a WebpayClient in Transbank
      *
      * @param $transaction
      * @param $options
      * @return Contracts\ResponseInterface
      */
-    public function get($transaction, $options = null)
+    public function getTransaction($transaction, $options = null)
     {
         // Set the correct adapter credentials
         $this->setAdapterCredentials($options);
 
         return $this->parseResponse(
-            $this->adapter->get($transaction, $options),
+            $this->adapter->getAndConfirm($transaction, $options),
             $options
         );
     }
@@ -345,7 +337,7 @@ abstract class AbstractService implements ServiceInterface
     */
 
     /**
-     * Dynamically handle class to the Transaction Factory from __class
+     * Dynamically handle class to the WebpayClient Factory from __class
      *
      * @param $method
      * @param $parameters
@@ -354,7 +346,7 @@ abstract class AbstractService implements ServiceInterface
      */
     protected function forwardCallToTransactionFactory($method, $parameters)
     {
-        // Proceed to call the Transaction Factory, or throw an Exception if the method doesn't exists.
+        // Proceed to call the WebpayClient Factory, or throw an Exception if the method doesn't exists.
         if (method_exists($this->transactionFactory, $method) && is_callable([$this->transactionFactory, $method])) {
             return $this->transactionFactory->{$method}(...$parameters);
         }
@@ -370,7 +362,7 @@ abstract class AbstractService implements ServiceInterface
     }
 
     /**
-     * Dynamically forwards calls to the Transaction Factory
+     * Dynamically forwards calls to the WebpayClient Factory
      *
      * @param $name
      * @param $arguments

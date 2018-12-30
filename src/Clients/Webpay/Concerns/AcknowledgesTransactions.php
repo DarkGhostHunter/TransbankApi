@@ -9,12 +9,12 @@ use DarkGhostHunter\TransbankApi\Helpers\Fluent;
  * Trait AcknowledgesTransactions
  * @package DarkGhostHunter\TransbankApi\Clients\Webpay\Concerns
  *
- * @mixin \DarkGhostHunter\TransbankApi\Clients\Webpay\Transaction
+ * @mixin \DarkGhostHunter\TransbankApi\Clients\Webpay\WebpayClient
  */
 trait AcknowledgesTransactions
 {
     /**
-     * Notifies WebpaySoap that the Transaction has been accepted
+     * Notifies WebpaySoap that the WebpayClient has been accepted
      *
      * @param $transaction
      * @return object
@@ -25,7 +25,7 @@ trait AcknowledgesTransactions
     }
 
     /**
-     * Acknowledges and accepts the Transaction
+     * Acknowledges and accepts the WebpayClient
      *
      * @param $token
      * @return array

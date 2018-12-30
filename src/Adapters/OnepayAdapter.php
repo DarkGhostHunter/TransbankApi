@@ -2,13 +2,10 @@
 
 namespace DarkGhostHunter\TransbankApi\Adapters;
 
-use DarkGhostHunter\TransbankApi\Clients\Onepay\OnepayHttp;
-use Transbank\Onepay\Item;
-use Transbank\Onepay\Refund;
-use Transbank\Onepay\ShoppingCart;
-use Transbank\Onepay\Transaction;
+use DarkGhostHunter\TransbankApi\Clients\Onepay\OnepayClient;
 use DarkGhostHunter\TransbankApi\Contracts\TransactionInterface;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepaySdkException;
+use DarkGhostHunter\TransbankApi\Transactions\OnepayNullifyTransaction;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 
 class OnepayAdapter extends AbstractAdapter
@@ -16,7 +13,7 @@ class OnepayAdapter extends AbstractAdapter
     /**
      * Onepay HTTP Client
      *
-     * @var \DarkGhostHunter\TransbankApi\Clients\Onepay\OnepayHttp
+     * @var \DarkGhostHunter\TransbankApi\Clients\Onepay\OnepayClient
      */
     protected $client;
 
@@ -27,7 +24,7 @@ class OnepayAdapter extends AbstractAdapter
      */
     protected function bootClient()
     {
-        $this->client = new OnepayHttp($this->isProduction, $this->credentials);
+        $this->client = new OnepayClient($this->isProduction, $this->credentials);
     }
 
     /**
@@ -66,30 +63,13 @@ class OnepayAdapter extends AbstractAdapter
     /**
      * Commits a Nullify transaction
      *
-     * @param OnepayTransaction $transaction
+     * @param OnepayNullifyTransaction $transaction
      * @return array
-     * @throws OnepaySdkException
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayResponseErrorException
      */
-    protected function commitNullify(OnepayTransaction $transaction)
+    protected function commitNullify(OnepayNullifyTransaction $transaction)
     {
-        // Catch the Transbank SDK Exception, return it as part of the OnepaySdkException
-        try {
-            $result = Refund::create(
-                $transaction->amount,
-                $transaction->occ,
-                $transaction->externalUniqueNumber,
-                $transaction->authorizationCode
-            );
-        } catch (\Exception $exception) {
-            throw new OnepaySdkException($exception);
-        }
-
-        return [
-            'occ'                   => $result->getOcc(),
-            'externalUniqueNumber'  => $result->getExternalUniqueNumber(),
-            'reverseCode'           => $result->getReverseCode(),
-            'issuedAt'              => $result->getIssuedAt(),
-        ];
+        return $this->client->refund($transaction);
     }
 
     /**
@@ -100,7 +80,7 @@ class OnepayAdapter extends AbstractAdapter
      * @return mixed
      * @throws \Exception
      */
-    public function get($transaction, $options = null)
+    public function getAndConfirm($transaction, $options = null)
     {
         $this->bootClient();
 

@@ -2,17 +2,17 @@
 
 include_once '../../vendor/autoload.php';
 
-echo $_POST['token_ws'];
-
 $webpay = \DarkGhostHunter\TransbankApi\Transbank::environment()->webpay();
 
-$result = $webpay->retrieveNormal($_POST['token_ws']);
+$result = $webpay->retrieveMallNormal($_POST['token_ws']);
 
-$confirm = $webpay->confirmNormal($_POST['token_ws']);
+$confirm = $webpay->confirmMallNormal($_POST['token_ws']);
 
 echo '<pre>';
 print_r($result);
+print_r($confirm);
 echo '</pre>';
+
 ?>
 
 <!doctype html>

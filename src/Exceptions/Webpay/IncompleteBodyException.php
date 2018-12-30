@@ -6,5 +6,5 @@ use DarkGhostHunter\TransbankApi\Exceptions\TransbankException;
 
 class IncompleteBodyException extends \Exception implements TransbankException, WebpayException
 {
-    protected $message = 'The Transaction need the following attributes to be sent: ';
+    protected $message = 'The WebpayClient need the following attributes to be sent: ';
 }

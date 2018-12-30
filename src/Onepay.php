@@ -34,7 +34,7 @@ class Onepay extends AbstractService
     protected const PRODUCTION_KEYS = 'production/onepay-keys.php';
 
     /**
-     * Transaction Factory to use for forwarding calls
+     * WebpayClient Factory to use for forwarding calls
      *
      * @example \DarkGhostHunter\TransbankApi\Clients\Webpay\AbstractTransactionFactory::class
      * @var string
@@ -56,7 +56,6 @@ class Onepay extends AbstractService
     {
         $this->bootAdapter();
         $this->bootTransactionFactory();
-        $this->bootResponseFactory();
     }
 
     /**
@@ -70,7 +69,7 @@ class Onepay extends AbstractService
     }
 
     /**
-     * Instantiates (and/or boots) the Transaction Factory for the Service
+     * Instantiates (and/or boots) the WebpayClient Factory for the Service
      *
      * @return void
      */
@@ -86,7 +85,7 @@ class Onepay extends AbstractService
      */
     public function bootResponseFactory()
     {
-        $this->resultFactory = new OnepayResponseFactory($this);
+        // We don't use a Repo
     }
 
     /*
@@ -123,16 +122,16 @@ class Onepay extends AbstractService
     */
 
     /**
-     * Gets and Acknowledges a Transaction in Transbank
+     * Gets and Acknowledges a WebpayClient in Transbank
      *
      * @param $transaction
      * @param $options
      * @return Contracts\ResponseInterface
      */
-    public function get($transaction, $options = null)
+    public function getTransaction($transaction, $options = null)
     {
         // Add the `issuedAt` timestamp for getting the transaction
-        return parent::get($transaction + ['issuedAt' => time()], 'onepay.cart');
+        return parent::getTransaction($transaction + ['issuedAt' => time()], 'onepay.cart');
     }
 
     /*
@@ -153,6 +152,7 @@ class Onepay extends AbstractService
     {
         $response = new OnepayResponse($result);
 
+        // Set the type of the WebpayClient where this response belongs
         $response->setType($type);
 
         // Set the status of the Response

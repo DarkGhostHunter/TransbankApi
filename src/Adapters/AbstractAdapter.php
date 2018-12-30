@@ -15,7 +15,14 @@ abstract class AbstractAdapter implements AdapterInterface
     protected $isProduction = false;
 
     /**
-     * Credentials for the Service and Transaction
+     * Service Client holder
+     *
+     * @var object
+     */
+    protected $client;
+
+    /**
+     * Credentials for the Service and WebpayClient
      *
      * @var Fluent
      */

@@ -9,12 +9,12 @@ use DarkGhostHunter\TransbankApi\Helpers\Fluent;
  *
  * @package DarkGhostHunter\TransbankApi\Clients\Webpay\Concerns
  *
- * @mixin \DarkGhostHunter\TransbankApi\Clients\Webpay\Transaction
+ * @mixin \DarkGhostHunter\TransbankApi\Clients\Webpay\WebpayClient
  */
 trait RetrievesResults
 {
     /**
-     * Returns the Transaction results
+     * Returns the WebpayClient results
      *
      * @param $transaction
      * @return array

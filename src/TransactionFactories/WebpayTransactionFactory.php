@@ -10,12 +10,12 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
 
     /*
     |--------------------------------------------------------------------------
-    | Transaction Bases
+    | WebpayClient Bases
     |--------------------------------------------------------------------------
     */
 
     /**
-     * Returns an instance of a Transaction
+     * Returns an instance of a WebpayClient
      *
      * @param string $type
      * @param array $attributes
@@ -27,7 +27,7 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
     }
 
     /**
-     * Returns an instance of a Transaction Mall
+     * Returns an instance of a WebpayClient Mall
      *
      * @param string $type
      * @param array $attributes

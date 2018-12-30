@@ -7,7 +7,7 @@ use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Responses\OnepayResponse;
 use PHPUnit\Framework\TestCase;
 use DarkGhostHunter\TransbankApi\Adapters\OnepayAdapter;
-use DarkGhostHunter\TransbankApi\Adapters\WebpaySoapAdapter;
+use DarkGhostHunter\TransbankApi\Adapters\WebpayAdapter;
 use DarkGhostHunter\TransbankApi\Contracts\AdapterInterface;
 use DarkGhostHunter\TransbankApi\Onepay;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
@@ -21,7 +21,7 @@ class OnepayTransactionsTest extends TestCase
     /** @var Onepay */
     protected $onepayProduction;
 
-    /** @var \Mockery\MockInterface|WebpaySoapAdapter */
+    /** @var \Mockery\MockInterface|WebpayAdapter */
     protected $mockAdapter;
 
     protected $mockCredentials = [

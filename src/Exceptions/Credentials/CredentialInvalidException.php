@@ -2,7 +2,6 @@
 
 namespace DarkGhostHunter\TransbankApi\Exceptions\Credentials;
 
-use Throwable;
 use DarkGhostHunter\TransbankApi\Exceptions\TransbankException;
 
 class CredentialInvalidException extends \Exception implements TransbankException
@@ -14,6 +13,6 @@ class CredentialInvalidException extends \Exception implements TransbankExceptio
 
         $service = ucfirst($service);
 
-        $this->message = "The Credential for $service has to be a string, $type passed.";
+        parent::__construct("The Credential for $service has to be a string, $type passed.");
     }
 }

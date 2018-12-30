@@ -6,7 +6,6 @@ use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayResponseErrorException;
 use PHPUnit\Framework\TestCase;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\CartEmptyException;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\CartNegativeAmountException;
-use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepaySdkException;
 use DarkGhostHunter\TransbankApi\Onepay;
 use DarkGhostHunter\TransbankApi\Transbank;
 
@@ -54,7 +53,6 @@ class OnepayIntegrationTransactionsTest extends TestCase
 
     public function testExceptionOnChannelAppWithoutScheme()
     {
-
         $this->expectException(OnepayResponseErrorException::class);
 
         $cart = $this->onepay->createCart([

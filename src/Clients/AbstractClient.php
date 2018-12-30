@@ -4,8 +4,28 @@ namespace DarkGhostHunter\TransbankApi\Clients;
 
 use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 
-abstract class AbstractConnector
+abstract class AbstractClient
 {
+    /**
+     * If Environment is production (default: no)
+     *
+     * @var bool
+     */
+    protected $isProduction = false;
+
+    /**
+     * Credentials for the Service Client
+     *
+     * @var Fluent
+     */
+    protected $credentials;
+
+    /**
+     * Service Endpoint to connect to
+     *
+     * @var string
+     */
+    protected $endpoint;
 
     /**
      * Connector constructor.
@@ -25,7 +45,7 @@ abstract class AbstractConnector
     /**
      * Boot the connector
      *
-     * @return mixed
+     * @return void
      */
-    abstract public function boot();
+    abstract protected function boot();
 }

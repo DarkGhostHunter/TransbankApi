@@ -29,7 +29,7 @@ abstract class AbstractResponse extends Fluent implements ResponseInterface
     protected $tokenName = 'token_ws';
 
     /**
-     * Transaction Type of this Response, if applicable
+     * WebpayClient Type of this Response, if applicable
      *
      * @var string
      */
@@ -124,7 +124,7 @@ abstract class AbstractResponse extends Fluent implements ResponseInterface
     }
 
     /**
-     * Gets the Transaction Type for the Response (if available)
+     * Gets the WebpayClient Type for the Response (if available)
      *
      * @return string
      */
@@ -134,7 +134,7 @@ abstract class AbstractResponse extends Fluent implements ResponseInterface
     }
 
     /**
-     * Sets the Transaction Type for the Response (if available)
+     * Sets the WebpayClient Type for the Response (if available)
      *
      * @param string $type
      */

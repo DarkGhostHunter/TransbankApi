@@ -6,55 +6,37 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Ejemplos de integración de Servicios Transbank</title>
+    <?php include __DIR__ . '/_master/header.php' ?>
 </head>
 <body>
 
-<?php
-
-$json = '{
-  "id": {
-    "commerceId": "customId"
-  },
-  "transaction": [
-    {
-      "type": "webpay.plus.normal",
-      "commerceOrderId": "order#322",
-      "data": {
-        "amount": 9990,
-      },
-      "meta": {
-        "urlReturn": "http://localhost:8080/WebpayNormal/return.php",
-        "urlFinal": "http://localhost:8080/WebpayNormal/final.php",
-        "description": "This is my custom description, generated from my App."
-      }
-    }
-  ]
-}';
-
-$secret = bin2hex(random_bytes(16));
-
-echo $hash = base64_encode(hash_hmac('sha256', hash('sha256', $json), $secret));
-
-?>
-
-
-<h1>Ejemplos de integración de Servicios Transbank</h1>
-<ul>
-    <li>
-        <a href="WebpayNormal/start.php" target="_self">Webpay Plus Normal</a>
-    </li>
-    <li>
-        <a href="WebpayMallNormal/start.php" target="_self">Webpay Plus Mall Normal</a>
-    </li>
-    <li>
-        <a href="WebpayDeferCaptureNullify/start.php" target="_self">Webpay Plus Diferida, Captura y Anulación</a>
-    </li>
-    <li>
-        <a href="WebpayOneclick/start.php" target="_self">Webpay Oneclick Registro, Cargo, Revertir y Dar de baja (<em>desregistrar</em>).</a>
-    </li>
-    <li>
-        <a href="Onepay/start.php" target="_self">Oneclick Web/Mobile</a>
-    </li>
-</ul>
+<div class="container">
+    <h1 class="mb-3">Ejemplos de integración de Servicios Transbank</h1>
+    <div class="alert alert-info small">
+        <i class="fas fa-info-circle"></i> Todos estos ejemplos usan las credenciales de integración suministradas por Transbank, así que no es necesario hacer nada más que probar cómo funcionan las transacciones.
+    </div>
+    <div class="list-group">
+        <a href="webpay-normal/start.php" class="list-group-item list-group-item-action">
+            <h3>Webpay Plus Normal</h3>
+            <p>Creación</p>
+        </a>
+        <a href="webpay-mall-normal/start.php" class="list-group-item list-group-item-action">
+            <h3>Webpay Plus Mall Normal</h3>
+            <p>Creación</p>
+        </a>
+        <a href="webpay-defer-capture-nullify/start.php" class="list-group-item list-group-item-action">
+            <h3>Webpay Plus Diferida</h3>
+            <p>Creación, Captura y Anulación</p>
+        </a>
+        <a href="webpay-oneclick/start.php" class="list-group-item list-group-item-action">
+            <h3>Webpay Oneclick</h3>
+            <p>Registro, Cargo, Revertir y Dar de baja.</p>
+        </a>
+        <a href="onepay/start.php" class="list-group-item list-group-item-action">
+            <h3>Onepay</h3>
+            <p>Web / Móvil</p>
+        </a>
+    </div>
+</div>
 </body>
 </html>

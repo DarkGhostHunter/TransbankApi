@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use DarkGhostHunter\TransbankApi\Responses\WebpayOneclickResponse;
 use DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse;
 use DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse;
-use DarkGhostHunter\TransbankApi\Adapters\WebpaySoapAdapter;
+use DarkGhostHunter\TransbankApi\Adapters\WebpayAdapter;
 use DarkGhostHunter\TransbankApi\Contracts\AdapterInterface;
 use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
 use DarkGhostHunter\TransbankApi\Transactions\WebpayMallTransaction;
@@ -22,7 +22,7 @@ class WebpayTransactionsTest extends TestCase
     /** @var Webpay */
     protected $webpayProduction;
 
-    /** @var \Mockery\MockInterface|WebpaySoapAdapter */
+    /** @var \Mockery\MockInterface|WebpayAdapter */
     protected $mockAdapter;
 
     protected $mockCredentials = [
@@ -49,7 +49,7 @@ class WebpayTransactionsTest extends TestCase
 
     protected function setUp()
     {
-        $this->mockAdapter = \Mockery::instanceMock(WebpaySoapAdapter::class, AdapterInterface::class);
+        $this->mockAdapter = \Mockery::instanceMock(WebpayAdapter::class, AdapterInterface::class);
     }
 
     protected function setWebpay()

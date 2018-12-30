@@ -33,7 +33,7 @@ abstract class AbstractTransactionFactory
     }
 
     /**
-     * Returns an instance of a Transaction
+     * Returns an instance of a WebpayClient
      *
      * @param string $type
      * @param array $attributes
@@ -42,7 +42,7 @@ abstract class AbstractTransactionFactory
     abstract protected function makeTransaction(string $type, array $attributes = []);
 
     /**
-     * Injects Service, Defaults and Type to the Transaction
+     * Injects Service, Defaults and Type to the WebpayClient
      *
      * @param string $type
      * @param AbstractTransaction $transaction

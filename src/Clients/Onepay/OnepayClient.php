@@ -2,16 +2,22 @@
 
 namespace DarkGhostHunter\TransbankApi\Clients\Onepay;
 
-use DarkGhostHunter\TransbankApi\Clients\AbstractConnector;
+use DarkGhostHunter\TransbankApi\Clients\AbstractClient;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayResponseErrorException;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayValidationException;
 use DarkGhostHunter\TransbankApi\Helpers\Fluent;
+use DarkGhostHunter\TransbankApi\Transactions\OnepayNullifyTransaction;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 use GuzzleHttp\Client;
 
-class OnepayHttp extends AbstractConnector
+class OnepayClient extends AbstractClient
 {
-
+    /**
+     * Path for services
+     *
+     * @const string
+     */
+    protected const PATH = '/ewallet-plugin-api-services/services/transactionservice/';
 
     /**
      * Endpoints for environment types
@@ -19,16 +25,9 @@ class OnepayHttp extends AbstractConnector
      * @var array
      */
     protected static $endpoints = [
-        'integration'   => 'https://onepay.ionix.cl/ewallet-plugin-api-services/services/transactionservice/',
-        'production'    => 'https://www.onepay.cl/ewallet-plugin-api-services/services/transactionservice/',
+        'integration'   => 'https://onepay.ionix.cl',
+        'production'    => 'https://www.onepay.cl',
     ];
-
-    /**
-     * Endpoint to use
-     *
-     * @var string
-     */
-    protected $endpoint;
 
     /**
      * Guzzle Client
@@ -46,12 +45,11 @@ class OnepayHttp extends AbstractConnector
     /**
      * Boot the connector
      *
-     * @return mixed
+     * @return void
      */
     public function boot()
     {
         $this->bootEndpoint();
-
         $this->bootHttpClient();
     }
 
@@ -73,7 +71,7 @@ class OnepayHttp extends AbstractConnector
     protected function bootHttpClient()
     {
         $this->httpClient = new Client([
-            'base_uri' => $this->endpoint,
+            'base_uri' => $this->endpoint . self::PATH,
             'timeout'  => 15.0,
             'verify' => true,
             'headers' => [
@@ -93,24 +91,24 @@ class OnepayHttp extends AbstractConnector
      * and returns its content in an array;
      *
      * @param string $endpoint
-     * @param OnepayTransaction $transaction
+     * @param OnepayTransaction|OnepayNullifyTransaction $transaction
      * @return \stdClass
      * @throws OnepayResponseErrorException
      */
-    protected function post(string $endpoint, OnepayTransaction $transaction)
+    protected function post(string $endpoint, $transaction)
     {
-        $response = json_decode(
-            $this->httpClient->post(
-                $endpoint,
-                ['body' => json_encode($transaction, JSON_UNESCAPED_SLASHES)]
-            )->getBody()->getContents()
+        $response = $this->httpClient->post(
+            $endpoint,
+            ['body' => json_encode($transaction, JSON_UNESCAPED_SLASHES)]
         );
 
-        if ($response->responseCode === 'OK') {
-            return $response->result;
+        $content = json_decode($response->getBody()->getContents());
+
+        if ($content->responseCode === 'OK') {
+            return $content->result;
         }
 
-        throw new OnepayResponseErrorException($response->responseCode, $response->description, $transaction);
+        throw new OnepayResponseErrorException($content->responseCode, $content->description, $transaction);
     }
 
 
@@ -121,7 +119,7 @@ class OnepayHttp extends AbstractConnector
     */
 
     /**
-     * Commits a Onepay Transaction on Transbank servers
+     * Commits a Onepay WebpayClient on Transbank servers
      *
      * @param OnepayTransaction $transaction
      * @return array
@@ -135,14 +133,13 @@ class OnepayHttp extends AbstractConnector
             $this->signedCommitTransaction($transaction)
         );
 
-        if ($this->verifyCommitResponse($response, $transaction)) {
-            return (array)$response;
-        }
+        $this->verifyCommitResponse($response, $transaction);
 
+        return (array)$response;
     }
 
     /**
-     * Confirms a Onepay Transaction on Transbank servers
+     * Confirms a Onepay WebpayClient on Transbank servers
      *
      * @param OnepayTransaction $transaction
      * @return array
@@ -156,19 +153,19 @@ class OnepayHttp extends AbstractConnector
             $this->signedConfirmTransaction($transaction)
         );
 
-        if ($this->verifyConfirmResponse($response, $transaction)) {
-            return (array)$response;
-        }
+        $this->verifyConfirmResponse($response, $transaction);
+
+        return (array)$response;
     }
 
     /**
-     * Refunds a Onepay Transaction on Transbank servers
+     * Refunds a Onepay WebpayClient on Transbank servers
      *
-     * @param OnepayTransaction $transaction
+     * @param OnepayNullifyTransaction $transaction
      * @return array
      * @throws OnepayResponseErrorException
      */
-    public function refund(OnepayTransaction $transaction)
+    public function refund(OnepayNullifyTransaction $transaction)
     {
         return (array)$this->post(
             'nullifytransaction',
@@ -196,7 +193,7 @@ class OnepayHttp extends AbstractConnector
     }
 
     /**
-     * Verifies a Onepay Transaction Commit Response
+     * Verifies a Onepay WebpayClient Commit Response
      *
      * @param $response
      * @param $transaction
@@ -213,7 +210,7 @@ class OnepayHttp extends AbstractConnector
     }
 
     /**
-     * Verifies a Onepay Transaction Confirm Response
+     * Verifies a Onepay WebpayClient Confirm Response
      *
      * @param $response
      * @param $transaction
@@ -242,19 +239,17 @@ class OnepayHttp extends AbstractConnector
     /**
      * Returns a signed a OnepayTransaction using the Credential's Secret
      *
-     * @param OnepayTransaction $transaction
+     * @param OnepayTransaction|OnepayNullifyTransaction $transaction
      * @param string $data
-     * @return OnepayTransaction
+     * @return OnepayTransaction|OnepayNullifyTransaction
      */
-    protected function sign(OnepayTransaction $transaction, string $data)
+    protected function sign($transaction, string $data)
     {
-        return (clone $transaction)
+        return $transaction
             ->appKey($this->credentials->appKey)
             ->apiKey($this->credentials->apiKey)
             ->signature(
-                base64_encode(
-                    hash_hmac('sha256', $data, $this->credentials->secret, true)
-                )
+                base64_encode(hash_hmac('sha256', $data, $this->credentials->secret, true))
             );
     }
 
@@ -266,13 +261,15 @@ class OnepayHttp extends AbstractConnector
      */
     protected function signedCommitTransaction(OnepayTransaction $transaction)
     {
-        $data = mb_strlen($transaction->externalUniqueNumber) . $transaction->externalUniqueNumber
-            . mb_strlen($transaction->total) . $transaction->total
-            . mb_strlen($transaction->itemsQuantity) . $transaction->itemsQuantity
-            . mb_strlen($transaction->issuedAt) . $transaction->issuedAt
-            . mb_strlen($transaction->callbackUrl) . $transaction->callbackUrl;
+        $properties = [
+            'externalUniqueNumber',
+            'total',
+            'itemsQuantity',
+            'issuedAt',
+            'callbackUrl',
+        ];
 
-        return $this->sign($transaction, $data);
+        return $this->createSignableString($properties, $transaction);
     }
 
     /**
@@ -283,26 +280,48 @@ class OnepayHttp extends AbstractConnector
      */
     protected function signedConfirmTransaction(OnepayTransaction $transaction)
     {
-        $data = mb_strlen($transaction->occ) . $transaction->occ
-            . mb_strlen($transaction->externalUniqueNumber) . $transaction->externalUniqueNumber
-            . mb_strlen($transaction->issuedAt) . $transaction->issuedAt;
+        $properties = [
+            'occ',
+            'externalUniqueNumber',
+            'issuedAt',
+        ];
 
-        return $this->sign($transaction, $data);
+        return $this->createSignableString($properties, $transaction);
     }
 
     /**
      * Returns a signed Refund OnepayTransaction
      *
-     * @param OnepayTransaction $transaction
+     * @param OnepayNullifyTransaction $transaction
      * @return OnepayTransaction
      */
-    protected function signedRefundTransaction(OnepayTransaction $transaction)
+    protected function signedRefundTransaction(OnepayNullifyTransaction $transaction)
     {
-        $data = mb_strlen($transaction->externalUniqueNumber) . $transaction->externalUniqueNumber
-            . mb_strlen($transaction->total) . $transaction->total
-            . mb_strlen($transaction->itemsQuantity) . $transaction->itemsQuantity
-            . mb_strlen($transaction->issuedAt) . $transaction->issuedAt
-            . mb_strlen($transaction->callbackUrl) . $transaction->callbackUrl;
+        $properties = [
+            'occ',
+            'externalUniqueNumber',
+            'authorizationCode',
+            'issuedAt',
+            'nullifyAmount',
+        ];
+
+        return $this->createSignableString($properties, $transaction);
+    }
+
+    /**
+     * Returns a new transaction with proper signature
+     *
+     * @param $properties
+     * @param $transaction
+     * @return OnepayTransaction
+     */
+    protected function createSignableString($properties, $transaction)
+    {
+        $data = '';
+
+        foreach ($properties as $property) {
+            $data .= mb_strlen($transaction->{$property}) . $transaction->{$property};
+        }
 
         return $this->sign($transaction, $data);
     }

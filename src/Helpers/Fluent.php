@@ -236,4 +236,15 @@ class Fluent implements ArrayAccess, JsonSerializable
     {
         unset($this->attributes[$offset]);
     }
+
+    /**
+     * Returns a new Fluent instance from a JSON string
+     *
+     * @param string $json
+     * @return static
+     */
+    public static function fromJson(string $json)
+    {
+        return new static(json_decode($json, true));
+    }
 }

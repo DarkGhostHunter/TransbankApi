@@ -8,12 +8,12 @@ namespace DarkGhostHunter\TransbankApi\Clients\Webpay\Concerns;
  *
  * @package DarkGhostHunter\TransbankApi\Clients\Webpay\Concerns
  *
- * @mixin \DarkGhostHunter\TransbankApi\Clients\Webpay\Transaction
+ * @mixin \DarkGhostHunter\TransbankApi\Clients\Webpay\WebpayClient
  */
 trait CommitsTransactions
 {
     /**
-     * Performs the commitment of the Transaction on WebpaySoap
+     * Performs the commitment of the WebpayClient on WebpaySoap
      *
      * @param object $transaction
      * @return mixed

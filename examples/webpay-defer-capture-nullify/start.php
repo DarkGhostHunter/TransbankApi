@@ -4,29 +4,19 @@ include_once '../../vendor/autoload.php';
 
 $webpay = DarkGhostHunter\TransbankApi\Transbank::environment()->webpay();
 
-$result = $webpay->createMallNormal([
-    'returnUrl' => 'http://localhost:8080/WebpayMallNormal/return.php',
-    'finalUrl' => 'http://localhost:8080/WebpayMallNormal/final.php',
-    'sessionId' => 'alpha-session-1',
-    'buyOrder' => 10000001,
-    'items' => [
-        [
-            'commerceCode' => 597044444402,
-            'amount' => 4990,
-            'buyOrder' => 20000001,
-        ],
-        [
-            'commerceCode' => 597044444403,
-            'amount' => 9990,
-            'buyOrder' => 30000001,
-        ],
-    ]
+$result = $webpay->createDefer([
+    'returnUrl' => 'http://localhost:8080/webpay-defer-capture-nullify/return.php',
+    'finalUrl' => 'http://localhost:8080/webpay-defer-capture-nullify/final.php',
+    'buyOrder'  => date('Y-m-d_H-i-s'),
+    'amount'    => 9990,
 ]);
 
+// Veamos el resultado.
 echo '<pre>';
 print_r($result);
 echo '</pre>';
 
+// HTML para redirigir la prueba
 ?>
 <!doctype html>
 <html lang="es">

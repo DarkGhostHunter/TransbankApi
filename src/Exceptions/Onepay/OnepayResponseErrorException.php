@@ -8,7 +8,13 @@ use DarkGhostHunter\TransbankApi\Exceptions\TransbankException;
 class OnepayResponseErrorException extends \Exception implements TransbankException, OnepayException
 {
 
-    public function __construct($error, $description, OnepayTransaction $transaction)
+    /**
+     * OnepayResponseErrorException constructor.
+     * @param $error
+     * @param $description
+     * @param OnepayTransactionOnepayNullifyTransaction $transaction
+     */
+    public function __construct($error, $description, $transaction)
     {
         parent::__construct(
             "Onepay has returned an error: [$error] $description. Transaction: $transaction"

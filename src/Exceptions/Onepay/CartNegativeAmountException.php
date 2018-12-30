@@ -9,11 +9,11 @@ use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 class CartNegativeAmountException extends \Exception implements TransbankException, OnepayException
 {
 
-    protected $message = 'Cannot send to Onepay a Transaction with zero total amount or below.';
+    protected $message = 'Cannot send to Onepay a WebpayClient with zero total amount or below.';
 
     public function __construct(OnepayTransaction $transaction)
     {
-        $this->message .= "\n" . "Transaction: " . $transaction;
+        $this->message .= "\n" . "WebpayClient: " . $transaction;
 
         parent::__construct();
     }

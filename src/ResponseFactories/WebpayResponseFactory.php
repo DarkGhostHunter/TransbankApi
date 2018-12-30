@@ -11,7 +11,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
     */
 
     /**
-     * Retrieves and Confirms a Webpay Plus Normal Transaction
+     * Retrieves and Confirms a Webpay Plus Normal WebpayClient
      *
      * @param string $transaction
      * @return \DarkGhostHunter\TransbankApi\Contracts\ResponseInterface|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
@@ -19,11 +19,11 @@ class WebpayResponseFactory extends AbstractResponseFactory
      */
     public function getNormal(string $transaction)
     {
-        return $this->service->get($transaction, 'plus.normal');
+        return $this->service->getTransaction($transaction, 'plus.normal');
     }
 
     /**
-     * Retrieves a Webpay Plus Normal Transaction
+     * Retrieves a Webpay Plus Normal WebpayClient
      *
      * @param string $transaction
      * @return \DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
@@ -34,7 +34,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
     }
 
     /**
-     * Confirms a Webpay Plus Normal Transaction
+     * Confirms a Webpay Plus Normal WebpayClient
      *
      * @param string $transaction
      * @return bool
@@ -51,7 +51,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
     */
 
     /**
-     * Retrieves and Confirms a Webpay Plus Mall Normal Transaction
+     * Retrieves and Confirms a Webpay Plus Mall Normal WebpayClient
      *
      * @param string $transaction
      * @return \DarkGhostHunter\TransbankApi\Contracts\ResponseInterface|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse
@@ -59,11 +59,11 @@ class WebpayResponseFactory extends AbstractResponseFactory
      */
     public function getMallNormal(string $transaction)
     {
-        return $this->service->get($transaction, 'plus.mall.normal');
+        return $this->service->getTransaction($transaction, 'plus.mall.normal');
     }
 
     /**
-     * Retrieves a Webpay Plus Mall Normal Transaction
+     * Retrieves a Webpay Plus Mall Normal WebpayClient
      *
      * @param string $transaction
      * @return \DarkGhostHunter\TransbankApi\Contracts\ResponseInterface|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse
@@ -74,7 +74,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
     }
 
     /**
-     * Confirms a Webpay Plus Mall Normal Transaction
+     * Confirms a Webpay Plus Mall Normal WebpayClient
      *
      * @param string $transaction
      * @return bool
@@ -91,7 +91,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
     */
 
     /**
-     * Retrieves and Confirms a Webpay Plus Deferred Transaction
+     * Retrieves and Confirms a Webpay Plus Deferred WebpayClient
      *
      * @param string $transaction
      * @return \DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
@@ -99,11 +99,11 @@ class WebpayResponseFactory extends AbstractResponseFactory
      */
     public function getDefer(string $transaction)
     {
-        return $this->service->get($transaction, 'plus.defer');
+        return $this->service->getTransaction($transaction, 'plus.defer');
     }
 
     /**
-     * Retrieves a Webpay Plus Deferred Transaction
+     * Retrieves a Webpay Plus Deferred WebpayClient
      *
      * @param string $transaction
      * @return \DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
@@ -114,7 +114,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
     }
 
     /**
-     * Confirms a Webpay Plus Deferred Transaction
+     * Confirms a Webpay Plus Deferred WebpayClient
      *
      * @param string $transaction
      * @return bool
@@ -151,7 +151,5 @@ class WebpayResponseFactory extends AbstractResponseFactory
     {
         return $this->getRegistration($transaction);
     }
-
-
 
 }

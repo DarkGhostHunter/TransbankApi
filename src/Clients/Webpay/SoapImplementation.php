@@ -7,7 +7,7 @@ use LuisUrrutia\TransbankSoap\Process;
 use SoapClient;
 
 /**
- * Class SoapConnector
+ * Class SoapImplementation
  * @package DarkGhostHunter\TransbankApi\Clients
  *
  * @method object acknowledgeTransaction($transaction)
@@ -16,7 +16,7 @@ use SoapClient;
  *
  *
  */
-class SoapConnector extends SoapClient
+class SoapImplementation extends SoapClient
 {
 
     /**

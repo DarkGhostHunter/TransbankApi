@@ -9,7 +9,7 @@ class TransactionItemsTest extends TestCase
 
     protected function setUp()
     {
-        // Mocked Transaction with Items
+        // Mocked WebpayClient with Items
     }
 
     public function testAddItemAsArray()

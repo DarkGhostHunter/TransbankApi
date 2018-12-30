@@ -3,7 +3,7 @@
 
 `TransbankApi` es un reemplazo al [Transbank SDK](https://github.com/TransbankDevelopers/transbank-sdk-php) con la finalidad de mejorar la experiencia de integración y uso.
 
-> Esta versión es incompatible con PHP 5. Para usar este código con PHP 5, usa la versión 1.4.3 del [Transbank SDK](https://github.com/TransbankDevelopers/transbank-sdk-php).
+> Esta versión es incompatible con PHP 5. Para usar este código con PHP 5, usa el packete oficial de [Transbank SDK](https://github.com/TransbankDevelopers/transbank-sdk-php).
 
 > Esta paquete es un trabajo en progreso ¡No lo uses en producción hasta que no esté listo! 
 
@@ -42,7 +42,7 @@ También puedes añadir el SDK como dependencia a tu proyecto y luego ejecutar `
 
 ```json
     "require": {
-        "darkghostgunter/transbank-wrapper": "1.0-rc"
+        Transbank Api: "1.0-rc"
     }
 ```
 
