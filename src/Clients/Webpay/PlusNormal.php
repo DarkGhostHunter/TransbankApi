@@ -81,7 +81,7 @@ class PlusNormal extends WebpayClient
      * @param WebpayTransaction $transaction
      * @return array
      */
-    public function getAndConfirm(WebpayTransaction $transaction)
+    public function retrieveAndConfirm(WebpayTransaction $transaction)
     {
         // Perform the WebpayClient result
         $response = $this->retrieve($transaction);

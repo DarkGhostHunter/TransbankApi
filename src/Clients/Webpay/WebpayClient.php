@@ -24,8 +24,8 @@ abstract class WebpayClient extends AbstractClient
             'production'    => 'https://webpay3g.transbank.cl/WSWebpayTransaction/cxf/WSCommerceIntegrationService?wsdl',
         ],
         'complete' => [
-            'integration'   => 'https://webpay3gint.transbank.cl/WSWebpayTransaction/cxf/WSCompleteWebpayService?wsdl',
-            'production'    => 'https://webpay3g.transbank.cl/WSWebpayTransaction/cxf/WSCompleteWebpayService?wsdl',
+            'integration'   => 'ttps://webpay3gint.transbank.cl/WSWebpayTransaction/cxf/WSCompleteWebpayService?wsdl',
+            'production'    => 'ttps://webpay3g.transbank.cl/WSWebpayTransaction/cxf/WSCompleteWebpayService?wsdl',
         ],
         'oneclick' => [
             'integration'   => 'https://webpay3gint.transbank.cl/webpayserver/wswebpay/OneClickPaymentService?wsdl',
@@ -66,7 +66,7 @@ abstract class WebpayClient extends AbstractClient
      *
      * @return void
      */
-    protected function boot()
+    public function boot()
     {
         $this->bootEndpoint();
 

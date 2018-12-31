@@ -29,6 +29,26 @@ abstract class AbstractAdapter implements AdapterInterface
     protected $credentials;
 
     /**
+     * Sets a Client to communicate with Transbank
+     *
+     * @param $client
+     */
+    public function setClient($client)
+    {
+        $this->client = $client;
+    }
+
+    /**
+     * Returns the Client used to communicate with Transbank
+     *
+     * @return object
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
      * Sets credentials to use against Transbank SDK
      *
      * @param Fluent $credentials

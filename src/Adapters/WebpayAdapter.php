@@ -15,6 +15,72 @@ use Exception;
 
 class WebpayAdapter extends AbstractAdapter
 {
+
+    /**
+     * Map of transaction types and their respective Clients
+     *
+     * @var array
+     */
+    protected $clients = [
+        PlusNormal::class => [
+            'plus.normal',
+            'plus.defer',
+            'plus.mall.normal',
+            'plus.mall.defer',
+        ],
+        PlusCapture::class => [
+            'plus.capture',
+            'plus.mall.capture',
+        ],
+        PlusNullify::class => [
+            'plus.nullify',
+            'plus.mall.nullify',
+        ],
+        OneclickNormal::class => [
+            'oneclick.register',
+            'oneclick.confirm',
+            'oneclick.unregister',
+            'oneclick.charge',
+            'oneclick.reverse',
+        ]
+    ];
+
+    /**
+     * Set the Clients per Type array
+     *
+     * @param array $array
+     */
+    public function setClients(array $array)
+    {
+        $this->clients = $array;
+    }
+
+    /**
+     * Get the Clients per Type array
+     *
+     * @return array
+     */
+    public function getClients()
+    {
+        return $this->clients;
+    }
+
+    /**
+     * Returns the Client for the type of transaction
+     *
+     * @param string $type
+     * @return string|void
+     */
+    protected function getClientForType(string $type)
+    {
+        foreach ($this->clients as $client => $types) {
+            if (in_array($type, $types) !== false) {
+                return $client;
+            }
+        }
+    }
+
+
     /**
      * Boots the WebpaySoap Processor for the transaction type
      *
@@ -23,40 +89,15 @@ class WebpayAdapter extends AbstractAdapter
      */
     protected function bootClient(string $type)
     {
-        // We could have used an array and check for every key, but since some
-        // transactions share the same logic (class), a switch it's better
-        // suited for this.
-        switch ($type) {
-            case 'plus.normal':
-            case 'plus.defer':
-            case 'plus.mall.normal':
-            case 'plus.mall.defer':
-                $processor = PlusNormal::class;
-                break;
-            case 'plus.capture':
-            case 'plus.mall.capture':
-                $processor = PlusCapture::class;
-                break;
-            case 'plus.nullify':
-            case 'plus.mall.nullify':
-                $processor = PlusNullify::class;
-                break;
-            case 'oneclick.register':
-            case 'oneclick.confirm':
-            case 'oneclick.unregister':
-            case 'oneclick.charge':
-            case 'oneclick.reverse':
-                $processor = OneclickNormal::class;
-                break;
-            case 'oneclick.mall.charge':
-            case 'oneclick.mall.reverse':
-            case 'oneclick.mall.nullify':
-            case 'oneclick.mall.reverseNullify':
-            default:
-                throw new ServiceSdkUnavailableException();
-        }
 
-        $this->client = new $processor($this->isProduction, $this->credentials);
+        if (!$processor = $this->getClientForType($type)) {
+            throw new ServiceSdkUnavailableException($type);
+        };
+
+        if (!$this->client instanceof $processor) {
+            $this->client = new $processor($this->isProduction, $this->credentials);
+            $this->client->boot();
+        }
     }
 
 
@@ -96,16 +137,8 @@ class WebpayAdapter extends AbstractAdapter
                     return $this->client->charge($transaction);
                 case 'oneclick.reverse':
                     return $this->client->reverse($transaction);
-                case 'patpass.subscribe':
-                case 'patpass.unsubscribe':
-                case 'patpass.extend':
-                case 'patpass.renew':
-                case 'oneclick.mall.charge':
-                case 'oneclick.mall.reverse':
-                case 'oneclick.mall.nullify':
-                case 'oneclick.mall.reverseNullify':
                 default:
-                    throw new ServiceSdkUnavailableException();
+                    throw new ServiceSdkUnavailableException($type);
             }
         } catch (Exception $exception) {
             throw new InvalidWebpayTransactionException($transaction, $exception);
@@ -127,14 +160,13 @@ class WebpayAdapter extends AbstractAdapter
         switch ($options) {
             case 'plus.normal':
             case 'plus.mall.normal':
-                return $this->client->get($transaction);
+                return $this->client->retrieveAndConfirm($transaction);
             case 'oneclick.register':
                 return $this->client->register($transaction);
             default:
-                throw new ServiceSdkUnavailableException();
+                throw new ServiceSdkUnavailableException($options);
         }
     }
-
 
     /**
      * Retrieves a transaction from Transbank
@@ -151,14 +183,12 @@ class WebpayAdapter extends AbstractAdapter
         switch ($options) {
             case 'plus.normal':
             case 'plus.mall.normal':
-            case 'patpass.subscribe':
                 return $this->client->retrieve($transaction);
                 break;
             default:
-                throw new ServiceSdkUnavailableException();
+                throw new ServiceSdkUnavailableException($options);
         }
     }
-
 
     /**
      * Acknowledges a transaction in the Transbank SDK
@@ -176,13 +206,11 @@ class WebpayAdapter extends AbstractAdapter
             case 'plus.normal':
             case 'plus.mall.normal':
             case 'patpass.subscribe':
-                return $this->client->confirm($transaction);
-                break;
             case 'oneclick.confirm':
                 return $this->client->confirm($transaction);
                 break;
             default:
-                throw new ServiceSdkUnavailableException();
+                throw new ServiceSdkUnavailableException($options);
         }
     }
 

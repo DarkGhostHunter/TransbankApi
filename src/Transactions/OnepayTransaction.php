@@ -5,15 +5,21 @@ namespace DarkGhostHunter\TransbankApi\Transactions;
 use Closure;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\CartEmptyException;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\CartNegativeAmountException;
-use DarkGhostHunter\TransbankApi\Transactions\Concerns\HasItems;
+use DarkGhostHunter\TransbankApi\Helpers\Helpers;
 
 /**
  * Class OnepayTransaction
  * @package DarkGhostHunter\TransbankApi\Transactions
+ *
+ * @property-read int $itemsQuantity
+ * @property-read int $total
+ *
+ * @property string $externalUniqueNumber
  */
 class OnepayTransaction extends AbstractTransaction
 {
-    use HasItems;
+    use Concerns\HasItems,
+        Concerns\HasSecrets;
 
     /**
      * External Unique Number Generator for this cart
@@ -57,6 +63,11 @@ class OnepayTransaction extends AbstractTransaction
 
     /*
     |--------------------------------------------------------------------------
+    | Getters and Setters
+    |--------------------------------------------------------------------------
+    */
+    /*
+    |--------------------------------------------------------------------------
     | External Unique Number generation
     |--------------------------------------------------------------------------
     */
@@ -64,9 +75,9 @@ class OnepayTransaction extends AbstractTransaction
     /**
      * Sets logic to make an External Unique Number for the OnepayTransaction
      *
-     * @param Closure $function
+     * @param callable $function
      */
-    public function generateEun(Closure $function)
+    public function generateEun(callable $function)
     {
         $this->eunGenerator = $function;
     }
@@ -90,6 +101,9 @@ class OnepayTransaction extends AbstractTransaction
 
     /**
      * Fill any empty attributes depending on the transaction type
+     *
+     * @return void
+     * @throws \Exception
      */
     protected function fillEmptyAttributes()
     {
@@ -103,11 +117,6 @@ class OnepayTransaction extends AbstractTransaction
                 $this->externalUniqueNumber = $this->autoGenerateEun();
             }
         }
-
-        // Set the time this is being committed as a timestamp
-        $this->issuedAt = time();
-
-        $this->itemsQuantity = $this->getItemsQuantityAttribute();
     }
 
 
@@ -128,6 +137,12 @@ class OnepayTransaction extends AbstractTransaction
             throw new CartNegativeAmountException($this);
         }
 
+        // Set the time this is being committed as a timestamp
+        $this->issuedAt = time();
+
+        // Set the items quantity
+        $this->itemsQuantity = $this->getItemsQuantityAttribute();
+
         // Uppercase the channel
         $this->channel = strtoupper($this->channel);
     }
@@ -146,12 +161,14 @@ class OnepayTransaction extends AbstractTransaction
      */
     protected function parseItem($item)
     {
-        if(is_string($item) && $array = json_decode($item, true)) {
+        // First, let's try to decode this Item
+        if (is_string($item) && $array = json_decode($item, true)) {
             $item = $array;
         }
 
-        if (is_array($item) && $item['quantity'] > 0) {
-            return new Item(array_merge($this->itemDefaults,$item));
+        // If it was decoded, then return the Item
+        if (is_array($item) && ($item['quantity'] ?? 0) >= 1) {
+            return new Item(array_merge($this->itemDefaults, $item));
         }
 
         return null;
@@ -232,18 +249,20 @@ class OnepayTransaction extends AbstractTransaction
      */
     public function toArray()
     {
-        $attributes = null;
-        if ($this->items) {
-            $attributes = array_merge(
-                array_merge(
-                    $this->attributes,
-                    [
-                        'total' => $this->total,
-                        'itemsQuantity' => $this->itemsQuantity
-                    ]
-                ),
-                ['items' => $this->items]
-            );
+        $attributes = array_merge(
+            array_merge(
+                $this->attributes,
+                [
+                    'total' => $this->total,
+                    'itemsQuantity' => $this->itemsQuantity,
+                    'externalUniqueNumber' => $this->externalUniqueNumber,
+                ]
+            ),
+            ['items' => $this->items]
+        );
+
+        if ($this->hideSecrets) {
+            $attributes = Helpers::arrayExcept($attributes, ['appKey', 'apiKey', 'signature']);
         }
 
         return $attributes ?? $this->attributes;

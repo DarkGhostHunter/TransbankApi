@@ -36,6 +36,39 @@ class OnepayClient extends AbstractClient
      */
     protected $httpClient;
 
+    /**
+     * If the client has been booted
+     *
+     * @var bool
+     */
+    protected $booted = false;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Getters and Setters
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Set the HTTP Client
+     *
+     * @return Client
+     */
+    public function getHttpClient()
+    {
+        return $this->httpClient;
+    }
+
+    /**
+     * Set the HTTP Client
+     *
+     * @param $client
+     */
+    public function setHttpClient($client)
+    {
+        $this->httpClient = $client;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Booting
@@ -49,8 +82,11 @@ class OnepayClient extends AbstractClient
      */
     public function boot()
     {
-        $this->bootEndpoint();
-        $this->bootHttpClient();
+        if (!$this->booted) {
+            $this->bootEndpoint();
+            $this->bootHttpClient();
+            $this->booted = true;
+        }
     }
 
     /**
@@ -97,9 +133,11 @@ class OnepayClient extends AbstractClient
      */
     protected function post(string $endpoint, $transaction)
     {
+        $showSecrets = (clone $transaction)->showSecrets();
+
         $response = $this->httpClient->post(
             $endpoint,
-            ['body' => json_encode($transaction, JSON_UNESCAPED_SLASHES)]
+            ['body' => json_encode($showSecrets, JSON_UNESCAPED_SLASHES)]
         );
 
         $content = json_decode($response->getBody()->getContents());

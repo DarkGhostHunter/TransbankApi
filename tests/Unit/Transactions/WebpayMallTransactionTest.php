@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 class WebpayMallTransactionTest extends TestCase
 {
 
-    public function testPassesItems()
+    public function testPassesItemsFromConstruct()
     {
         $transaction = new WebpayMallTransaction([
             'items' => $items = [

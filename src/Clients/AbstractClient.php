@@ -36,10 +36,27 @@ abstract class AbstractClient
     public function __construct(bool $isProduction, Fluent $credentials)
     {
         $this->isProduction = $isProduction;
-
         $this->credentials = $credentials;
+    }
 
-        $this->boot();
+    /**
+     * Get the Endpoint
+     *
+     * @return string
+     */
+    public function getEndpoint()
+    {
+        return $this->endpoint;
+    }
+
+    /**
+     * Set the Endpoint
+     *
+     * @param string $endpoint
+     */
+    public function setEndpoint(string $endpoint)
+    {
+        $this->endpoint = $endpoint;
     }
 
     /**

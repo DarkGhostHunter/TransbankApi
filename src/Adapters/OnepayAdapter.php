@@ -23,7 +23,10 @@ class OnepayAdapter extends AbstractAdapter
      */
     protected function bootClient()
     {
-        $this->client = new OnepayClient($this->isProduction, $this->credentials);
+        if (!$this->client) {
+            $this->client = new OnepayClient($this->isProduction, $this->credentials);
+            $this->client->boot();
+        }
     }
 
     /**
