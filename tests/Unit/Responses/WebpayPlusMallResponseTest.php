@@ -2,58 +2,160 @@
 
 namespace Tests\Unit\Responses;
 
+use DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse;
 use PHPUnit\Framework\TestCase;
 
 class WebpayPlusMallResponseTest extends TestCase
 {
 
-    public function testReturnsFullUrlForRedirect()
+    public function testGetFailedItems()
     {
-        $this->markTestSkipped();
+
     }
 
-    public function testReceivesResponseAndFillsOrders()
+    public function testDynamicallySetSuccessStatusWithToken()
     {
-        $this->markTestSkipped();
+        $response = new WebpayPlusMallResponse([
+            'token' => 'test-token'
+        ]);
+
+        $response->dynamicallySetSuccessStatus();
+
+        $this->assertTrue($response->isSuccess());
+
+        $response = new WebpayPlusMallResponse([]);
+
+        $response->dynamicallySetSuccessStatus();
+
+        $this->assertFalse($response->isSuccess());
     }
 
-    public function testOrdersAreInstanceOfOrder()
+    public function testDynamicallySetSuccessStatusWithItems()
     {
-        $this->markTestSkipped();
+        $response = new WebpayPlusMallResponse([
+            'detailOutput' => [
+                (object)['responseCode' => 0],
+                (object)['responseCode' => 0],
+                (object)['responseCode' => 0],
+            ]
+        ]);
+
+        $response->dynamicallySetSuccessStatus();
+
+        $this->assertTrue($response->isSuccess());
+
+        $response = new WebpayPlusMallResponse([
+            'detailOutput' => [
+                (object)['responseCode' => 0],
+                (object)['responseCode' => 1],
+                (object)['responseCode' => 0],
+            ]
+        ]);
+
+        $response->dynamicallySetSuccessStatus();
+
+        $this->assertFalse($response->isSuccess());
     }
 
-    public function testGetsOrders()
+    public function testGetSuccessfulTotal()
     {
-        $this->markTestSkipped();
+        $response = new WebpayPlusMallResponse([
+            'detailOutput' => [
+                (object)['responseCode' => 0, 'amount' => 4990],
+                (object)['responseCode' => 1, 'amount' => 4990],
+                (object)['responseCode' => 0, 'amount' => 4990],
+            ]
+        ]);
+
+        $this->assertEquals(4990 * 2, $response->getSuccessfulTotal());
     }
 
-    public function testGetSuccessfulOrders()
+    public function testGetSuccessfulOrdersOrGetSuccessfulItems()
     {
-        $this->markTestSkipped();
-    }
+        $response = new WebpayPlusMallResponse([
+            'detailOutput' => [
+                (object)['responseCode' => 0, 'amount' => 4990],
+                (object)['responseCode' => 1, 'amount' => 4990],
+                (object)['responseCode' => 0, 'amount' => 4990],
+            ]
+        ]);
 
-    public function testGetsFailedOrders()
-    {
-        $this->markTestSkipped();
+        $this->assertCount(2, $response->getSuccessfulOrders());
+        $this->assertCount(2, $response->getSuccessfulItems());
     }
 
     public function testGetTotal()
     {
-        $this->markTestSkipped();
+        $response = new WebpayPlusMallResponse([
+            'detailOutput' => [
+                (object)['responseCode' => 0, 'amount' => 4990],
+                (object)['responseCode' => 1, 'amount' => 4990],
+                (object)['responseCode' => 0, 'amount' => 4990],
+            ]
+        ]);
+
+        $this->assertEquals(4990 * 3, $response->getTotal());
     }
 
-    public function testReturnSingleOrder()
+    public function testGetOrdersOrGetItems()
     {
-        $this->markTestSkipped();
+        $response = new WebpayPlusMallResponse([
+            'detailOutput' => $array = [
+                (object)['responseCode' => 0, 'amount' => 4990],
+                (object)['responseCode' => 1, 'amount' => 4990],
+                (object)['responseCode' => 0, 'amount' => 4990],
+            ]
+        ]);
+
+        $this->assertEquals($array, $response->getOrders());
+        $this->assertEquals($array, $response->getItems());
     }
 
-    public function testReturnSingleOrderErrorCode()
+    public function testGetOrderErrorForHumansOrGetItemErrorForHumans()
     {
-        $this->markTestSkipped();
+        $response = new WebpayPlusMallResponse([
+            'detailOutput' => [
+                (object)['responseCode' => 0, 'amount' => 4990],
+                (object)['responseCode' => 1, 'errorCode' => 18, 'amount' => 4990],
+                (object)['responseCode' => 0, 'amount' => 4990],
+            ]
+        ]);
+
+        $this->assertEquals('ERR_SERVIDOR_COMERCIO', $response->getOrderErrorForHumans(1));
+        $this->assertEquals('ERR_SERVIDOR_COMERCIO', $response->getItemErrorForHumans(1));
     }
 
-    public function testReturnSingleOrderErrorCodeForHumans()
+    public function testGetFailedOrdersOrGetFailedItems()
     {
-        $this->markTestSkipped();
+        $failed = [
+            (object)['responseCode' => 1, 'errorCode' => 18, 'amount' => 4990],
+            (object)['responseCode' => 1, 'errorCode' => 1, 'amount' => 4990],
+        ];
+
+        $response = new WebpayPlusMallResponse([
+            'detailOutput' => [
+                (object)['responseCode' => 0, 'amount' => 4990],
+                (object)['responseCode' => 1, 'errorCode' => 18, 'amount' => 4990],
+                (object)['responseCode' => 0, 'amount' => 4990],
+                (object)['responseCode' => 1, 'errorCode' => 1, 'amount' => 4990],
+            ]
+        ]);
+
+        $this->assertEquals($failed, $response->getFailedOrders());
+        $this->assertEquals($failed, $response->getFailedItems());
+    }
+
+    public function testGetFailedTotal()
+    {
+        $response = new WebpayPlusMallResponse([
+            'detailOutput' => [
+                (object)['responseCode' => 0, 'amount' => 4990],
+                (object)['responseCode' => 1, 'errorCode' => 18, 'amount' => 1990],
+                (object)['responseCode' => 0, 'amount' => 4990],
+                (object)['responseCode' => 1, 'errorCode' => 1, 'amount' => 1990],
+            ]
+        ]);
+
+        $this->assertEquals(1990 * 2, $response->getFailedTotal());
     }
 }

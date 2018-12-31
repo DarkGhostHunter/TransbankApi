@@ -79,7 +79,7 @@ class OnepayAdapter extends AbstractAdapter
      * @return mixed
      * @throws \Exception
      */
-    public function getAndConfirm($transaction, $options = null)
+    public function retrieveAndConfirm($transaction, $options = null)
     {
         $this->bootClient();
 

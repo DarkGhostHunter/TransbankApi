@@ -37,7 +37,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
      * Confirms a Webpay Plus Normal WebpayClient
      *
      * @param string $transaction
-     * @return bool
+     * @return \DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
      */
     public function confirmNormal(string $transaction)
     {
@@ -77,7 +77,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
      * Confirms a Webpay Plus Mall Normal WebpayClient
      *
      * @param string $transaction
-     * @return bool
+     * @return \DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
      */
     public function confirmMallNormal(string $transaction)
     {
@@ -117,7 +117,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
      * Confirms a Webpay Plus Deferred WebpayClient
      *
      * @param string $transaction
-     * @return bool
+     * @return \DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
      */
     public function confirmDefer(string $transaction)
     {
@@ -134,7 +134,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
      * Confirms the Webpay Oneclick Registration
      *
      * @param string $transaction
-     * @return bool
+     * @return \DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
      */
     public function getRegistration(string $transaction)
     {
@@ -145,7 +145,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
      * Alias for getRegistration()
      *
      * @param string $transaction
-     * @return bool
+     * @return \DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
      */
     public function confirmRegistration(string $transaction)
     {

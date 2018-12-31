@@ -47,7 +47,7 @@ También puedes añadir el SDK como dependencia a tu proyecto y luego ejecutar `
 
 ```json
     "require": {
-        darkghosthunter/transbank-api: "^1.0"
+        "darkghosthunter/transbank-api": "^1.0"
     }
 ```
 

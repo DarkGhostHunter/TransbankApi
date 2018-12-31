@@ -2,58 +2,50 @@
 
 namespace Tests\Unit\Responses;
 
+use DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse;
 use PHPUnit\Framework\TestCase;
 
 class WebpayPlusResponseTest extends TestCase
 {
 
-    public function testReturnsFullUrlForRedirect()
+    public function testDynamicallySetSuccessStatusWithToken()
     {
-        $this->markTestSkipped();
+        $response = new WebpayPlusResponse([
+            'foo' => 'bar',
+            'token' => 'mock-token'
+        ]);
+
+        $response->dynamicallySetSuccessStatus();
+
+        $this->assertTrue($response->isSuccess());
+
+        $response = new WebpayPlusResponse([
+            'foo' => 'bar',
+        ]);
+
+        $response->dynamicallySetSuccessStatus();
+
+        $this->assertFalse($response->isSuccess());
     }
 
-    public function testReceivesResponseAndFillsOrders()
+    public function testDynamicallySetSuccessStatusWithDetailedOutput()
     {
-        $this->markTestSkipped();
-    }
+        $response = new WebpayPlusResponse([
+            'foo' => 'bar',
+            'detailOutput' => (object)['responseCode' => 0],
+        ]);
 
-    public function testOrdersAreInstanceOfOrder()
-    {
-        $this->markTestSkipped();
-    }
+        $response->dynamicallySetSuccessStatus();
 
-    public function testGetsOrders()
-    {
-        $this->markTestSkipped();
-    }
+        $this->assertTrue($response->isSuccess());
 
-    public function testGetSuccessfulOrders()
-    {
-        $this->markTestSkipped();
-    }
+        $response = new WebpayPlusResponse([
+            'foo' => 'bar',
+            'detailOutput' => (object)['responseCode' => 1],
+        ]);
 
-    public function testGetsFailedOrders()
-    {
-        $this->markTestSkipped();
-    }
+        $response->dynamicallySetSuccessStatus();
 
-    public function testGetTotal()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testReturnSingleOrder()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testReturnSingleOrderErrorCode()
-    {
-        $this->markTestSkipped();
-    }
-
-    public function testReturnSingleOrderErrorCodeForHumans()
-    {
-        $this->markTestSkipped();
+        $this->assertFalse($response->isSuccess());
     }
 }

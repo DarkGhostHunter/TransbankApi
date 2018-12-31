@@ -20,31 +20,31 @@ use DarkGhostHunter\TransbankApi\TransactionFactories\WebpayTransactionFactory;
  * @method Transactions\WebpayTransaction       makeNormal(array $attributes = [])
  * @method Responses\WebpayPlusResponse             createNormal(array $attributes)
  * @method Transactions\WebpayMallTransaction   makeMallNormal(array $attributes = [])
- * @method Responses\WebpayPlusResponse             createMallNormal(array $attributes)
+ * @method Responses\WebpayPlusMallResponse         createMallNormal(array $attributes)
  * @method Transactions\WebpayTransaction       makeDefer(array $attributes = [])
  * @method Responses\WebpayPlusResponse             createDefer(array $attributes)
  * @method Transactions\WebpayMallTransaction   makeMallDefer(array $attributes = [])
- * @method Responses\WebpayPlusResponse             createMallDefer(array $attributes)
+ * @method Responses\WebpayPlusMallResponse         createMallDefer(array $attributes)
  * @method Transactions\WebpayTransaction       makeCapture(array $attributes = [])
  * @method Responses\WebpayPlusResponse             createCapture(array $attributes)
  * @method Transactions\WebpayTransaction       makeMallCapture(array $attributes = [])
- * @method Responses\WebpayPlusResponse             createMallCapture(array $attributes)
+ * @method Responses\WebpayPlusMallResponse         createMallCapture(array $attributes)
  * @method Transactions\WebpayTransaction       makeNullify(array $attributes = [])
  * @method Responses\WebpayPlusResponse             createNullify(array $attributes)
  * @method Transactions\WebpayTransaction       makeRegistration(array $attributes = [])
  * @method Responses\WebpayPlusResponse             createRegistration(array $attributes)
  * @method Transactions\WebpayTransaction       makeUnregistration(array $attributes = [])
- * @method Responses\WebpayPlusResponse             createUnregistration(array $attributes)
+ * @method Responses\WebpayOneclickResponse         createUnregistration(array $attributes)
  * @method Transactions\WebpayTransaction       makeCharge(array $attributes = [])
- * @method Responses\WebpayPlusResponse             createCharge(array $attributes)
+ * @method Responses\WebpayOneclickResponse         createCharge(array $attributes)
  * @method Transactions\WebpayTransaction       makeReverseCharge(array $attributes = [])
- * @method Responses\WebpayPlusResponse             createReverseCharge(array $attributes)
+ * @method Responses\WebpayOneclickResponse         createReverseCharge(array $attributes)
  * @method Transactions\WebpayMallTransaction   makeMallCharge(array $attributes = [])
- * @method Responses\WebpayPlusResponse             createMallCharge(array $attributes)
+ * @method Responses\WebpayOneclickResponse         createMallCharge(array $attributes)
  * @method Transactions\WebpayMallTransaction   makeMallReverseCharge(array $attributes = [])
- * @method Responses\WebpayPlusResponse             createMallReverseCharge(array $attributes)
+ * @method Responses\WebpayOneclickResponse         createMallReverseCharge(array $attributes)
  * @method Transactions\WebpayMallTransaction   makeMallNullify(array $attributes = [])
- * @method Responses\WebpayPlusResponse             createMallNullify(array $attributes)
+ * @method Responses\WebpayOneclickResponse         createMallNullify(array $attributes)
  * @method Transactions\WebpayMallTransaction   makeMallReverseNullify(array $attributes = [])
  * @method Responses\WebpayPlusResponse             createMallReverseNullify(array $attributes)
  *
@@ -92,7 +92,7 @@ class Webpay extends AbstractService
      *
      * @return void
      */
-    public function bootAdapter()
+    protected function bootAdapter()
     {
         $this->adapter = new WebpayAdapter;
         $this->adapter->setIsProduction($this->isProduction());
@@ -103,7 +103,7 @@ class Webpay extends AbstractService
      *
      * @return void
      */
-    public function bootTransactionFactory()
+    protected function bootTransactionFactory()
     {
         $this->transactionFactory = new WebpayTransactionFactory($this, $this->defaults);
     }
@@ -113,9 +113,9 @@ class Webpay extends AbstractService
      *
      * @return void
      */
-    public function bootResponseFactory()
+    protected function bootResponseFactory()
     {
-        $this->resultFactory = new WebpayResponseFactory($this);
+        $this->responseFactory = new WebpayResponseFactory($this);
     }
 
     /*
@@ -154,20 +154,22 @@ class Webpay extends AbstractService
         $contents = Helpers::dirContents($directory);
 
         // Return the credentials or fail miserably
-        $credentials = [
-            'commerceCode' => $commerceCode = strtok($contents[0], '.'),
-            'privateKey' => file_get_contents($directory . "$commerceCode.key"),
-            'publicCert' => file_get_contents($directory . "$commerceCode.cert"),
-            'webpayCert' => $this->getWebpayCertForEnvironment(),
-        ];
+        try {
+            $credentials = [
+                'commerceCode' => $commerceCode = strtok($contents[0], '.'),
+                'privateKey' => file_get_contents($directory . "$commerceCode.key"),
+                'publicCert' => file_get_contents($directory . "$commerceCode.cert"),
+                'webpayCert' => $this->getWebpayCertForEnvironment(),
+            ];
 
-        if ($credentials['privateKey'] && $credentials['publicCert'] && $credentials['webpayCert']) {
-            return $credentials;
+        } catch (\Throwable $throwable) {
+            throw new CredentialsNotReadableException(
+                Helpers::classBasename(static::class), 0, $throwable
+            );
         }
 
-        throw new CredentialsNotReadableException(
-            Helpers::classBasename(static::class)
-        );
+        return $credentials;
+
     }
 
     /**
@@ -220,7 +222,7 @@ class Webpay extends AbstractService
     */
 
     /**
-     * Gets and Acknowledges a WebpayClient in Transbank
+     * Gets and Acknowledges a Transaction in Transbank
      *
      * @param $transaction
      * @param string|null $options
@@ -229,7 +231,7 @@ class Webpay extends AbstractService
      */
     public function getTransaction($transaction, $options = null)
     {
-        if (!is_string($options) ?? null) {
+        if (!is_string($options)) {
             throw new RetrievingNoTransactionTypeException;
         }
 
@@ -249,7 +251,7 @@ class Webpay extends AbstractService
         $this->setAdapterCredentials($type);
 
         return $this->parseResponse(
-            $this->adapter->get($transaction, $type),
+            $this->adapter->retrieve($transaction, $type),
             $type
         );
     }
@@ -259,17 +261,21 @@ class Webpay extends AbstractService
      *
      * @param $transaction
      * @param $type
-     * @return WebpayPlusResponse
+     * @return bool|WebpayPlusResponse
      */
     public function confirmTransaction($transaction, $type)
     {
         // Set the correct adapter credentials
         $this->setAdapterCredentials($type);
 
-        return $this->parseResponse(
-            $this->adapter->confirm($transaction, $type),
-            $type
-        );
+        $response = $this->adapter->confirm($transaction, $type);
+
+        // If the response to the confirmation is just a boolean, return it
+        if (is_bool($response)) {
+            return $response;
+        }
+
+        return $this->parseResponse($response, $type);
     }
 
     /*
@@ -283,17 +289,17 @@ class Webpay extends AbstractService
      * more friendly Webpay Response or WebpayOneclickResponse
      *
      * @param array $result
-     * @param string $type
+     * @param mixed $options
      * @return WebpayPlusResponse
      */
-    protected function parseResponse(array $result, string $type)
+    protected function parseResponse(array $result, $options = null)
     {
         // Create the Response depending on the transaction type
         switch (true) {
-            case strpos($type, 'oneclick') !== false:
+            case strpos($options, 'oneclick') !== false:
                 $response = new WebpayOneclickResponse($result);
                 break;
-            case strpos($type, 'mall') !== false:
+            case strpos($options, 'mall') !== false:
                 $response = new WebpayPlusMallResponse($result);
                 break;
             default:
@@ -301,10 +307,10 @@ class Webpay extends AbstractService
         }
 
         // Add the Type to the Response
-        $response->setType($type);
+        $response->setType($options);
 
         // Set the status of the Response
-        $response->setStatus();
+        $response->dynamicallySetSuccessStatus();
 
         return $response;
     }

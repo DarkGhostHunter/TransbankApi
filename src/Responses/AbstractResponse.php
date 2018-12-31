@@ -95,7 +95,7 @@ abstract class AbstractResponse extends Fluent implements ResponseInterface
      *
      * @return void
      */
-    abstract public function setStatus();
+    abstract public function dynamicallySetSuccessStatus();
 
     /*
     |--------------------------------------------------------------------------

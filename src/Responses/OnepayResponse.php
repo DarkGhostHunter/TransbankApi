@@ -27,7 +27,7 @@ class OnepayResponse extends AbstractResponse
      *
      * @return void
      */
-    public function setStatus()
+    public function dynamicallySetSuccessStatus()
     {
         $this->isSuccess = true;
     }

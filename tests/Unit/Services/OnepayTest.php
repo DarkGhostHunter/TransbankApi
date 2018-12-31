@@ -2,61 +2,65 @@
 
 namespace Tests\Unit\Services;
 
-use PHPUnit\Framework\TestCase;
+use DarkGhostHunter\TransbankApi\Adapters\OnepayAdapter;
 use DarkGhostHunter\TransbankApi\Onepay;
-use DarkGhostHunter\TransbankApi\Transactions\Cart;
+use DarkGhostHunter\TransbankApi\Responses\OnepayResponse;
+use DarkGhostHunter\TransbankApi\TransactionFactories\OnepayTransactionFactory;
+use DarkGhostHunter\TransbankApi\Transactions\OnepayNullifyTransaction;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 use DarkGhostHunter\TransbankApi\Transbank;
+use PHPUnit\Framework\TestCase;
 
 class OnepayTest extends TestCase
 {
+    /** @var Transbank&\Mockery\MockInterface */
+    protected $mockTransbank;
 
-    protected $transbankIntegration;
+    /** @var Onepay */
+    protected $onepay;
 
-    protected $transbankProduction;
+    /** @var OnepayAdapter&\Mockery\MockInterface */
+    protected $mockAdapter;
 
     protected function setUp()
     {
-        $this->transbankIntegration = Transbank::environment();
-        $this->transbankProduction = Transbank::environment('production');
+        $this->mockTransbank = \Mockery::mock(Transbank::class);
+
+        $this->mockTransbank->shouldReceive('getDefaults') ->once()
+            ->andReturn([ 'foo' => 'bar' ]);
+
+        $this->mockTransbank->shouldReceive('getCredentials') ->once()
+            ->andReturn([ 'baz' => 'qux' ]);
+
+        $this->mockAdapter = \Mockery::mock(OnepayAdapter::class);
+
+        $this->mockAdapter->shouldReceive('setCredentials')
+            ->andReturn(['foo' => 'bar']);
+
+        $this->onepay = new Onepay($this->mockTransbank);
+
+        $this->onepay->setAdapter($this->mockAdapter);
     }
 
-    public function testInstancesFromReceivingTransbank()
+    public function testGetTransaction()
     {
-        $onepayIntegration = Onepay::fromConfig($this->transbankIntegration);
-        $webpayProduction = Onepay::fromConfig($this->transbankProduction);
+        $this->mockTransbank->shouldReceive('isProduction')->once()
+            ->andReturnTrue();
 
-        $this->assertInstanceOf(Onepay::class, $onepayIntegration);
-        $this->assertInstanceOf(Onepay::class, $webpayProduction);
-    }
+        $this->mockAdapter->shouldReceive('retrieveAndConfirm')
+            ->andReturn(['foo' => 'bar']);
 
-    public function testInstancesFromConstructTransbank()
-    {
-        $onepayIntegration = new Onepay($this->transbankIntegration);
-        $webpayProduction = new Onepay($this->transbankProduction);
+        $transaction = $this->onepay->getTransaction(['mock.transaction']);
 
-        $this->assertInstanceOf(Onepay::class, $onepayIntegration);
-        $this->assertInstanceOf(Onepay::class, $webpayProduction);
-    }
+        $this->assertInstanceOf(OnepayResponse::class, $transaction);
+        $this->assertEquals('bar', $transaction->foo);
 
-    public function testServiceReturnsEnvironment()
-    {
-        $onepayIntegration = Onepay::fromConfig($this->transbankIntegration);
-        $webpayProduction = Onepay::fromConfig($this->transbankProduction);
+        $this->mockTransbank->shouldReceive('isProduction')->once()
+            ->andReturnFalse();
 
-        $this->assertTrue($onepayIntegration->isIntegration());
-        $this->assertFalse($onepayIntegration->isProduction());
+        $transaction = $this->onepay->getTransaction(['mock.transaction']);
 
-        $this->assertTrue($webpayProduction->isProduction());
-        $this->assertFalse($webpayProduction->isIntegration());
-    }
-    
-    public function testCartAliased()
-    {
-        $onepayIntegration = Onepay::fromConfig($this->transbankIntegration);
-        $webpayProduction = Onepay::fromConfig($this->transbankProduction);
-
-        $this->assertTrue($onepayIntegration->makeCart() instanceof OnepayTransaction);
-        $this->assertTrue($webpayProduction->makeCart() instanceof OnepayTransaction);
+        $this->assertInstanceOf(OnepayResponse::class, $transaction);
+        $this->assertEquals('bar', $transaction->foo);
     }
 }

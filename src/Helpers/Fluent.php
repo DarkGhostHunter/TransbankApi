@@ -3,6 +3,7 @@
 namespace DarkGhostHunter\TransbankApi\Helpers;
 
 use ArrayAccess;
+use BadMethodCallException;
 use JsonSerializable;
 
 /**
@@ -117,9 +118,15 @@ class Fluent implements ArrayAccess, JsonSerializable
      */
     public function __call($method, $parameters)
     {
-        $this->attributes[$method] = count($parameters) > 0 ? $parameters[0] : true;
+        if (count($parameters) > 0) {
+            $this->attributes[$method] = $parameters;
+            return $this;
+        }
 
-        return $this;
+        throw new BadMethodCallException(
+            "Method \"$method\" does not exist in class " . Helpers::classBasename(static::class)
+        );
+
     }
 
     /**

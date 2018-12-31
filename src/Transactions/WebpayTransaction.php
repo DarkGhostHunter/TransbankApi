@@ -28,12 +28,7 @@ class WebpayTransaction extends AbstractTransaction
                 break;
             case 'oneclick.register':
                 $defaults = $this->filterDefaults(
-                    'oneclick', ['oneclickReturnUrl'], $defaults
-                );
-                break;
-            case 'patpass.subscription':
-                $defaults = $this->filterDefaults(
-                    'patpass', ['patpassReturnUrl', 'patpassFinalUrl'], $defaults
+                    'oneclick', ['oneclickResponseURL'], $defaults
                 );
                 break;
             default:

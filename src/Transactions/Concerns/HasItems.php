@@ -21,13 +21,6 @@ trait HasItems
      */
     protected function setItemsFromConstruct(array $items)
     {
-        // To know if the user is passing just one item, we will see if the
-        // keys are not numeric. If they are, we will add the array on
-        // top of the item so the OnepayTransaction can be made
-        if (count($items) > 1 && !Helpers::isNumericArray($items)) {
-            $items = [$items];
-        }
-
         $this->addItems($items);
     }
 
@@ -60,12 +53,6 @@ trait HasItems
      */
     public function addItem(...$items)
     {
-        // If we just added a single array of Items, and the children are numeric,
-        // then we will use the only key available
-        if (count($items) === 1 && Helpers::isNumericArray($items)) {
-            $items = $items[0];
-        }
-
         foreach ($items as $item) {
             // Add the Item only if we can parse it
             if ($item = $this->parseItem($item)) {
@@ -75,13 +62,13 @@ trait HasItems
     }
 
     /**
-     * Add multiple items. Alias for addItem().
+     * Add multiple items.
      *
-     * @param mixed ...$items
+     * @param array $items
      */
-    public function addItems($items)
+    public function addItems(array $items)
     {
-        $this->addItem($items);
+        $this->addItem(...$items);
     }
 
     /**
@@ -186,14 +173,11 @@ trait HasItems
     public function updateItem(int $key, array $attributes)
     {
         if (isset($this->items[$key])) {
-            foreach ($attributes as $attribute => $value) {
-                $this->items[$key]->$attribute = $value;
-            }
-            // Delete the updated item when its quantity is zero
-            if ($this->items[$key]->quantity < 1) {
-                $this->deleteItem($key);
-                return false;
-            }
+
+            $this->items[$key]->setAttributes(
+                array_merge($this->items[$key]->getAttributes(), $attributes)
+            );
+
             return $this->items[$key];
         }
         return false;

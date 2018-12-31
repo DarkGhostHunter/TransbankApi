@@ -188,11 +188,11 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
      * Makes a new Webpay Plus Mall Deferred transaction
      *
      * @param array $attributes
-     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractTransaction|WebpayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractTransaction|WebpayMallTransaction
      */
     public function makeMallCapture(array $attributes = [])
     {
-        return $this->makeTransaction('plus.mall.capture', $attributes);
+        return $this->makeTransactionMall('plus.mall.capture', $attributes);
     }
 
     /**
@@ -412,11 +412,11 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
      * Makes a new Webpay Oneclick Mall Nullify transaction
      *
      * @param array $attributes
-     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractTransaction|WebpayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractTransaction|WebpayMallTransaction
      */
     public function makeMallNullify(array $attributes = [])
     {
-        return $this->makeTransaction('oneclick.mall.nullify', $attributes);
+        return $this->makeTransactionMall('oneclick.mall.nullify', $attributes);
     }
 
     /**
@@ -440,11 +440,11 @@ class WebpayTransactionFactory extends AbstractTransactionFactory
      * Makes a new Webpay Oneclick Mall Reverse Nullify transaction
      *
      * @param array $attributes
-     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractTransaction|WebpayTransaction
+     * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractTransaction|WebpayMallTransaction
      */
     public function makeMallReverseNullify(array $attributes = [])
     {
-        return $this->makeTransaction('oneclick.mall.reverseNullify', $attributes);
+        return $this->makeTransactionMall('oneclick.mall.reverseNullify', $attributes);
     }
 
     /**

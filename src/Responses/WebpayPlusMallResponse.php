@@ -4,6 +4,14 @@ namespace DarkGhostHunter\TransbankApi\Responses;
 
 class WebpayPlusMallResponse extends AbstractResponse
 {
+
+    /**
+     * List of results to query for the translation
+     *
+     * @var string
+     */
+    protected $listKey = 'webpay.plus';
+
     /*
     |--------------------------------------------------------------------------
     | Boot
@@ -17,8 +25,7 @@ class WebpayPlusMallResponse extends AbstractResponse
      */
     protected function boot()
     {
-        // Transform a single item to an array, if its only one item returned,
-        // if this is not a response
+        // Transform a single item to an array, if its only one item returned
         if ($this->detailOutput) {
             $this->detailOutput = is_array($this->detailOutput)
                 ? $this->detailOutput
@@ -38,7 +45,7 @@ class WebpayPlusMallResponse extends AbstractResponse
      *
      * @return void
      */
-    public function setStatus()
+    public function dynamicallySetSuccessStatus()
     {
         switch (true) {
             case !!$this->token:
@@ -70,9 +77,12 @@ class WebpayPlusMallResponse extends AbstractResponse
      */
     public function getOrderErrorForHumans(int $key)
     {
-        return ($item = $this->detailOutput[$key] ?? null)
-            ? self::getLoadedErrorList()[$this->listKey][$item->errorCode]
-            : null;
+        if (($item = $this->detailOutput[$key]) ?? null && $item->errorCode) {
+            return $item->errorCode
+                ? self::getLoadedErrorList()[$this->listKey][$item->errorCode]
+                : null;
+        }
+        return null;
     }
 
     /**
@@ -91,7 +101,6 @@ class WebpayPlusMallResponse extends AbstractResponse
     | Order (Item) management
     |--------------------------------------------------------------------------
     */
-
 
     /**
      * Return all the orders

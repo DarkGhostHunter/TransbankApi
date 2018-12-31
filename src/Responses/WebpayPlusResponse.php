@@ -9,7 +9,7 @@ class WebpayPlusResponse extends AbstractResponse
      *
      * @return void
      */
-    public function setStatus()
+    public function dynamicallySetSuccessStatus()
     {
         switch (true) {
             case !!$this->token:

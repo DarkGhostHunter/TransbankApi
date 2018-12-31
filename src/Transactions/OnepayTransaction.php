@@ -157,6 +157,32 @@ class OnepayTransaction extends AbstractTransaction
         return null;
     }
 
+    /**
+     * Updates an Item attributes, replacing or adding them, and return the result
+     *
+     * @param int $key
+     * @param array $attributes
+     * @return object|bool
+     */
+    public function updateItem(int $key, array $attributes)
+    {
+        if (isset($this->items[$key])) {
+
+            $this->items[$key]->setAttributes(
+                array_merge($this->items[$key]->getAttributes(), $attributes)
+            );
+
+            // Delete the updated item when its quantity is zero
+            if ($this->items[$key]->quantity < 1) {
+                $this->deleteItem($key);
+                return false;
+            }
+
+            return $this->items[$key];
+        }
+        return false;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Items attribute helpers functions

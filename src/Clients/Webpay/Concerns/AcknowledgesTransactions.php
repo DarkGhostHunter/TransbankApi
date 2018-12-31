@@ -28,7 +28,7 @@ trait AcknowledgesTransactions
      * Acknowledges and accepts the WebpayClient
      *
      * @param $token
-     * @return array
+     * @return bool
      */
     public function confirm($token)
     {
@@ -38,7 +38,7 @@ trait AcknowledgesTransactions
 
         $this->performConfirm($acknowledgeTransaction);
 
-        // Since we don't need any result, return the validation as an array
-        return [$this->validate()];
+        // Since we don't need any result, return the validation as a boolean
+        return $this->validate();
     }
 }

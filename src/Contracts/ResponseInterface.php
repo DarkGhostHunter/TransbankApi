@@ -39,5 +39,5 @@ interface ResponseInterface
      *
      * @return void
      */
-    public function setStatus();
+    public function dynamicallySetSuccessStatus();
 }

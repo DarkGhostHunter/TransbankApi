@@ -120,14 +120,14 @@ class WebpayAdapter extends AbstractAdapter
      * @return mixed
      * @throws ServiceSdkUnavailableException
      */
-    public function getAndConfirm($transaction, $options = null)
+    public function retrieveAndConfirm($transaction, $options = null)
     {
         $this->bootClient($options);
 
         switch ($options) {
             case 'plus.normal':
             case 'plus.mall.normal':
-                return $this->client->retrieve($transaction);
+                return $this->client->get($transaction);
             case 'oneclick.register':
                 return $this->client->register($transaction);
             default:
@@ -144,7 +144,7 @@ class WebpayAdapter extends AbstractAdapter
      * @return mixed
      * @throws ServiceSdkUnavailableException
      */
-    public function get($transaction, $options = null)
+    public function retrieve($transaction, $options = null)
     {
         $this->bootClient($options);
 
@@ -165,7 +165,7 @@ class WebpayAdapter extends AbstractAdapter
      *
      * @param $transaction
      * @param string $options
-     * @return mixed
+     * @return bool
      * @throws ServiceSdkUnavailableException
      */
     public function confirm($transaction, $options = null)

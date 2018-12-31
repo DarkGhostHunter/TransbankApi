@@ -3,6 +3,7 @@
 namespace DarkGhostHunter\TransbankApi\Helpers;
 
 use ReflectionClass;
+use Throwable;
 
 class Helpers
 {
@@ -25,11 +26,15 @@ class Helpers
      * Return the directory contents without dots directories.
      *
      * @param string $directory
-     * @return array
+     * @return array|null
      */
     public static function dirContents(string $directory)
     {
-        return array_values(array_diff(scandir($directory), array('.', '..')));
+        try {
+            return array_values(array_diff(scandir($directory), array('.', '..')));
+        } catch (Throwable $throwable) {
+            return null;
+        }
     }
 
     /**

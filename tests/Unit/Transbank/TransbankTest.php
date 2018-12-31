@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\Transbank;
 
+use DarkGhostHunter\TransbankApi\Onepay;
+use DarkGhostHunter\TransbankApi\Webpay;
 use PHPUnit\Framework\TestCase;
 use DarkGhostHunter\TransbankApi\Exceptions\Credentials\CredentialInvalidException;
 use DarkGhostHunter\TransbankApi\Exceptions\Transbank\InvalidServiceException;
@@ -10,13 +12,13 @@ use DarkGhostHunter\TransbankApi\Transbank;
 class TransbankTest extends TestCase
 {
 
-    protected $mockCredentials = [
+    protected $mockWebpayCredentials = [
         'commerceCode' => '5000000001',
         'publicKey' => 'ABCD1234EF...',
         'publicCert' => '---BEGIN CERTIFICATE---...'
     ];
 
-    protected $mockDefaults = [
+    protected $mockWebpayDefaults = [
         'plusReturnUrl' => 'http://app.com/webpay/normal/result',
         'plusFinalUrl' => 'http://app.com/webpay/normal/receipt',
         'plusMallReturnUrl' => 'http://app.com/webpay/mall/result',
@@ -67,11 +69,10 @@ class TransbankTest extends TestCase
     public function testSetProductionCredentialsAtInstancing()
     {
         $transbank = Transbank::environment('production', [
-            'webpay' => $this->mockCredentials
+            'webpay' => $this->mockWebpayCredentials
         ]);
 
-        $this->assertEquals($this->mockCredentials, $transbank->getCredentials('webpay')->toArray(),
-            '', 0.0, 10, true);
+        $this->assertEquals($this->mockWebpayCredentials, $transbank->getCredentials('webpay')->toArray());
     }
 
     public function testExceptionOnCredentialSetForInvalidServiceOnInstance()
@@ -79,7 +80,7 @@ class TransbankTest extends TestCase
         $this->expectException(\Exception::class);
 
         Transbank::environment('production', [
-            'invalid_service' => $this->mockCredentials
+            'invalid_service' => $this->mockWebpayCredentials
         ]);
     }
 
@@ -87,10 +88,9 @@ class TransbankTest extends TestCase
     {
         $transbank = Transbank::environment('production');
 
-        $transbank->setCredentials('webpay', $this->mockCredentials);
+        $transbank->setCredentials('webpay', $this->mockWebpayCredentials);
 
-        $this->assertEquals($this->mockCredentials, $transbank->getCredentials('webpay')->toArray(),
-            '', 0.0, 10, true);
+        $this->assertEquals($this->mockWebpayCredentials, $transbank->getCredentials('webpay')->toArray());
     }
 
     public function testExceptionOnCredentialSetForInvalidServiceOnMethod()
@@ -99,7 +99,7 @@ class TransbankTest extends TestCase
 
         $transbank = Transbank::environment('production');
 
-        $transbank->setCredentials('INVALID_SERVICE', $this->mockCredentials);
+        $transbank->setCredentials('INVALID_SERVICE', $this->mockWebpayCredentials);
     }
 
     public function testSetsDefaults()
@@ -107,13 +107,11 @@ class TransbankTest extends TestCase
         $transbank_integration = Transbank::environment();
         $transbank_production = Transbank::environment('production');
 
-        $transbank_integration->setDefaults('webpay', $this->mockDefaults);
-        $transbank_production->setDefaults('webpay', $this->mockDefaults);
+        $transbank_integration->setDefaults('webpay', $this->mockWebpayDefaults);
+        $transbank_production->setDefaults('webpay', $this->mockWebpayDefaults);
 
-        $this->assertEquals($this->mockDefaults, $transbank_integration->getDefaults('webpay'),
-            '', 0.0, 10, true);
-        $this->assertEquals($this->mockDefaults, $transbank_production->getDefaults('webpay'),
-            '', 0.0, 10, true);
+        $this->assertEquals($this->mockWebpayDefaults, $transbank_integration->getDefaults('webpay'));
+        $this->assertEquals($this->mockWebpayDefaults, $transbank_production->getDefaults('webpay'));
     }
 
     public function testExceptionOnSetsDefaultsOnIntegrationOnInvalidService()
@@ -122,7 +120,7 @@ class TransbankTest extends TestCase
 
         $transbank = Transbank::environment();
 
-        $transbank->setDefaults('INVALID_SERVICE', $this->mockDefaults);
+        $transbank->setDefaults('INVALID_SERVICE', $this->mockWebpayDefaults);
     }
 
     public function testExceptionOnSetsDefaultsOnProductionOnInvalidService()
@@ -131,18 +129,18 @@ class TransbankTest extends TestCase
 
         $transbank = Transbank::environment('production');
 
-        $transbank->setDefaults('INVALID_SERVICE', $this->mockDefaults);
+        $transbank->setDefaults('INVALID_SERVICE', $this->mockWebpayDefaults);
     }
 
     public function testRetrievesDefaultOption()
     {
         $transbank = Transbank::environment('production');
 
-        $transbank->setDefaults('webpay', $this->mockDefaults);
+        $transbank->setDefaults('webpay', $this->mockWebpayDefaults);
 
-        $defaultKey = key($this->mockDefaults);
+        $defaultKey = key($this->mockWebpayDefaults);
 
-        $defaultValue = $this->mockDefaults[$defaultKey];
+        $defaultValue = $this->mockWebpayDefaults[$defaultKey];
 
         $this->assertEquals($defaultValue, $transbank->getDefault('webpay', $defaultKey));
     }
@@ -151,7 +149,7 @@ class TransbankTest extends TestCase
     {
         $transbank = Transbank::environment('production');
 
-        $transbank->setDefaults('webpay', $this->mockDefaults);
+        $transbank->setDefaults('webpay', $this->mockWebpayDefaults);
 
         $this->assertNull($transbank->getDefault('webpay', 'INVALID_DEFAULT'));
     }
@@ -160,9 +158,9 @@ class TransbankTest extends TestCase
     {
         $transbank = Transbank::environment('production');
 
-        $transbank->setDefaults('webpay', $this->mockDefaults);
+        $transbank->setDefaults('webpay', $this->mockWebpayDefaults);
 
-        $defaultKey = key($this->mockDefaults);
+        $defaultKey = key($this->mockWebpayDefaults);
 
         $this->assertNull($transbank->getDefault('INVALID_SERVICE', $defaultKey));
     }
@@ -193,5 +191,36 @@ class TransbankTest extends TestCase
         ]);
     }
 
+    public function testSetsAndGetsDefault()
+    {
+        $transbank = Transbank::environment();
+
+        $transbank->setDefault('webpay', 'foo', 'bar');
+
+        $this->assertEquals('bar', $transbank->getDefault('webpay', 'foo'));
+    }
+
+    public function testExceptionOnSettingDefaultForInvalidService()
+    {
+        $this->expectException(InvalidServiceException::class);
+
+        $transbank = Transbank::environment();
+
+        $transbank->setDefault('invalidService', 'foo', 'bar');
+    }
+
+    public function testReturnsWebpayInstance()
+    {
+        $transbank = Transbank::environment();
+
+        $this->assertInstanceOf(Webpay::class, $transbank->webpay());
+    }
+
+    public function testReturnsOnepayInstance()
+    {
+        $transbank = Transbank::environment();
+
+        $this->assertInstanceOf(Onepay::class, $transbank->onepay());
+    }
 
 }

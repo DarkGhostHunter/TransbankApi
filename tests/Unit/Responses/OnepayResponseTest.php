@@ -2,27 +2,30 @@
 
 namespace Tests\Unit\Responses;
 
+use DarkGhostHunter\TransbankApi\Responses\OnepayResponse;
 use PHPUnit\Framework\TestCase;
 
 class OnepayResponseTest extends TestCase
 {
-    public function testTransformToJson()
+
+    /** @var OnepayResponse */
+    protected $response;
+
+    protected function setUp()
     {
-        $this->markTestIncomplete();
+        $this->response = new OnepayResponse(['foo' => 'bar']);
     }
 
-    public function testTransformToArray()
+    public function testToArray()
     {
-        $this->markTestSkipped();
+        $this->assertIsArray($this->response->toArray());
+        $this->assertArrayHasKey('foo', $this->response->toArray());
     }
 
-    public function testTransformToString()
+    public function testDynamicallySetSuccessStatus()
     {
-        $this->markTestSkipped();
-    }
+        $this->response->dynamicallySetSuccessStatus();
 
-    public function testHidesSignatureOnSerialization()
-    {
-        $this->markTestSkipped();
+        $this->assertTrue($this->response->isSuccess());
     }
 }

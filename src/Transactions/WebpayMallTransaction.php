@@ -41,8 +41,8 @@ class WebpayMallTransaction extends WebpayTransaction
      */
     public function __call($method, $parameters)
     {
-        if (strpos('Order', $method) !== false) {
-            return $this->{str_replace('Order', 'Item', $method)}($parameters);
+        if (strpos($method, 'Order') !== false) {
+            return $this->{str_replace('Order', 'Item', $method)}(...$parameters);
         }
 
         return parent::__call($method, $parameters);

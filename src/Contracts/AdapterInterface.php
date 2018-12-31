@@ -39,7 +39,7 @@ interface AdapterInterface
      * @param string|array $options
      * @return mixed
      */
-    public function getAndConfirm($transaction, $options = null);
+    public function retrieveAndConfirm($transaction, $options = null);
 
     /**
      * Returns if the environment is Production

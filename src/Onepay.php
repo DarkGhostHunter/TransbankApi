@@ -3,7 +3,6 @@
 namespace DarkGhostHunter\TransbankApi;
 
 use DarkGhostHunter\TransbankApi\Adapters\OnepayAdapter;
-use DarkGhostHunter\TransbankApi\ResponseFactories\OnepayResponseFactory;
 use DarkGhostHunter\TransbankApi\Responses\OnepayResponse;
 use DarkGhostHunter\TransbankApi\TransactionFactories\OnepayTransactionFactory;
 
@@ -11,10 +10,10 @@ use DarkGhostHunter\TransbankApi\TransactionFactories\OnepayTransactionFactory;
  * Class Onepay
  * @package DarkGhostHunter\TransbankApi
  *
- * @method Transactions\OnepayTransaction   makeCart(array $attributes = [])
- * @method Responses\OnepayResponse         createCart(array $attributes = [])
- * @method Transactions\OnepayTransaction   makeNullify(array $attributes = [])
- * @method Responses\OnepayResponse         createNullify(array $attributes = [])
+ * @method Transactions\OnepayTransaction           makeCart(array $attributes = [])
+ * @method Responses\OnepayResponse                 createCart(array $attributes = [])
+ * @method Transactions\OnepayNullifyTransaction    makeNullify(array $attributes = [])
+ * @method Responses\OnepayResponse                 createNullify(array $attributes = [])
  *
  */
 class Onepay extends AbstractService
@@ -78,16 +77,6 @@ class Onepay extends AbstractService
         $this->transactionFactory = new OnepayTransactionFactory($this, $this->defaults);
     }
 
-    /**
-     * Instantiates (and/or boots) the Result Factory for the Service
-     *
-     * @return void
-     */
-    public function bootResponseFactory()
-    {
-        // We don't use a Repo
-    }
-
     /*
     |--------------------------------------------------------------------------
     | Credentials
@@ -145,18 +134,18 @@ class Onepay extends AbstractService
      * more friendly Onepay Response
      *
      * @param array $result
-     * @param string $type
+     * @param mixed $options
      * @return Contracts\ResponseInterface
      */
-    protected function parseResponse(array $result, string $type)
+    protected function parseResponse(array $result, $options = null)
     {
         $response = new OnepayResponse($result);
 
         // Set the type of the WebpayClient where this response belongs
-        $response->setType($type);
+        $response->setType($options);
 
         // Set the status of the Response
-        $response->setStatus();
+        $response->dynamicallySetSuccessStatus();
 
         return $response;
     }

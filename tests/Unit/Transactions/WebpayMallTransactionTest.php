@@ -2,89 +2,59 @@
 
 namespace Tests\Unit\Transactions;
 
+use DarkGhostHunter\TransbankApi\Transactions\Item;
+use DarkGhostHunter\TransbankApi\Transactions\WebpayMallTransaction;
 use PHPUnit\Framework\TestCase;
-use DarkGhostHunter\TransbankApi\Webpay;
-use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ServiceSdkUnavailableException;
-use DarkGhostHunter\TransbankApi\Transbank;
 
 class WebpayMallTransactionTest extends TestCase
 {
-    /** @var Webpay */
-    protected $webpay;
 
-    protected function setUp()
+    public function testPassesItems()
     {
-        $transbank = Transbank::environment();
-
-        $transbank->setDefaults('webpay', [
-            'plusReturnUrl'         => 'http://app.com/webpay/result',
-            'plusFinalUrl'          => 'http://app.com/webpay/receipt',
-            'plusMallReturnUrl'     => 'http://app.com/webpay/mall/result',
-            'plusMallFinalUrl'      => 'http://app.com/webpay/mall/receipt',
-            'oneclickResponseURL'   => 'http://app.com/webpay/registration',
+        $transaction = new WebpayMallTransaction([
+            'items' => $items = [
+                ['foo' => 'bar'],
+                ['baz' => 'qux']
+            ]
         ]);
 
-        $this->webpay = Webpay::fromConfig(
-            $transbank
-        );
+        foreach ($items as &$item) {
+            $item = new Item(array_merge($item, ['sessionId' => null]));
+        }
+
+        $this->assertEquals($items, $transaction->getItems());
     }
 
-
-    public function testReceivesOrdersAsItems()
+    public function testToArray()
     {
-        $this->markTestSkipped();
-    }
-
-    public function testServiceSdkUnavailableExceptionOnOneclickMallCharge()
-    {
-        $this->expectException(ServiceSdkUnavailableException::class);
-
-        $charges = $this->webpay->createMallCharge([
-            'buyOrder' => 'master-store-order#65987',
-            'tbkUser' => 'tbkUser',
-            'username' => 'username',
-            'storesInput' => [
-                [
-                    'storeCode' => 597044444402,
-                    'amount' => 4990,
-                    'buyOrder' => '201',
-                    'sessionId' => 'alpha-session-id-1',
-                    'sharesNumber' => 3
-                ],
-            ],
+        $transaction = new WebpayMallTransaction([
+            'items' => $items = [
+                ['foo' => 'bar'],
+                ['baz' => 'qux']
+            ]
         ]);
+
+        $this->assertCount(2, $transaction->getItems());
+        $this->assertEquals('bar', $transaction->getItem(0)->foo);
+        $this->assertEquals('qux', $transaction->getItem(1)->baz);
     }
 
-    public function testServiceSdkUnavailableExceptionOnOneclickMallReverse()
+    public function testCallsOrderMethodAsItems()
     {
-        $this->expectException(ServiceSdkUnavailableException::class);
-
-        $reverse = $this->webpay->createMallReverseCharge([
-            'buyOrder' => 'store-order#123',
+        $transaction = new WebpayMallTransaction([
+            'items' => [
+                ['foo' => 'bar'],
+                ['baz' => 'qux']
+            ]
         ]);
-    }
 
-    public function testServiceSdkUnavailableExceptionOnOneclickMallNullify()
-    {
-        $this->expectException(ServiceSdkUnavailableException::class);
-
-        $reverse = $this->webpay->createMallNullify([
-            'authorizationCode' => 'makoy123',
-            'commerceId' => 'store-child-1',
-            'buyOrder' => '20181201153000001',
-            'authorizedAmount' => 19990,
-            'nullifyAmount' => 10000
+        $transaction->addOrder([
+            'quux' => 'quuz'
         ]);
-    }
 
-    public function testServiceSdkUnavailableExceptionOnOneclickMallReverseNullify()
-    {
-        $this->expectException(ServiceSdkUnavailableException::class);
-
-        $reverse = $this->webpay->createMallReverseNullify([
-            'commerceId' => 'store-child-1',
-            'buyOrder' => '20181201153000001',
-            'nullifyAmount' => 10000
-        ]);
+        $this->assertCount(3, $transaction->getOrders());
+        $this->assertEquals('bar', $transaction->getOrder(0)->foo);
+        $this->assertEquals('qux', $transaction->getOrder(1)->baz);
+        $this->assertEquals('quuz', $transaction->getOrder(2)->quux);
     }
 }
