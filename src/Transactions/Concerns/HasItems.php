@@ -21,6 +21,13 @@ trait HasItems
      */
     protected function setItemsFromConstruct(array $items)
     {
+        // To know if the user is passing just one item, we will see if the
+        // keys are not numeric. If they are, we will add the array on
+        // top of the item so the OnepayTransaction can be made
+        if (count($items) > 1 && !Helpers::isNumericArray($items)) {
+            $items = [$items];
+        }
+
         $this->addItems($items);
     }
 
