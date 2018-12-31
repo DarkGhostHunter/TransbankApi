@@ -8,11 +8,6 @@ use PHPUnit\Framework\TestCase;
 class WebpayPlusMallResponseTest extends TestCase
 {
 
-    public function testGetFailedItems()
-    {
-
-    }
-
     public function testDynamicallySetSuccessStatusWithToken()
     {
         $response = new WebpayPlusMallResponse([

@@ -28,8 +28,6 @@ class OnepayIntegrationTransactionsTest extends TestCase
         $this->onepay = Onepay::fromConfig(
             $transbank
         );
-
-        parent::setUp();
     }
 
     public function testCreatesCartInTransbank()

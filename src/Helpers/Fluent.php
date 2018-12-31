@@ -118,8 +118,10 @@ class Fluent implements ArrayAccess, JsonSerializable
      */
     public function __call($method, $parameters)
     {
+        // First check if there are parameters to set as values
         if (count($parameters) > 0) {
-            $this->attributes[$method] = $parameters;
+            // Add the first parameter value if its only one parameter, or add the array completely.
+            $this->attributes[$method] = count($parameters) === 1 ? $parameters[0] : $parameters;
             return $this;
         }
 

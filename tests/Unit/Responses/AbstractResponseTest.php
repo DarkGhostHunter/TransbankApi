@@ -45,6 +45,8 @@ class AbstractResponseTest extends TestCase
 
     public function testSuccess()
     {
+        $this->response->dynamicallySetSuccessStatus();
+
         $this->assertTrue($this->response->isSuccess());
         $this->assertFalse($this->response->isFailed());
     }
