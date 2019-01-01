@@ -50,6 +50,14 @@ class WebpayPlusMallResponseTest extends TestCase
         $response->dynamicallySetSuccessStatus();
 
         $this->assertFalse($response->isSuccess());
+
+        $response = new WebpayPlusMallResponse([
+            'detailOutput' => (object)['responseCode' => 0]
+        ]);
+
+        $response->dynamicallySetSuccessStatus();
+
+        $this->assertFalse($response->isSuccess());
     }
 
     public function testGetSuccessfulTotal()
@@ -113,11 +121,14 @@ class WebpayPlusMallResponseTest extends TestCase
                 (object)['responseCode' => 0, 'amount' => 4990],
                 (object)['responseCode' => 1, 'errorCode' => 18, 'amount' => 4990],
                 (object)['responseCode' => 0, 'amount' => 4990],
+                (object)['responseCode' => 1, 'errorCode' => 99999, 'amount' => 4990],
             ]
         ]);
 
         $this->assertEquals('ERR_SERVIDOR_COMERCIO', $response->getOrderErrorForHumans(1));
         $this->assertEquals('ERR_SERVIDOR_COMERCIO', $response->getItemErrorForHumans(1));
+        $this->assertNull($response->getOrderErrorForHumans(3));
+        $this->assertNull($response->getOrderErrorForHumans(5));
     }
 
     public function testGetFailedOrdersOrGetFailedItems()

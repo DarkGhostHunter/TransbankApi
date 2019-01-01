@@ -59,6 +59,21 @@ class Fluent implements ArrayAccess, JsonSerializable
     }
 
     /**
+     * Sets an Attribute
+     *
+     * @param $key
+     * @param $value
+     */
+    public function set($key, $value)
+    {
+        if (method_exists($this, $method = 'set'. lcfirst($key) . 'Attribute')) {
+            $this->$method($value);
+        } else {
+            $this->attributes[$key] = $value;
+        }
+    }
+
+    /**
      * Returns all the attributes as an array.
      *
      * @return array
@@ -228,11 +243,7 @@ class Fluent implements ArrayAccess, JsonSerializable
      */
     public function offsetSet($offset, $value)
     {
-        if (method_exists($this, $method = 'set'. lcfirst($offset) . 'Attribute')) {
-            $this->$method($value);
-        } else {
-            $this->attributes[$offset] = $value;
-        }
+        return $this->set($offset, $value);
     }
 
     /**

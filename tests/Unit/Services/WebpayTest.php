@@ -4,6 +4,7 @@ namespace Tests\Unit\Services;
 
 use DarkGhostHunter\TransbankApi\Adapters\WebpayAdapter;
 use DarkGhostHunter\TransbankApi\Exceptions\Credentials\CredentialsNotReadableException;
+use DarkGhostHunter\TransbankApi\Exceptions\Webpay\RetrievingNoTransactionTypeException;
 use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Helpers\Helpers;
 use DarkGhostHunter\TransbankApi\Responses\AbstractResponse;
@@ -64,6 +65,13 @@ class WebpayTest extends TestCase
 
         $this->assertInstanceOf(AbstractResponse::class, $transaction);
         $this->assertEquals('bar', $transaction->foo);
+    }
+
+    public function testExceptionOnGetTransactionWithoutType()
+    {
+        $this->expectException(RetrievingNoTransactionTypeException::class);
+
+        $this->webpay->getTransaction('mock-transaction', null);
     }
 
     public function testRetrieveTransaction()
@@ -129,8 +137,20 @@ class WebpayTest extends TestCase
 
         $webpay->setAdapter($adapter);
 
-        $transaction = $webpay->getTransaction('transaction', 'test');
+        $transaction = $webpay->getTransaction('transaction', 'oneclick');
+        $this->assertInstanceOf(AbstractResponse::class, $transaction);
 
+        $transaction = $webpay->getTransaction('transaction', 'defer');
+        $this->assertInstanceOf(AbstractResponse::class, $transaction);
+        $transaction = $webpay->getTransaction('transaction', 'capture');
+        $this->assertInstanceOf(AbstractResponse::class, $transaction);
+        $transaction = $webpay->getTransaction('transaction', 'nullify');
+        $this->assertInstanceOf(AbstractResponse::class, $transaction);
+
+        $transaction = $webpay->getTransaction('transaction', 'mall');
+        $this->assertInstanceOf(AbstractResponse::class, $transaction);
+
+        $transaction = $webpay->getTransaction('transaction', 'test');
         $this->assertInstanceOf(AbstractResponse::class, $transaction);
     }
 
@@ -161,4 +181,6 @@ class WebpayTest extends TestCase
 
         $webpay->getTransaction('transaction', 'test');
     }
+
+
 }

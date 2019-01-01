@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests\Unit\Clients;
+namespace Tests\Unit\Clients\Onepay;
 
 use DarkGhostHunter\TransbankApi\Clients\Onepay\OnepayClient;
+use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayValidationException;
 use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayNullifyTransaction;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
@@ -147,5 +148,39 @@ class OnepayClientTest extends TestCase
         $this->assertArrayHasKey('buyOrder', $response);
         $this->assertArrayHasKey('issuedAt', $response);
         $this->assertArrayHasKey('signature', $response);
+    }
+
+    public function testInvalidSignature()
+    {
+        $this->expectException(OnepayValidationException::class);
+
+        $httpClient = \Mockery::mock(Client::class);
+
+        $httpClient->expects('post')
+            ->with(
+                'gettransactionnumber',
+                ['body' => '{"foo":"bar","appKey":"test-app","apiKey":"test-key","signature":"uvYGgjcgwlNDLLvw8W21iWl7FAtwtWh8P4+CYMaP5+Q=","total":0,"itemsQuantity":0,"externalUniqueNumber":null,"items":[]}']
+            )
+            ->andReturn(new Response(200, [], json_encode([
+                    'responseCode' => 'OK',
+                    'result' => [
+                        'occ' => 'test-occ',
+                        'externalUniqueNumber' => 'test-eun',
+                        'authorizationCode' => 'test-auth',
+                        'amount' => 9990,
+                        'installmentsAmount' => 9990,
+                        'installmentsNumber' => 1,
+                        'buyOrder' => 'test-buyOrder',
+                        'issuedAt' => 'test-issuedAt',
+                        'signature' => 'INVALIDSIGNATURE'
+                    ]
+                ])
+            ));
+
+        $this->client->setHttpClient($httpClient);
+
+        $transaction = new OnepayTransaction(['foo' => 'bar']);
+
+        $this->client->confirm($transaction);
     }
 }

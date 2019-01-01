@@ -56,6 +56,14 @@ class WebpayAdapterTest extends TestCase
         $this->adapter->setClient($this->client);
     }
 
+    public function testSetAndGetClients()
+    {
+        $adapter = new WebpayAdapter();
+        $this->assertIsArray($adapter->getClients());
+        $adapter->setClients(['foo' => 'bar']);
+        $this->assertEquals('bar', $adapter->getClients()['foo']);
+    }
+
     public function testRetrieveAndConfirm()
     {
         $transaction = new WebpayTransaction(['foo' => 'bar']);

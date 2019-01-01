@@ -60,12 +60,6 @@ abstract class AbstractTransaction extends Fluent implements TransactionInterfac
             $this->performed = true;
         };
 
-        // Do any logic before getting the result
-        if (method_exists($this, $method = 'performPostLogic')
-            && is_callable([$this, $method])) {
-            call_user_func([$this, $method]);
-        }
-
         return $this->response;
     }
 

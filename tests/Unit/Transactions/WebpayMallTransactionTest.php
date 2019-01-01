@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Transactions;
 
+use BadMethodCallException;
 use DarkGhostHunter\TransbankApi\Transactions\Item;
 use DarkGhostHunter\TransbankApi\Transactions\WebpayMallTransaction;
 use PHPUnit\Framework\TestCase;
@@ -56,5 +57,19 @@ class WebpayMallTransactionTest extends TestCase
         $this->assertEquals('bar', $transaction->getOrder(0)->foo);
         $this->assertEquals('qux', $transaction->getOrder(1)->baz);
         $this->assertEquals('quuz', $transaction->getOrder(2)->quux);
+    }
+
+    public function testExceptionOnCallingInvalidMethod()
+    {
+        $this->expectException(BadMethodCallException::class);
+
+        $transaction = new WebpayMallTransaction([
+            'items' => [
+                ['foo' => 'bar'],
+                ['baz' => 'qux']
+            ]
+        ]);
+
+        $transaction->anything();
     }
 }

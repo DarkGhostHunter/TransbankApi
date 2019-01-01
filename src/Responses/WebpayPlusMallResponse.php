@@ -77,10 +77,14 @@ class WebpayPlusMallResponse extends AbstractResponse
      */
     public function getOrderErrorForHumans(int $key)
     {
-        if (($item = $this->detailOutput[$key]) ?? null && $item->errorCode) {
-            return $item->errorCode
-                ? self::getLoadedErrorList()[$this->listKey][$item->errorCode]
-                : null;
+        // First let's see if the item index exists
+        $item = $this->detailOutput[$key] ?? null;
+
+        // If the item exists and the errorCode also exists, return the translated
+        // error code only if you can find it. Otherwise the script will proceed
+        // and eventually return null since it did not exists from the get go.
+        if ($item && $item->errorCode) {
+            return self::getLoadedErrorList()[$this->listKey][$item->errorCode] ?? null;
         }
         return null;
     }

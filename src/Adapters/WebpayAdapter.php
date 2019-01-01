@@ -89,7 +89,6 @@ class WebpayAdapter extends AbstractAdapter
      */
     protected function bootClient(string $type)
     {
-
         if (!$processor = $this->getClientForType($type)) {
             throw new ServiceSdkUnavailableException($type);
         };
@@ -112,15 +111,10 @@ class WebpayAdapter extends AbstractAdapter
      */
     public function commit(TransactionInterface $transaction, $options = null)
     {
-        $this->bootClient($transaction->getType());
+        $this->bootClient($type = $transaction->getType());
 
         try {
             switch ($type = $transaction->getType()) {
-                case 'plus.normal':
-                case 'plus.defer':
-                case 'plus.mall.normal':
-                case 'plus.mall.defer':
-                    return $this->client->commit($transaction);
                 case 'plus.capture':
                 case 'plus.mall.capture':
                     return $this->client->capture($transaction);
@@ -137,8 +131,12 @@ class WebpayAdapter extends AbstractAdapter
                     return $this->client->charge($transaction);
                 case 'oneclick.reverse':
                     return $this->client->reverse($transaction);
-                default:
-                    throw new ServiceSdkUnavailableException($type);
+                case 'plus.normal':
+                case 'plus.defer':
+                case 'plus.mall.normal':
+                case 'plus.mall.defer':
+                default :
+                    return $this->client->commit($transaction);
             }
         } catch (Exception $exception) {
             throw new InvalidWebpayTransactionException($transaction, $exception);
@@ -158,13 +156,12 @@ class WebpayAdapter extends AbstractAdapter
         $this->bootClient($options);
 
         switch ($options) {
-            case 'plus.normal':
-            case 'plus.mall.normal':
-                return $this->client->retrieveAndConfirm($transaction);
             case 'oneclick.register':
                 return $this->client->register($transaction);
+            case 'plus.normal':
+            case 'plus.mall.normal':
             default:
-                throw new ServiceSdkUnavailableException($options);
+                return $this->client->retrieveAndConfirm($transaction);
         }
     }
 
@@ -180,14 +177,7 @@ class WebpayAdapter extends AbstractAdapter
     {
         $this->bootClient($options);
 
-        switch ($options) {
-            case 'plus.normal':
-            case 'plus.mall.normal':
-                return $this->client->retrieve($transaction);
-                break;
-            default:
-                throw new ServiceSdkUnavailableException($options);
-        }
+        return $this->client->retrieve($transaction);
     }
 
     /**
@@ -202,16 +192,7 @@ class WebpayAdapter extends AbstractAdapter
     {
         $this->bootClient($options);
 
-        switch ($options) {
-            case 'plus.normal':
-            case 'plus.mall.normal':
-            case 'patpass.subscribe':
-            case 'oneclick.confirm':
-                return $this->client->confirm($transaction);
-                break;
-            default:
-                throw new ServiceSdkUnavailableException($options);
-        }
+        return $this->client->confirm($transaction);
     }
 
 }

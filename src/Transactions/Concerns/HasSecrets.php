@@ -33,4 +33,14 @@ trait HasSecrets
         return $this;
     }
 
+    /**
+     * If the current instance is hiddng it's secrets
+     *
+     * @return bool
+     */
+    public function isHidingSecrets()
+    {
+        return $this->hideSecrets;
+    }
+
 }

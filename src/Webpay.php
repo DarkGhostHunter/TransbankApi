@@ -12,41 +12,47 @@ use DarkGhostHunter\TransbankApi\Exceptions\Credentials\CredentialsNotReadableEx
 use DarkGhostHunter\TransbankApi\Helpers\Helpers;
 use DarkGhostHunter\TransbankApi\ResponseFactories\WebpayResponseFactory;
 use DarkGhostHunter\TransbankApi\TransactionFactories\WebpayTransactionFactory;
+use Throwable;
 
 /**
  * Class WebpaySoap
  * @package DarkGhostHunter\TransbankApi
  * 
  * @method Transactions\WebpayTransaction       makeNormal(array $attributes = [])
- * @method Responses\WebpayPlusResponse             createNormal(array $attributes)
+ * @method WebpayPlusResponse             createNormal(array $attributes)
  * @method Transactions\WebpayMallTransaction   makeMallNormal(array $attributes = [])
- * @method Responses\WebpayPlusMallResponse         createMallNormal(array $attributes)
+ * @method WebpayPlusMallResponse         createMallNormal(array $attributes)
  * @method Transactions\WebpayTransaction       makeDefer(array $attributes = [])
- * @method Responses\WebpayPlusResponse             createDefer(array $attributes)
+ * @method WebpayPlusResponse             createDefer(array $attributes)
  * @method Transactions\WebpayMallTransaction   makeMallDefer(array $attributes = [])
- * @method Responses\WebpayPlusMallResponse         createMallDefer(array $attributes)
+ * @method WebpayPlusMallResponse         createMallDefer(array $attributes)
  * @method Transactions\WebpayTransaction       makeCapture(array $attributes = [])
- * @method Responses\WebpayPlusResponse             createCapture(array $attributes)
+ * @method WebpayPlusResponse             createCapture(array $attributes)
  * @method Transactions\WebpayTransaction       makeMallCapture(array $attributes = [])
- * @method Responses\WebpayPlusMallResponse         createMallCapture(array $attributes)
+ * @method WebpayPlusMallResponse         createMallCapture(array $attributes)
  * @method Transactions\WebpayTransaction       makeNullify(array $attributes = [])
- * @method Responses\WebpayPlusResponse             createNullify(array $attributes)
+ * @method WebpayPlusResponse             createNullify(array $attributes)
  * @method Transactions\WebpayTransaction       makeRegistration(array $attributes = [])
- * @method Responses\WebpayPlusResponse             createRegistration(array $attributes)
+ * @method WebpayPlusResponse             createRegistration(array $attributes)
  * @method Transactions\WebpayTransaction       makeUnregistration(array $attributes = [])
- * @method Responses\WebpayOneclickResponse         createUnregistration(array $attributes)
+ * @method WebpayOneclickResponse         createUnregistration(array $attributes)
  * @method Transactions\WebpayTransaction       makeCharge(array $attributes = [])
- * @method Responses\WebpayOneclickResponse         createCharge(array $attributes)
+ * @method WebpayOneclickResponse         createCharge(array $attributes)
  * @method Transactions\WebpayTransaction       makeReverseCharge(array $attributes = [])
- * @method Responses\WebpayOneclickResponse         createReverseCharge(array $attributes)
+ * @method WebpayOneclickResponse         createReverseCharge(array $attributes)
  * @method Transactions\WebpayMallTransaction   makeMallCharge(array $attributes = [])
- * @method Responses\WebpayOneclickResponse         createMallCharge(array $attributes)
+ * @method WebpayOneclickResponse         createMallCharge(array $attributes)
  * @method Transactions\WebpayMallTransaction   makeMallReverseCharge(array $attributes = [])
- * @method Responses\WebpayOneclickResponse         createMallReverseCharge(array $attributes)
+ * @method WebpayOneclickResponse         createMallReverseCharge(array $attributes)
  * @method Transactions\WebpayMallTransaction   makeMallNullify(array $attributes = [])
- * @method Responses\WebpayOneclickResponse         createMallNullify(array $attributes)
+ * @method WebpayOneclickResponse         createMallNullify(array $attributes)
  * @method Transactions\WebpayMallTransaction   makeMallReverseNullify(array $attributes = [])
- * @method Responses\WebpayPlusResponse             createMallReverseNullify(array $attributes)
+ * @method WebpayPlusResponse             createMallReverseNullify(array $attributes)
+ * 
+ * @method WebpayPlusMallResponse|WebpayPlusResponse    getDefer(string $transaction)
+ * @method WebpayPlusMallResponse|WebpayPlusResponse    retrieveDefer(string $transaction)
+ * @method WebpayPlusResponse                           confirmDefer(string $transaction)
+ * @method WebpayPlusResponse                           confirmRegistration
  *
  * @method WebpayPlusResponse       getNormal(string $transaction)
  * @method WebpayPlusResponse       retrieveNormal(string $transaction)
@@ -162,10 +168,8 @@ class Webpay extends AbstractService
                 'webpayCert' => $this->getWebpayCertForEnvironment(),
             ];
 
-        } catch (\Throwable $throwable) {
-            throw new CredentialsNotReadableException(
-                Helpers::classBasename(static::class), 0, $throwable
-            );
+        } catch (Throwable $throwable) {
+            throw new CredentialsNotReadableException($directory);
         }
 
         return $credentials;
@@ -203,9 +207,6 @@ class Webpay extends AbstractService
                 break;
             case strpos($type, 'mall') !== false:
                 $directory = 'webpay-plus-mall';
-                break;
-            case strpos($type, 'patpass') !== false:
-                $directory = 'webpay-patpass-normal';
                 break;
             default:
                 $directory = 'webpay-plus-normal';

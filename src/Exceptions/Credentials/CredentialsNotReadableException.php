@@ -9,7 +9,7 @@ class CredentialsNotReadableException extends \Exception implements TransbankExc
 {
     public function __construct(string $message = "", int $code = 0, Throwable $previous = null)
     {
-        $message = "Couldn't retrieve Integration Credentials for service $message.";
+        $message = "Couldn't retrieve Integration Credentials in $message.";
         parent::__construct($message, $code, $previous);
     }
 }

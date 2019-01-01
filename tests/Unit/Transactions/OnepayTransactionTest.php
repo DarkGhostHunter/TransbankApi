@@ -3,6 +3,8 @@
 namespace Tests\Unit\Transactions;
 
 use DarkGhostHunter\TransbankApi\AbstractService;
+use DarkGhostHunter\TransbankApi\Exceptions\Onepay\CartEmptyException;
+use DarkGhostHunter\TransbankApi\Exceptions\Onepay\CartNegativeAmountException;
 use DarkGhostHunter\TransbankApi\Transactions\Item;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +18,8 @@ class OnepayTransactionTest extends TestCase
             'items' => $items = [
                 ['foo' => 'bar', 'quantity' => 1],
                 ['baz' => 'qux', 'quantity'],
-                ['quux' => 'quux'],
+                json_encode(['quux' => 'quux']),
+                'NOPE'
             ]
         ]);
 
@@ -57,6 +60,7 @@ class OnepayTransactionTest extends TestCase
         $this->assertEquals(4990, $transaction->getItem(2)->amount);
         $this->assertEquals(3, $transaction->getItem(2)->quantity);
 
+        $this->assertFalse($transaction->updateItem(99, ['hellow']));
     }
 
     public function testGetItemsQuantityAttribute()
@@ -194,6 +198,28 @@ class OnepayTransactionTest extends TestCase
         $transaction->setService($mockService);
 
         $transaction->externalUniqueNumber = 'foo';
+
+        $transaction->commit();
+    }
+
+    public function testExceptionOnCommitWithEmptyCart()
+    {
+        $this->expectException(CartEmptyException::class);
+        $transaction = new OnepayTransaction();
+
+        $transaction->commit();
+    }
+
+    public function testExceptionOnCommitWithNegativeAmount()
+    {
+        $this->expectException(CartNegativeAmountException::class);
+
+        $transaction = new OnepayTransaction([
+            'items' => [
+                'amount' => -9999,
+                'quantity' => 1,
+            ]
+        ]);
 
         $transaction->commit();
     }

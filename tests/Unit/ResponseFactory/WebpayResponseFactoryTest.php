@@ -65,19 +65,34 @@ class WebpayResponseFactoryTest extends TestCase
             ->with('test-transaction', $type = 'oneclick.confirm')
             ->andReturn(['foo' => 'bar']);
 
-        $mallNormal = $this->webpay->getRegistration('test-transaction');
+        $registration = $this->webpay->getRegistration('test-transaction');
 
-        $this->assertInstanceOf(WebpayOneclickResponse::class, $mallNormal);
-        $this->assertEquals('bar', $mallNormal->foo);
-        $this->assertEquals($type, $mallNormal->getType());
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $registration);
+        $this->assertEquals('bar', $registration->foo);
+        $this->assertEquals($type, $registration->getType());
 
         $this->mockAdapter->shouldReceive('confirm')->once()
             ->with('test-transaction', $type = 'oneclick.confirm')
             ->andReturnTrue();
 
-        $mallNormal = $this->webpay->getRegistration('test-transaction');
+        $registration = $this->webpay->getRegistration('test-transaction');
 
-        $this->assertTrue($mallNormal);
+        $this->assertTrue($registration);
+    }
+
+    public function testConfirmRegistration()
+    {
+        $this->mockAdapter->shouldReceive('setCredentials')
+            ->andReturn(['foo' => 'bar']);
+        $this->mockAdapter->shouldReceive('confirm')->once()
+            ->with('test-transaction', $type = 'oneclick.confirm')
+            ->andReturn(['foo' => 'bar']);
+
+        $registration = $this->webpay->confirmRegistration('test-transaction');
+
+        $this->assertInstanceOf(WebpayOneclickResponse::class, $registration);
+        $this->assertEquals('bar', $registration->foo);
+        $this->assertEquals($type, $registration->getType());
     }
 
     public function testGetNormal()
@@ -149,5 +164,44 @@ class WebpayResponseFactoryTest extends TestCase
         $normal = $this->webpay->confirmNormal('test-transaction');
 
         $this->assertTrue($normal);
+    }
+
+    public function testGetDefer()
+    {
+        $this->mockAdapter->shouldReceive('setCredentials')
+            ->andReturn(['foo' => 'bar']);
+        $this->mockAdapter->shouldReceive('retrieveAndConfirm')->once()
+            ->with('test-transaction', $type = 'plus.defer')
+            ->andReturn([true]);
+
+        $defer = $this->webpay->getDefer('test-transaction');
+
+        $this->assertInstanceOf(WebpayPlusResponse::class, $defer);
+    }
+
+    public function testRetrieveDefer()
+    {
+        $this->mockAdapter->shouldReceive('setCredentials')
+            ->andReturn(['foo' => 'bar']);
+        $this->mockAdapter->shouldReceive('retrieve')->once()
+            ->with('test-transaction', $type = 'plus.defer')
+            ->andReturn([true]);
+
+        $defer = $this->webpay->retrieveDefer('test-transaction');
+
+        $this->assertInstanceOf(WebpayPlusResponse::class, $defer);
+    }
+
+    public function testConfirmDefer()
+    {
+        $this->mockAdapter->shouldReceive('setCredentials')
+            ->andReturn(['foo' => 'bar']);
+        $this->mockAdapter->shouldReceive('confirm')->once()
+            ->with('test-transaction', $type = 'plus.defer')
+            ->andReturn([true]);
+
+        $defer = $this->webpay->confirmDefer('test-transaction');
+
+        $this->assertInstanceOf(WebpayPlusResponse::class, $defer);
     }
 }
