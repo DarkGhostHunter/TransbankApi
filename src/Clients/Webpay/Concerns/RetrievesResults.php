@@ -16,10 +16,10 @@ trait RetrievesResults
     /**
      * Returns the WebpayClient results
      *
-     * @param $transaction
+     * @param string $transaction
      * @return array
      */
-    public function retrieve($transaction)
+    public function retrieve(string $transaction)
     {
         return (array)($this->connector->getTransactionResult(
             new Fluent([

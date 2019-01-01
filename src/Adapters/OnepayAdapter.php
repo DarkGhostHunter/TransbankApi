@@ -55,7 +55,8 @@ class OnepayAdapter extends AbstractAdapter
      * @param OnepayTransaction $transaction
      * @return array
      * @throws \DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayValidationException
-     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayResponseErrorException
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayClientException
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayResponseException
      */
     protected function commitCart(OnepayTransaction $transaction)
     {
@@ -67,7 +68,8 @@ class OnepayAdapter extends AbstractAdapter
      *
      * @param OnepayNullifyTransaction $transaction
      * @return array
-     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayResponseErrorException
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayClientException
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayResponseException
      */
     protected function commitNullify(OnepayNullifyTransaction $transaction)
     {

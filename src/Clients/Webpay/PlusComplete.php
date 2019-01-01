@@ -2,6 +2,7 @@
 
 namespace DarkGhostHunter\TransbankApi\Clients\Webpay;
 
+use DarkGhostHunter\TransbankApi\Exceptions\Webpay\InvalidSignatureException;
 use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException;
 use Exception;
@@ -21,6 +22,7 @@ class PlusComplete extends WebpayClient
      * @param WebpayTransaction $transaction
      * @return mixed
      * @throws ErrorResponseException
+     * @throws InvalidSignatureException
      */
     public function complete(WebpayTransaction $transaction)
     {
@@ -42,11 +44,16 @@ class PlusComplete extends WebpayClient
 
         try {
             // Perform the capture with the data, and return if validates
-            if (($response = $this->performComplete($transaction)) && $this->validate())
-                return $response;
+            $response = $this->performComplete($transaction);
         } catch (Exception $e) {
             throw new ErrorResponseException($e->getMessage(), $e->getCode(), $e);
         }
+
+        if ($this->validate()) {
+            return $response;
+        }
+
+        throw new InvalidSignatureException();
 
     }
 
@@ -58,6 +65,7 @@ class PlusComplete extends WebpayClient
      * @param $shareNumber
      * @return mixed
      * @throws ErrorResponseException
+     * @throws InvalidSignatureException
      */
     public function queryShare($token, $buyOrder, $shareNumber)
     {
@@ -68,11 +76,16 @@ class PlusComplete extends WebpayClient
         ];
 
         try {
-            if (($response = $this->performQueryShare($queryShare)) && $this->validate())
-                return $response;
+            $response = $this->performQueryShare($queryShare);
         } catch (Exception $e) {
             throw new ErrorResponseException($e->getMessage(), $e->getCode(), $e);
         }
+
+        if ($this->validate()) {
+            return $response;
+        }
+
+        throw new InvalidSignatureException();
     }
 
     /**
@@ -81,6 +94,7 @@ class PlusComplete extends WebpayClient
      * @param WebpayTransaction $transaction
      * @return mixed
      * @throws ErrorResponseException
+     * @throws InvalidSignatureException
      */
     public function charge(WebpayTransaction $transaction)
     {
@@ -103,12 +117,16 @@ class PlusComplete extends WebpayClient
 
         try {
             // Perform the authorization
-            if (($response = $this->performCharge($charge)) && $this->validate())
-                return $response;
-
+            $response = $this->performCharge($charge);
         } catch (Exception $e) {
             throw new ErrorResponseException($e->getMessage(), $e->getCode(), $e);
         }
+
+        if ($this->validate()) {
+            return $response;
+        }
+
+        throw new InvalidSignatureException();
     }
 
     /**
@@ -117,6 +135,7 @@ class PlusComplete extends WebpayClient
      * @param $token
      * @return bool
      * @throws ErrorResponseException
+     * @throws InvalidSignatureException
      */
     public function confirm($token)
     {
@@ -125,11 +144,16 @@ class PlusComplete extends WebpayClient
         ];
 
         try {
-            if ($this->performConfirm($acknowledgeTransaction) && $validates = $this->validate())
-                return $validates;
+            $confirmation = $this->performConfirm($acknowledgeTransaction);
         } catch (Exception $e) {
             throw new ErrorResponseException($e->getMessage(), $e->getCode(), $e);
         }
+
+        if ($confirmation[0] === $validates = $this->validate()) {
+            return $validates;
+        }
+
+        throw new InvalidSignatureException();
 
     }
 

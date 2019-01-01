@@ -57,6 +57,14 @@ class WebpayPlusMallResponseTest extends TestCase
 
         $response->dynamicallySetSuccessStatus();
 
+        $this->assertTrue($response->isSuccess());
+
+        $response = new WebpayPlusMallResponse([
+            'detailOutput' => (object)['responseCode' => 999]
+        ]);
+
+        $response->dynamicallySetSuccessStatus();
+
         $this->assertFalse($response->isSuccess());
     }
 

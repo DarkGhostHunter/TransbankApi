@@ -4,11 +4,17 @@ namespace Tests\Unit\Adapters;
 
 use DarkGhostHunter\TransbankApi\Adapters\WebpayAdapter;
 use DarkGhostHunter\TransbankApi\Clients\AbstractClient;
+use DarkGhostHunter\TransbankApi\Clients\Webpay\PlusNormal;
+use DarkGhostHunter\TransbankApi\Exceptions\Webpay\InvalidWebpayTransactionException;
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ServiceSdkUnavailableException;
 use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @runTestsInSeparateProcesses
+ * @preserveGlobalState disabled
+ */
 class WebpayAdapterTest extends TestCase
 {
 
@@ -62,6 +68,14 @@ class WebpayAdapterTest extends TestCase
         $this->assertIsArray($adapter->getClients());
         $adapter->setClients(['foo' => 'bar']);
         $this->assertEquals('bar', $adapter->getClients()['foo']);
+    }
+
+    public function testSetAndGetCommitMap()
+    {
+        $adapter = new WebpayAdapter();
+        $this->assertIsArray($adapter->getCommitMap());
+        $adapter->setCommitMap(['foo' => 'bar']);
+        $this->assertEquals('bar', $adapter->getCommitMap()['foo']);
     }
 
     public function testRetrieveAndConfirm()
@@ -154,6 +168,55 @@ class WebpayAdapterTest extends TestCase
             $response = $this->adapter->commit($transaction);
             $this->assertTrue($response);
         }
+    }
+
+    public function testExceptionOnCommit()
+    {
+        $this->expectException(InvalidWebpayTransactionException::class);
+
+        $this->client->expects('commit')
+            ->andThrow(\Exception::class);
+
+        $transaction = new WebpayTransaction(['foo' => 'bar']);
+        $transaction->setType('plus.normal');
+
+        $this->adapter->commit($transaction);
+    }
+
+    public function testExceptionOnCommitMapUnavailable()
+    {
+        $this->expectException(ServiceSdkUnavailableException::class);
+
+        $this->adapter->setCommitMap([]);
+
+        $transaction = new WebpayTransaction(['foo' => 'bar']);
+        $transaction->setType('plus.normal');
+        $this->adapter->commit($transaction, 'any');
+    }
+
+
+    public function testDoenstInstancesClientAgain()
+    {
+        $client = \Mockery::mock('overload:' . PlusNormal::class);
+
+        $this->adapter->setClient(null);
+
+        $client->expects('boot');
+        $client->expects('commit')->andReturnTrue();
+
+        $this->adapter->setClients([
+            get_class($client) => [
+                'plus.normal'
+            ]
+        ]);
+
+        $transaction = new WebpayTransaction(['foo' => 'bar']);
+        $transaction->setType('plus.normal');
+
+        $response = $this->adapter->commit($transaction);
+        $this->assertTrue($response);
+
+
     }
 
     public function testExceptionOnCommitUnavailable()

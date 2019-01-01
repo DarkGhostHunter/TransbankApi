@@ -3,6 +3,7 @@
 namespace DarkGhostHunter\TransbankApi\Clients\Webpay;
 
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException;
+use DarkGhostHunter\TransbankApi\Exceptions\Webpay\InvalidSignatureException;
 use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
 use Exception;
 
@@ -28,6 +29,7 @@ class PlusNullify extends WebpayClient
      * @param WebpayTransaction $transaction
      * @return mixed
      * @throws ErrorResponseException
+     * @throws InvalidSignatureException
      */
     public function nullify(WebpayTransaction $transaction)
     {
@@ -43,11 +45,16 @@ class PlusNullify extends WebpayClient
 
         try {
             // Perform the capture with the data, and return if validates
-            if (($response = $this->performNullify($transaction)) && $this->validate())
-                return $response;
+            $response = $this->performNullify($transaction);
         } catch (Exception $e) {
             throw new ErrorResponseException($e->getMessage(), $e->getCode(), $e);
         }
+
+        if ($this->validate()) {
+            return $response;
+        }
+
+        throw new InvalidSignatureException();
 
     }
 

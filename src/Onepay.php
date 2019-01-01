@@ -90,7 +90,9 @@ class Onepay extends AbstractService
      */
     protected function getProductionCredentials()
     {
-        return include __DIR__ . self::CREDENTIALS_DIR . self::PRODUCTION_KEYS;
+        return include __DIR__ . '/' .
+            trim(self::CREDENTIALS_DIR, '/') . '/' .
+            trim(self::PRODUCTION_KEYS, '/');
     }
 
     /**
@@ -101,7 +103,9 @@ class Onepay extends AbstractService
      */
     protected function getIntegrationCredentials(string $type = null)
     {
-        return include __DIR__ . self::CREDENTIALS_DIR . self::INTEGRATION_KEYS;
+        return include __DIR__ . '/' .
+            trim(self::CREDENTIALS_DIR, '/') . '/' .
+            trim(self::INTEGRATION_KEYS, '/');
     }
 
     /*

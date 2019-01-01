@@ -3,6 +3,7 @@
 namespace DarkGhostHunter\TransbankApi\Clients\Webpay;
 
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException;
+use DarkGhostHunter\TransbankApi\Exceptions\Webpay\InvalidSignatureException;
 use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
 use Exception;
 
@@ -27,7 +28,8 @@ class PlusCapture extends WebpayClient
      *
      * @param WebpayTransaction $transaction
      * @return mixed
-     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
+     * @throws ErrorResponseException
+     * @throws InvalidSignatureException
      */
     public function capture(WebpayTransaction $transaction)
     {
@@ -40,11 +42,16 @@ class PlusCapture extends WebpayClient
 
         try {
             // Perform the capture with the data, and return if validates
-            if (($response = $this->performCapture($capture)) && $this->validate())
-                return $response;
+            $response = $this->performCapture($capture);
         } catch (Exception $e) {
             throw new ErrorResponseException($e->getMessage(), $e->getCode(), $e);
         }
+
+        if ($this->validate()) {
+            return $response;
+        };
+
+        throw new InvalidSignatureException();
     }
 
     /**

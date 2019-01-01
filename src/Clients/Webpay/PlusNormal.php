@@ -3,6 +3,7 @@
 namespace DarkGhostHunter\TransbankApi\Clients\Webpay;
 
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException;
+use DarkGhostHunter\TransbankApi\Exceptions\Webpay\InvalidSignatureException;
 use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
 use Exception;
 
@@ -20,30 +21,17 @@ class PlusNormal extends WebpayClient
     protected $endpointType = 'webpay';
 
     /**
-     * Commits a Normal or Mall WebpayClient into WebpaySoap
-     *
+     * @param array $commit
      * @param WebpayTransaction $transaction
-     * @return array
-     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
+     * @return object
      */
-    public function commit(WebpayTransaction $transaction)
+    protected function makeCommit(array $commit, WebpayTransaction $transaction)
     {
-
-        // Create a normal transaction using the Fluent Helper
-        $commit = (object)[
-            'wSTransactionType'     => 'TR_NORMAL_WS',
-            'sessionId'             => $transaction->sessionId,
-            'buyOrder'              => $transaction->buyOrder,
-            'returnURL'             => $transaction->returnUrl,
-            'finalURL'              => $transaction->finalUrl,
-            'transactionDetails'    => $transaction->items,
-        ];
-
         // If this is a normal transaction, which doesn't have items,
         // we will comply with Transaction structure and just add a
         // single item into the data to send.
-        if (!$commit->transactionDetails) {
-            $commit->transactionDetails = [
+        if (!$commit['transactionDetails']) {
+            $commit['transactionDetails'] = [
                 [
                     'commerceCode' => $this->credentials->commerceCode,
                     'buyOrder' => $transaction->buyOrder,
@@ -52,13 +40,13 @@ class PlusNormal extends WebpayClient
             ];
         // Otherwise, we will change the transaction type to Mall and...
         } else {
-            $commit->wSTransactionType = 'TR_MALL_WS';
-            $commit->commerceId = $this->credentials->commerceCode;
+            $commit['wSTransactionType'] = 'TR_MALL_WS';
+            $commit['commerceId'] = $this->credentials->commerceCode;
         }
 
         // ..for each item (even if its one), transform it as something
         // Soap Connector can digest.
-        foreach ($commit->transactionDetails as &$item) {
+        foreach ($commit['transactionDetails'] as &$item) {
             $item = (object)[
                 'commerceCode' => $item['commerceCode'],
                 'buyOrder' => $item['buyOrder'],
@@ -66,30 +54,62 @@ class PlusNormal extends WebpayClient
             ];
         }
 
+        return (object)$commit;
+    }
+
+    /**
+     * Commits a Normal or Mall WebpayClient into WebpaySoap
+     *
+     * @param WebpayTransaction $transaction
+     * @return array
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
+     * @throws InvalidSignatureException
+     */
+    public function commit(WebpayTransaction $transaction)
+    {
+        // Create a normal transaction using the Fluent Helper
+        $commit = $this->makeCommit([
+            'wSTransactionType'     => 'TR_NORMAL_WS',
+            'sessionId'             => $transaction->sessionId,
+            'buyOrder'              => $transaction->buyOrder,
+            'returnURL'             => $transaction->returnUrl,
+            'finalURL'              => $transaction->finalUrl,
+            'transactionDetails'    => $transaction->items,
+        ], $transaction);
+
         try {
             // Now that we have the transaction completed, commit it
-            if (($response = $this->performCommit($commit)) && $this->validate())
-                return $response;
+            $response = $this->performCommit($commit);
         } catch (Exception $e) {
             throw new ErrorResponseException($e->getMessage(), $e->getCode(), $e);
         }
+
+        if ($this->validate()) {
+            return $response;
+        }
+
+        throw new InvalidSignatureException();
     }
 
     /**
      * Obtains the WebpayClient results from Webpay Soap
      *
-     * @param WebpayTransaction $transaction
+     * @param string $transaction
      * @return array
+     * @throws InvalidSignatureException
      */
-    public function retrieveAndConfirm(WebpayTransaction $transaction)
+    public function retrieveAndConfirm($transaction)
     {
         // Perform the WebpayClient result
         $response = $this->retrieve($transaction);
 
         // If Validation passes and the WebpayClient is Confirmed...
-        if ($this->validate() && $this->confirm($transaction))
+        if ($this->validate() && $this->confirm($transaction)) {
             // Extract the results from the response and return it
             return $response;
+        }
+
+        throw new InvalidSignatureException();
     }
 
 }

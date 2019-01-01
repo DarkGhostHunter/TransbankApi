@@ -47,19 +47,19 @@ class WebpayPlusMallResponse extends AbstractResponse
      */
     public function dynamicallySetSuccessStatus()
     {
-        switch (true) {
-            case !!$this->token:
-                $this->isSuccess = true;
-                break;
-            case $this->detailOutput && count($this->detailOutput) > 1:
-                $this->isSuccess = true;
-                foreach ($this->detailOutput ?? [] as $item) {
-                    if ($item->responseCode !== 0) {
-                        $this->isSuccess = false;
-                        break;
-                    }
+        if (!!$this->token) {
+            $this->isSuccess = true;
+            return;
+        }
+
+        if(is_array($this->detailOutput)) {
+            foreach ($this->detailOutput as $item) {
+                if ($item->responseCode !== 0) {
+                    $this->isSuccess = false;
+                    return;
                 }
-                break;
+            }
+            $this->isSuccess = true;
         }
     }
 

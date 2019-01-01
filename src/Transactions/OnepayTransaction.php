@@ -249,17 +249,17 @@ class OnepayTransaction extends AbstractTransaction
      */
     public function toArray()
     {
-        $attributes = array_merge(
-            array_merge(
-                $this->attributes,
-                [
-                    'total' => $this->total,
-                    'itemsQuantity' => $this->itemsQuantity,
-                    'externalUniqueNumber' => $this->externalUniqueNumber,
-                ]
-            ),
-            ['items' => $this->items]
-        );
+        if ($hasItems = $this->items ?? []) {
+            $hasItems = [
+                'items' => $this->items,
+                'total' => $this->total,
+                'itemsQuantity' => $this->itemsQuantity,
+            ];
+        }
+
+        $attributes = array_merge($this->attributes, $hasItems, [
+            'externalUniqueNumber' => $this->externalUniqueNumber,
+        ]);
 
         if ($this->hideSecrets) {
             $attributes = Helpers::arrayExcept($attributes, ['appKey', 'apiKey', 'signature']);

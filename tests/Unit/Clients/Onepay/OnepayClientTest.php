@@ -3,11 +3,16 @@
 namespace Tests\Unit\Clients\Onepay;
 
 use DarkGhostHunter\TransbankApi\Clients\Onepay\OnepayClient;
+use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayClientException;
+use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayResponseException;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayValidationException;
 use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayNullifyTransaction;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
@@ -50,7 +55,7 @@ class OnepayClientTest extends TestCase
         $httpClient->expects('post')
             ->with(
                 'sendtransaction',
-                ['body' => '{"foo":"bar","total":0,"itemsQuantity":0,"appKey":"test-app","apiKey":"test-key","signature":"GfWeI4CHVLeW1Sc7Iwvoxg/9ZMSY80/76dB7rcZZYnI=","externalUniqueNumber":null,"items":[]}']
+                ['body' => '{"foo":"bar","total":0,"itemsQuantity":0,"appKey":"test-app","apiKey":"test-key","signature":"GfWeI4CHVLeW1Sc7Iwvoxg/9ZMSY80/76dB7rcZZYnI=","externalUniqueNumber":null}']
             )
             ->andReturn(new Response(200, [], json_encode([
                 'responseCode' => 'OK',
@@ -114,7 +119,7 @@ class OnepayClientTest extends TestCase
         $httpClient->expects('post')
             ->with(
                 'gettransactionnumber',
-                ['body' => '{"foo":"bar","appKey":"test-app","apiKey":"test-key","signature":"uvYGgjcgwlNDLLvw8W21iWl7FAtwtWh8P4+CYMaP5+Q=","total":0,"itemsQuantity":0,"externalUniqueNumber":null,"items":[]}']
+                ['body' => '{"foo":"bar","appKey":"test-app","apiKey":"test-key","signature":"uvYGgjcgwlNDLLvw8W21iWl7FAtwtWh8P4+CYMaP5+Q=","externalUniqueNumber":null}']
             )
             ->andReturn(new Response(200, [], json_encode([
                     'responseCode' => 'OK',
@@ -159,7 +164,7 @@ class OnepayClientTest extends TestCase
         $httpClient->expects('post')
             ->with(
                 'gettransactionnumber',
-                ['body' => '{"foo":"bar","appKey":"test-app","apiKey":"test-key","signature":"uvYGgjcgwlNDLLvw8W21iWl7FAtwtWh8P4+CYMaP5+Q=","total":0,"itemsQuantity":0,"externalUniqueNumber":null,"items":[]}']
+                ['body' => '{"foo":"bar","appKey":"test-app","apiKey":"test-key","signature":"uvYGgjcgwlNDLLvw8W21iWl7FAtwtWh8P4+CYMaP5+Q=","externalUniqueNumber":null}']
             )
             ->andReturn(new Response(200, [], json_encode([
                     'responseCode' => 'OK',
@@ -182,5 +187,42 @@ class OnepayClientTest extends TestCase
         $transaction = new OnepayTransaction(['foo' => 'bar']);
 
         $this->client->confirm($transaction);
+    }
+
+    public function testExceptionOnHttpClient()
+    {
+        $this->expectException(OnepayClientException::class);
+
+        $httpClient = \Mockery::mock(Client::class);
+
+        $httpClient->expects('post')
+            ->andThrow(new RequestException("Error Communicating with Server", new Request('GET', 'test')));
+
+        $this->client->setHttpClient($httpClient);
+
+        $transaction = new OnepayTransaction(['foo' => 'bar']);
+
+        $this->client->commit($transaction);
+    }
+
+    public function testExceptionOnMalformedResponse()
+    {
+        $this->expectException(OnepayResponseException::class);
+
+        $httpClient = \Mockery::mock(Client::class);
+
+        $httpClient->expects('post')
+            ->andReturn(new Response(200, [], json_encode([
+                    'responseCode' => 'INVALID_PARAMS',
+                    'description' => 'Parametros invalidos'
+                ]))
+            );
+
+        $this->client->setHttpClient($httpClient);
+
+        $transaction = new OnepayTransaction(['foo' => 'bar']);
+
+        $this->client->commit($transaction);
+
     }
 }

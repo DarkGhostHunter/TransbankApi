@@ -6,6 +6,7 @@ use DarkGhostHunter\TransbankApi\Clients\AbstractClient;
 use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use LuisUrrutia\TransbankSoap\Validation;
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException;
+use SoapClient;
 
 abstract class WebpayClient extends AbstractClient
 {
@@ -24,8 +25,8 @@ abstract class WebpayClient extends AbstractClient
             'production'    => 'https://webpay3g.transbank.cl/WSWebpayTransaction/cxf/WSCommerceIntegrationService?wsdl',
         ],
         'complete' => [
-            'integration'   => 'ttps://webpay3gint.transbank.cl/WSWebpayTransaction/cxf/WSCompleteWebpayService?wsdl',
-            'production'    => 'ttps://webpay3g.transbank.cl/WSWebpayTransaction/cxf/WSCompleteWebpayService?wsdl',
+            'integration'   => 'https://webpay3gint.transbank.cl/WSWebpayTransaction/cxf/WSCompleteWebpayService?wsdl',
+            'production'    => 'https://webpay3g.transbank.cl/WSWebpayTransaction/cxf/WSCompleteWebpayService?wsdl',
         ],
         'oneclick' => [
             'integration'   => 'https://webpay3gint.transbank.cl/webpayserver/wswebpay/OneClickPaymentService?wsdl',
@@ -50,10 +51,55 @@ abstract class WebpayClient extends AbstractClient
     /**
      * Soap Connector
      *
-     * @var SoapImplementation
+     * @var SoapImplementation|SoapClient
      */
     protected $connector;
 
+    /*
+    |--------------------------------------------------------------------------
+    | Getters and Setters
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Get the Soap Connector
+     *
+     * @return SoapImplementation
+     */
+    public function getConnector()
+    {
+        return $this->connector;
+    }
+
+    /**
+     * Set the Soap Connector
+     *
+     * @param SoapImplementation|SoapClient $connector
+     */
+    public function setConnector(SoapClient $connector)
+    {
+        $this->connector = $connector;
+    }
+
+    /**
+     * Get the Endpoint Type
+     *
+     * @return string
+     */
+    public function getEndpointType()
+    {
+        return $this->endpointType;
+    }
+
+    /**
+     * Set the Endpoint Type
+     *
+     * @param string $endpointType
+     */
+    public function setEndpointType(string $endpointType)
+    {
+        $this->endpointType = $endpointType;
+    }
 
     /*
     |--------------------------------------------------------------------------

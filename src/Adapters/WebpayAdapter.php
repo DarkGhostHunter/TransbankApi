@@ -45,6 +45,28 @@ class WebpayAdapter extends AbstractAdapter
         ]
     ];
 
+    protected $commitMap = [
+        'capture' => [
+            'plus.capture',
+            'plus.mall.capture',
+        ],
+        'nullify' => [
+            'plus.nullify',
+            'plus.mall.nullify',
+        ],
+        'register' => ['oneclick.register'],
+        'confirm' => ['oneclick.confirm'],
+        'unregister' => ['oneclick.unregister'],
+        'charge' => ['oneclick.charge'],
+        'reverse' => ['oneclick.reverse'],
+        'commit' => [
+            'plus.normal',
+            'plus.defer',
+            'plus.mall.normal',
+            'plus.mall.defer',
+        ],
+    ];
+
     /**
      * Set the Clients per Type array
      *
@@ -80,6 +102,26 @@ class WebpayAdapter extends AbstractAdapter
         }
     }
 
+    /**
+     * Get the Commit Map
+     *
+     * @return array
+     */
+    public function getCommitMap()
+    {
+        return $this->commitMap;
+    }
+
+
+    /**
+     * Sets the Commit Map
+     *
+     * @param array $commitMap
+     */
+    public function setCommitMap(array $commitMap)
+    {
+        $this->commitMap = $commitMap;
+    }
 
     /**
      * Boots the WebpaySoap Processor for the transaction type
@@ -99,7 +141,6 @@ class WebpayAdapter extends AbstractAdapter
         }
     }
 
-
     /**
      * Commits a transaction into the Transbank SDK
      *
@@ -114,33 +155,16 @@ class WebpayAdapter extends AbstractAdapter
         $this->bootClient($type = $transaction->getType());
 
         try {
-            switch ($type = $transaction->getType()) {
-                case 'plus.capture':
-                case 'plus.mall.capture':
-                    return $this->client->capture($transaction);
-                case 'plus.nullify':
-                case 'plus.mall.nullify':
-                    return $this->client->nullify($transaction);
-                case 'oneclick.register':
-                    return $this->client->register($transaction);
-                case 'oneclick.confirm':
-                    return $this->client->confirm($transaction);
-                case 'oneclick.unregister':
-                    return $this->client->unregister($transaction);
-                case 'oneclick.charge':
-                    return $this->client->charge($transaction);
-                case 'oneclick.reverse':
-                    return $this->client->reverse($transaction);
-                case 'plus.normal':
-                case 'plus.defer':
-                case 'plus.mall.normal':
-                case 'plus.mall.defer':
-                default :
-                    return $this->client->commit($transaction);
+            foreach ($this->commitMap as $method => $types) {
+                if (in_array($type, $types)) {
+                    return $this->client->{$method}($transaction);
+                }
             }
         } catch (Exception $exception) {
             throw new InvalidWebpayTransactionException($transaction, $exception);
         }
+
+        throw new ServiceSdkUnavailableException($type);
     }
 
     /**

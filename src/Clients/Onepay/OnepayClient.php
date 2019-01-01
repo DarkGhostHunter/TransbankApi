@@ -3,7 +3,8 @@
 namespace DarkGhostHunter\TransbankApi\Clients\Onepay;
 
 use DarkGhostHunter\TransbankApi\Clients\AbstractClient;
-use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayResponseErrorException;
+use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayClientException;
+use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayResponseException;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayValidationException;
 use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayNullifyTransaction;
@@ -129,25 +130,32 @@ class OnepayClient extends AbstractClient
      * @param string $endpoint
      * @param OnepayTransaction|OnepayNullifyTransaction $transaction
      * @return \stdClass
-     * @throws OnepayResponseErrorException
+     * @throws OnepayClientException
+     * @throws OnepayResponseException
      */
     protected function post(string $endpoint, $transaction)
     {
         $showSecrets = (clone $transaction)->showSecrets();
 
-        $response = $this->httpClient->post(
-            $endpoint,
-            ['body' => json_encode($showSecrets, JSON_UNESCAPED_SLASHES)]
-        );
+        try {
+            $response = $this->httpClient->post(
+                $endpoint,
+                ['body' => json_encode($showSecrets, JSON_UNESCAPED_SLASHES)]
+            );
+        } catch (\Throwable $throwable) {
+            throw new OnepayClientException($transaction, 0, $throwable);
+        }
 
         $content = json_decode($response->getBody()->getContents());
+
 
         // Proceed only if the Status Code is OK and the "responseCode" is "OK".
         if ($response->getStatusCode() === 200 && $content->responseCode === 'OK') {
             return $content->result;
         }
 
-        throw new OnepayResponseErrorException($content->responseCode, $content->description, $transaction);
+        throw new OnepayResponseException($transaction, $content->description, $content->responseCode);
+
     }
 
 
@@ -163,7 +171,8 @@ class OnepayClient extends AbstractClient
      * @param OnepayTransaction $transaction
      * @return array
      * @throws OnepayValidationException
-     * @throws OnepayResponseErrorException
+     * @throws OnepayClientException
+     * @throws OnepayResponseException
      */
     public function commit(OnepayTransaction $transaction)
     {
@@ -183,7 +192,8 @@ class OnepayClient extends AbstractClient
      * @param OnepayTransaction $transaction
      * @return array
      * @throws OnepayValidationException
-     * @throws OnepayResponseErrorException
+     * @throws OnepayClientException
+     * @throws OnepayResponseException
      */
     public function confirm(OnepayTransaction $transaction)
     {
@@ -202,7 +212,8 @@ class OnepayClient extends AbstractClient
      *
      * @param OnepayNullifyTransaction $transaction
      * @return array
-     * @throws OnepayResponseErrorException
+     * @throws OnepayClientException
+     * @throws OnepayResponseException
      */
     public function refund(OnepayNullifyTransaction $transaction)
     {

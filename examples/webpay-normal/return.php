@@ -22,7 +22,7 @@ $confirm = $webpay->confirmNormal($_POST['token_ws']);
         <h4>Resultado de la transacción</h4>
         <pre><?php print_r($result->toArray()); ?></pre>
         <div class="alert alert-info small">
-            <i class="fas fa-info-circle"> La transacción fue confirmada por separado.
+            <i class="fas fa-info-circle"></i> La transacción fue confirmada por separado.
         </div>
     </div>
 

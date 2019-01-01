@@ -14,6 +14,7 @@ use SoapClient;
  * @method object getTransactionResult($transaction)
  * @method object initTransaction($transaction)
  *
+ * @codeCoverageIgnore
  *
  */
 class SoapImplementation extends SoapClient

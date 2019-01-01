@@ -21,6 +21,13 @@ abstract class AbstractService implements ServiceInterface
     use Concerns\HasCredentialOperations;
 
     /**
+     * Credentials Location for the Service
+     *
+     * @const string
+     */
+    protected const CREDENTIALS_DIR = '../credentials/';
+
+    /**
      * Transbank Configuration to use for the Service
      *
      * @var Transbank
@@ -82,6 +89,22 @@ abstract class AbstractService implements ServiceInterface
         $this->credentials = $this->getCredentials();
 
         $this->boot();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Credentials Operations
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Returns the credentials directory
+     *
+     * @return string
+     */
+    public function credentialsDirectory()
+    {
+        return __DIR__ . '/' . trim(self::CREDENTIALS_DIR, '/');
     }
 
     /*

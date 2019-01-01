@@ -4,11 +4,16 @@ namespace Tests\Unit\Adapters;
 
 use DarkGhostHunter\TransbankApi\Adapters\OnepayAdapter;
 use DarkGhostHunter\TransbankApi\Clients\AbstractClient;
+use DarkGhostHunter\TransbankApi\Clients\Onepay\OnepayClient;
 use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayNullifyTransaction;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @runTestsInSeparateProcesses
+ * @preserveGlobalState disabled
+ */
 class OnepayAdapterTest extends TestCase
 {
 
@@ -43,6 +48,21 @@ class OnepayAdapterTest extends TestCase
 
         $transaction = new OnepayNullifyTransaction([ 'foo' => 'bar' ]);
         $transaction->setType('onepay.nullify');
+        $response = $this->adapter->commit($transaction);
+        $this->assertTrue($response);
+    }
+
+    public function testDoesntInstancesClientAgain()
+    {
+        $client = \Mockery::mock('overload:' . OnepayClient::class);
+
+        $client->expects('boot');
+        $client->shouldReceive('commit')->andReturnTrue();
+
+        $this->adapter->setClient(null);
+
+        $transaction = new OnepayTransaction([ 'foo' => 'bar' ]);
+        $transaction->setType('onepay.cart');
         $response = $this->adapter->commit($transaction);
         $this->assertTrue($response);
     }

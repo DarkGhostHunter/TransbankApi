@@ -28,16 +28,6 @@ trait HasCredentialOperations
     }
 
     /**
-     * Returns the credentials directory
-     *
-     * @return string
-     */
-    public function credentialsDirectory()
-    {
-        return __DIR__ . '/' . trim(self::CREDENTIALS_DIR, '/');
-    }
-
-    /**
      * Returns the credentials directory for the active environment
      *
      * @return string

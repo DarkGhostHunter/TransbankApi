@@ -3,6 +3,7 @@
 namespace DarkGhostHunter\TransbankApi\Clients\Webpay;
 
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException;
+use DarkGhostHunter\TransbankApi\Exceptions\Webpay\InvalidSignatureException;
 use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
 use Exception;
 
@@ -21,6 +22,7 @@ class OneclickNormal extends WebpayClient
      * @param WebpayTransaction $transaction
      * @return array
      * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
+     * @throws InvalidSignatureException
      */
     public function register(WebpayTransaction $transaction)
     {
@@ -32,11 +34,16 @@ class OneclickNormal extends WebpayClient
 
         try {
             // Perform the capture with the data, and return if validates
-            if (($response = $this->performRegister($registration)) && $this->validate())
-                return $response;
+            $response = $this->performRegister($registration);
         } catch (Exception $e) {
             throw new ErrorResponseException($e->getMessage(), $e->getCode(), $e);
         }
+
+        if ($this->validate()) {
+            return $response;
+        }
+
+        throw new InvalidSignatureException();
     }
 
     /**
@@ -44,7 +51,8 @@ class OneclickNormal extends WebpayClient
      *
      * @param WebpayTransaction $transaction
      * @return mixed
-     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
+     * @throws ErrorResponseException
+     * @throws InvalidSignatureException
      */
     public function confirm($transaction)
     {
@@ -54,11 +62,16 @@ class OneclickNormal extends WebpayClient
 
         try {
             // Perform the capture with the data, and return if validates
-            if (($response = $this->performConfirm($registration)) && $this->validate())
-                return $response;
+            $response = $this->performConfirm($registration);
         } catch (Exception $e) {
             throw new ErrorResponseException($e->getMessage(), $e->getCode(), $e);
         }
+
+        if ($this->validate()) {
+            return $response;
+        }
+
+        throw new InvalidSignatureException();
     }
 
     /**
@@ -66,7 +79,8 @@ class OneclickNormal extends WebpayClient
      *
      * @param WebpayTransaction $transaction
      * @return mixed
-     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
+     * @throws ErrorResponseException
+     * @throws InvalidSignatureException
      */
     public function unregister(WebpayTransaction $transaction)
     {
@@ -77,11 +91,16 @@ class OneclickNormal extends WebpayClient
 
         try {
             // Perform the capture with the data, and return if validates
-            if (($response = $this->performUnregister($unregister)) && $this->validate())
-                return $response;
+            $response = $this->performUnregister($unregister);
         } catch (Exception $e) {
             throw new ErrorResponseException($e->getMessage(), $e->getCode(), $e);
         }
+
+        if ($this->validate()) {
+            return $response;
+        }
+
+        throw new InvalidSignatureException();
     }
 
     /**
@@ -89,7 +108,8 @@ class OneclickNormal extends WebpayClient
      *
      * @param WebpayTransaction $transaction
      * @return mixed
-     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
+     * @throws ErrorResponseException
+     * @throws InvalidSignatureException
      */
     public function charge(WebpayTransaction $transaction)
     {
@@ -102,11 +122,16 @@ class OneclickNormal extends WebpayClient
 
         try {
             // Perform the capture with the data, and return if validates
-            if (($response = $this->performCharge($charge)) && $this->validate())
-                return $response;
+            $response = $this->performCharge($charge);
         } catch (Exception $e) {
             throw new ErrorResponseException($e->getMessage(), $e->getCode(), $e);
         }
+
+        if ($this->validate()) {
+            return $response;
+        }
+
+        throw new InvalidSignatureException();
     }
 
     /**
@@ -114,7 +139,8 @@ class OneclickNormal extends WebpayClient
      *
      * @param WebpayTransaction $transaction
      * @return mixed
-     * @throws \DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException
+     * @throws ErrorResponseException
+     * @throws InvalidSignatureException
      */
     public function reverse(WebpayTransaction $transaction)
     {
@@ -125,11 +151,16 @@ class OneclickNormal extends WebpayClient
 
         try {
             // Perform the capture with the data, and return if validates
-            if (($response = $this->performReverse($reverse)) && $this->validate())
-                return $response;
+            $response = $this->performReverse($reverse);
         } catch (Exception $e) {
             throw new ErrorResponseException($e->getMessage(), $e->getCode(), $e);
         }
+
+        if ($this->validate()) {
+            return $response;
+        }
+
+        throw new InvalidSignatureException();
     }
 
     /**
