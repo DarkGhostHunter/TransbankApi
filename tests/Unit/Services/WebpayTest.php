@@ -4,7 +4,7 @@ namespace Tests\Unit\Services;
 
 use DarkGhostHunter\TransbankApi\Adapters\WebpayAdapter;
 use DarkGhostHunter\TransbankApi\Exceptions\Credentials\CredentialsNotReadableException;
-use DarkGhostHunter\TransbankApi\Exceptions\Webpay\RetrievingNoTransactionTypeException;
+use DarkGhostHunter\TransbankApi\Exceptions\Webpay\TransactionTypeNullException;
 use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Helpers\Helpers;
 use DarkGhostHunter\TransbankApi\Responses\AbstractResponse;
@@ -69,7 +69,7 @@ class WebpayTest extends TestCase
 
     public function testExceptionOnGetTransactionWithoutType()
     {
-        $this->expectException(RetrievingNoTransactionTypeException::class);
+        $this->expectException(TransactionTypeNullException::class);
 
         $this->webpay->getTransaction('mock-transaction', null);
     }

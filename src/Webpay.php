@@ -4,7 +4,7 @@ namespace DarkGhostHunter\TransbankApi;
 
 use Exception;
 use DarkGhostHunter\TransbankApi\Adapters\WebpayAdapter;
-use DarkGhostHunter\TransbankApi\Exceptions\Webpay\RetrievingNoTransactionTypeException;
+use DarkGhostHunter\TransbankApi\Exceptions\Webpay\TransactionTypeNullException;
 use DarkGhostHunter\TransbankApi\Responses\WebpayOneclickResponse;
 use DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse;
 use DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse;
@@ -228,12 +228,12 @@ class Webpay extends AbstractService
      * @param $transaction
      * @param string|null $options
      * @return Contracts\ResponseInterface|WebpayPlusMallResponse|WebpayPlusResponse
-     * @throws RetrievingNoTransactionTypeException
+     * @throws TransactionTypeNullException
      */
     public function getTransaction($transaction, $options = null)
     {
         if (!is_string($options)) {
-            throw new RetrievingNoTransactionTypeException;
+            throw new TransactionTypeNullException;
         }
 
         return parent::getTransaction($transaction, $options);
