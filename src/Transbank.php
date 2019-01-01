@@ -33,10 +33,7 @@ class Transbank
      *
      * @const array
      */
-    protected const AVAILABLE_SERVICES = [
-        'webpay',
-        'onepay',
-    ];
+    protected const AVAILABLE_SERVICES = ['webpay', 'onepay'];
 
     /**
      * Services holder
@@ -165,17 +162,19 @@ class Transbank
      */
     public function setCredentials(string $service, array $credentials)
     {
-        if (in_array($service, self::AVAILABLE_SERVICES)) {
-            foreach ($credentials as $credential) {
-                if (!is_string($credential)) {
-                    throw new CredentialInvalidException($service, $credential);
-                }
-            }
-            $this->servicesCredentials[$service] = new Fluent($credentials);
-            return;
+        // Check if the service is in the available services array
+        if (!in_array($service, self::AVAILABLE_SERVICES)) {
+            throw new InvalidServiceException($service);
         }
 
-        throw new InvalidServiceException($service);
+        foreach ($credentials as $credential) {
+            if (!is_string($credential)) {
+                throw new CredentialInvalidException($service, $credential);
+            }
+        }
+
+        $this->servicesCredentials[$service] = new Fluent($credentials);
+
     }
 
     /**

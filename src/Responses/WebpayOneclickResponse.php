@@ -29,13 +29,9 @@ class WebpayOneclickResponse extends AbstractResponse
                 $this->isSuccess = true;
                 $this->attributes = [];
                 break;
-            case !!$this->{$this->tokenName}:
-                $this->isSuccess = true;
-                break;
+            case (bool)$this->{$this->tokenName}:
+            case (bool)$this->reversed:
             case $this->responseCode === 0:
-                $this->isSuccess = true;
-                break;
-            case !!$this->reversed:
                 $this->isSuccess = true;
                 break;
         }
