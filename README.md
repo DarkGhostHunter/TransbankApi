@@ -10,8 +10,6 @@
 
 > Esta versión es incompatible con PHP 5. Para usar este código con PHP 5, usa el packete oficial de [Transbank SDK](https://github.com/TransbankDevelopers/transbank-sdk-php).
 
-> Esta paquete es un trabajo en progreso ¡No lo uses en producción hasta que no esté listo! (Algo que va a ser pronto)
-
 ## Requisitos:
 
 - PHP 7.1.3 o mayor
