@@ -31,6 +31,12 @@ class TransbankTest extends TestCase
 
     public function testMake()
     {
+        $transbank = Transbank::make();
+        $this->assertInstanceOf(Transbank::class, $transbank);
+        $this->assertInstanceOf(NullLogger::class, $transbank->getLogger());
+        $this->assertTrue($transbank->isIntegration());
+        $this->assertNull($transbank->getCredentials('webpay'));
+
         $transbank = Transbank::make('notProduction', ['webpay' => ['foo' => 'bar']]);
         $this->assertInstanceOf(Transbank::class, $transbank);
         $this->assertInstanceOf(NullLogger::class, $transbank->getLogger());

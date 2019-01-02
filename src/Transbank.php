@@ -281,14 +281,14 @@ class Transbank
      * @param LoggerInterface $logger
      * @return Transbank
      */
-    public static function make(string $environment, array $credentials = [], LoggerInterface $logger = null)
+    public static function make(string $environment = null, array $credentials = [], LoggerInterface $logger = null)
     {
         // Instantiate Transbank with the Logger. If no logger was passed, we will
         // use the default Null Logger which logs nothing.
         $transbank = new static($logger ?? new NullLogger());
 
         // Set the environment.
-        $transbank->setEnvironment($environment);
+        $transbank->setEnvironment($environment ?? '');
 
         // For each credentials array, set them.
         foreach ($credentials as $service => $credentialBag) {
