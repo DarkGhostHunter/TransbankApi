@@ -6,13 +6,9 @@ use DarkGhostHunter\TransbankApi\Contracts\AdapterInterface;
 use DarkGhostHunter\TransbankApi\Contracts\ServiceInterface;
 use DarkGhostHunter\TransbankApi\Contracts\TransactionInterface;
 use DarkGhostHunter\TransbankApi\Helpers\Helpers;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
-use DarkGhostHunter\TransbankApi\ResponseFactories\AbstractResponseFactory;
-use DarkGhostHunter\TransbankApi\TransactionFactories\AbstractTransactionFactory;
 use Exception;
 use BadMethodCallException;
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 
 /**
  * Class AbstractService
@@ -20,7 +16,8 @@ use Psr\Log\NullLogger;
  */
 abstract class AbstractService implements ServiceInterface
 {
-    use Concerns\HasCredentialOperations;
+    use Concerns\HasCredentialOperations,
+        Concerns\HasServiceGettersAndSetters;
 
     /**
      * Credentials Location for the Service
@@ -147,104 +144,6 @@ abstract class AbstractService implements ServiceInterface
      * @return void
      */
     abstract protected function bootTransactionFactory();
-
-    /*
-    |--------------------------------------------------------------------------
-    | Getters and Setters
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Returns if the service is using a Production environment
-     *
-     * @return bool
-     */
-    public function isProduction()
-    {
-        return $this->transbankConfig->isProduction();
-    }
-
-    /**
-     * Returns if the service is using an Integration environment
-     *
-     * @return bool
-     */
-    public function isIntegration()
-    {
-        return $this->transbankConfig->isIntegration();
-    }
-
-    /**
-     * Retrieves the default options for the service Transactions
-     *
-     * @return array|null
-     */
-    protected function getDefaults()
-    {
-        return $this->transbankConfig->getDefaults(
-                lcfirst(Helpers::classBasename(static::class))
-            ) ?? [];
-    }
-
-    /**
-     * Get the Adapter
-     *
-     * @return AdapterInterface
-     */
-    public function getAdapter()
-    {
-        return $this->adapter;
-    }
-
-    /**
-     * Set the Adapter
-     *
-     * @param AdapterInterface $adapter
-     */
-    public function setAdapter(AdapterInterface $adapter)
-    {
-        $this->adapter = $adapter;
-    }
-
-    /**
-     * Get the Transaction Factory
-     *
-     * @return string
-     */
-    public function getTransactionFactory()
-    {
-        return $this->transactionFactory;
-    }
-
-    /**
-     * Set the Transaction Factory
-     *
-     * @param AbstractTransactionFactory $transactionFactory
-     */
-    public function setTransactionFactory(AbstractTransactionFactory $transactionFactory)
-    {
-        $this->transactionFactory = $transactionFactory;
-    }
-
-    /**
-     * Get the Response Factory
-     *
-     * @return string
-     */
-    public function getResponseFactory()
-    {
-        return $this->responseFactory;
-    }
-
-    /**
-     * Set the Response Factory
-     *
-     * @param AbstractResponseFactory $responseFactory
-     */
-    public function setResponseFactory(AbstractResponseFactory $responseFactory)
-    {
-        $this->responseFactory = $responseFactory;
-    }
 
     /*
     |--------------------------------------------------------------------------
@@ -387,6 +286,6 @@ abstract class AbstractService implements ServiceInterface
      */
     public static function fromConfig(Transbank $config, LoggerInterface $logger = null)
     {
-        return new static($config, $logger ?? new NullLogger());
+        return new static($config, $logger ?? $config->getLogger());
     }
 }
