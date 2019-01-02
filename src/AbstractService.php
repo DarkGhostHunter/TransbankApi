@@ -6,11 +6,9 @@ use DarkGhostHunter\TransbankApi\Contracts\AdapterInterface;
 use DarkGhostHunter\TransbankApi\Contracts\ServiceInterface;
 use DarkGhostHunter\TransbankApi\Contracts\TransactionInterface;
 use DarkGhostHunter\TransbankApi\Helpers\Helpers;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
-use DarkGhostHunter\TransbankApi\ResponseFactories\AbstractResponseFactory;
-use DarkGhostHunter\TransbankApi\TransactionFactories\AbstractTransactionFactory;
 use Exception;
 use BadMethodCallException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class AbstractService
@@ -18,7 +16,8 @@ use BadMethodCallException;
  */
 abstract class AbstractService implements ServiceInterface
 {
-    use Concerns\HasCredentialOperations;
+    use Concerns\HasCredentialOperations,
+        Concerns\HasServiceGettersAndSetters;
 
     /**
      * Credentials Location for the Service
@@ -69,6 +68,13 @@ abstract class AbstractService implements ServiceInterface
      */
     protected $responseFactory;
 
+    /**
+     * Logger
+     *
+     * @var LoggerInterface
+     */
+    protected $logger;
+
     /*
     |--------------------------------------------------------------------------
     | Construct
@@ -79,11 +85,12 @@ abstract class AbstractService implements ServiceInterface
      * Abstract Service constructor.
      *
      * @param Transbank $transbankConfig
-     * @throws \Exception
+     * @param LoggerInterface $logger
      */
-    public function __construct(Transbank $transbankConfig)
+    public function __construct(Transbank $transbankConfig, LoggerInterface $logger)
     {
         $this->transbankConfig = $transbankConfig;
+        $this->logger = $logger;
 
         $this->defaults = $this->getDefaults();
         $this->credentials = $this->getCredentials();
@@ -140,104 +147,6 @@ abstract class AbstractService implements ServiceInterface
 
     /*
     |--------------------------------------------------------------------------
-    | Getters and Setters
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Returns if the service is using a Production environment
-     *
-     * @return bool
-     */
-    public function isProduction()
-    {
-        return $this->transbankConfig->isProduction();
-    }
-
-    /**
-     * Returns if the service is using an Integration environment
-     *
-     * @return bool
-     */
-    public function isIntegration()
-    {
-        return $this->transbankConfig->isIntegration();
-    }
-
-    /**
-     * Retrieves the default options for the service Transactions
-     *
-     * @return array|null
-     */
-    protected function getDefaults()
-    {
-        return $this->transbankConfig->getDefaults(
-                lcfirst(Helpers::classBasename(static::class))
-            ) ?? [];
-    }
-
-    /**
-     * Get the Adapter
-     *
-     * @return AdapterInterface
-     */
-    public function getAdapter()
-    {
-        return $this->adapter;
-    }
-
-    /**
-     * Set the Adapter
-     *
-     * @param AdapterInterface $adapter
-     */
-    public function setAdapter(AdapterInterface $adapter)
-    {
-        $this->adapter = $adapter;
-    }
-
-    /**
-     * Get the Transaction Factory
-     *
-     * @return string
-     */
-    public function getTransactionFactory()
-    {
-        return $this->transactionFactory;
-    }
-
-    /**
-     * Set the Transaction Factory
-     *
-     * @param AbstractTransactionFactory $transactionFactory
-     */
-    public function setTransactionFactory(AbstractTransactionFactory $transactionFactory)
-    {
-        $this->transactionFactory = $transactionFactory;
-    }
-
-    /**
-     * Get the Response Factory
-     *
-     * @return string
-     */
-    public function getResponseFactory()
-    {
-        return $this->responseFactory;
-    }
-
-    /**
-     * Set the Response Factory
-     *
-     * @param AbstractResponseFactory $responseFactory
-     */
-    public function setResponseFactory(AbstractResponseFactory $responseFactory)
-    {
-        $this->responseFactory = $responseFactory;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
     | Operations
     |--------------------------------------------------------------------------
     */
@@ -251,7 +160,9 @@ abstract class AbstractService implements ServiceInterface
     public function commit(TransactionInterface $transaction)
     {
         // Set the correct adapter credentials
-        $this->setAdapterCredentials($transaction->getType());
+        $this->setAdapterCredentials($type = $transaction->getType());
+
+        $this->logger->info("Getting [$type]: $transaction");
 
         // Commit the transaction to the adapter
         return $this->parseResponse(
@@ -272,10 +183,32 @@ abstract class AbstractService implements ServiceInterface
         // Set the correct adapter credentials
         $this->setAdapterCredentials($options);
 
+        $this->logger->info("Getting [$options]: " . json_encode($transaction));
+
         return $this->parseResponse(
             $this->adapter->retrieveAndConfirm($transaction, $options),
             $options
         );
+    }
+
+    /**
+     * Get the Logger
+     *
+     * @return LoggerInterface
+     */
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    /**
+     * Set the Logger
+     *
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
     }
 
     /*
@@ -348,11 +281,11 @@ abstract class AbstractService implements ServiceInterface
      * Returns a new service instance using the Transbank Configuration
      *
      * @param Transbank $config
+     * @param LoggerInterface|null $logger
      * @return AbstractService|$this
-     * @throws \Exception
      */
-    public static function fromConfig(Transbank $config)
+    public static function fromConfig(Transbank $config, LoggerInterface $logger = null)
     {
-        return new static($config);
+        return new static($config, $logger ?? $config->getLogger());
     }
 }

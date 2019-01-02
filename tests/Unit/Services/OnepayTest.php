@@ -10,6 +10,8 @@ use DarkGhostHunter\TransbankApi\Transactions\OnepayNullifyTransaction;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 use DarkGhostHunter\TransbankApi\Transbank;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 class OnepayTest extends TestCase
 {
@@ -21,6 +23,9 @@ class OnepayTest extends TestCase
 
     /** @var OnepayAdapter&\Mockery\MockInterface */
     protected $mockAdapter;
+
+    /** @var LoggerInterface&\Mockery\MockInterface */
+    protected $mockLogger;
 
     protected function setUp()
     {
@@ -37,7 +42,9 @@ class OnepayTest extends TestCase
         $this->mockAdapter->shouldReceive('setCredentials')
             ->andReturn(['foo' => 'bar']);
 
-        $this->onepay = new Onepay($this->mockTransbank);
+        $this->mockLogger = \Mockery::mock(LoggerInterface::class);
+
+        $this->onepay = new Onepay($this->mockTransbank, $this->mockLogger);
 
         $this->onepay->setAdapter($this->mockAdapter);
     }
@@ -49,6 +56,10 @@ class OnepayTest extends TestCase
 
         $this->mockAdapter->shouldReceive('retrieveAndConfirm')
             ->andReturn(['foo' => 'bar']);
+
+        $this->mockLogger->shouldReceive('info')
+            ->with(\Mockery::type('string'))
+            ->andReturnNull();
 
         $transaction = $this->onepay->getTransaction(['mock.transaction']);
 

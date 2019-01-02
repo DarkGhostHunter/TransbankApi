@@ -6,6 +6,8 @@ use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use Exception;
 use DarkGhostHunter\TransbankApi\Exceptions\Credentials\CredentialInvalidException;
 use DarkGhostHunter\TransbankApi\Exceptions\Transbank\InvalidServiceException;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Class TransbankConfig
@@ -50,7 +52,7 @@ class Transbank
     protected $isProduction = false;
 
     /**
-     * Service Configurations
+     * Service Defaults Values for its Transactions
      *
      * @var array
      */
@@ -64,21 +66,20 @@ class Transbank
     protected $servicesCredentials = [];
 
     /**
-     * TransbankConfig constructor.
+     * The Logger instance to log transactions
      *
-     * @param string $environment
-     * @param array $credentials
-     * @throws Exception
+     * @var LoggerInterface
      */
-    public function __construct(string $environment = null, array $credentials = [])
-    {
-        // Set default as `integration` unless explicitly says production.
-        $this->isProduction = $environment === self::PRODUCTION_ENV;
+    protected $logger;
 
-        // Add the Credentials
-        foreach ($credentials as $service => $array) {
-            $this->setCredentials($service, $array);
-        }
+    /**
+     * Transbank constructor.
+     *
+     * @param LoggerInterface $logger
+     */
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
     }
 
     /**
@@ -207,23 +208,35 @@ class Transbank
         return $this->isProduction ? self::PRODUCTION_ENV : self::INTEGRATION_ENV;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Static instantiation
-    |--------------------------------------------------------------------------
-    */
+    /**
+     * Sets the environment for the Transbank Services
+     *
+     * @param string $environment
+     * @return void
+     */
+    public function setEnvironment(string $environment)
+    {
+        $this->isProduction = $environment === self::PRODUCTION_ENV;
+    }
 
     /**
-     * Creates a new TransbankConfig instance
+     * Get the Logger
      *
-     * @param string|null $environment
-     * @param array $credentials
-     * @return Transbank
-     * @throws Exception
+     * @return LoggerInterface
      */
-    public static function environment(string $environment = null, array $credentials = [])
+    public function getLogger()
     {
-        return new static($environment, $credentials);
+        return $this->logger;
+    }
+
+    /**
+     * Set the Logger
+     *
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
     }
 
     /*
@@ -240,7 +253,7 @@ class Transbank
      */
     public function webpay()
     {
-        return $this->services['webpay'] ?? $this->services['webpay'] = new Webpay($this);
+        return $this->services['webpay'] ?? $this->services['webpay'] = new Webpay($this, $this->logger);
     }
 
     /**
@@ -251,7 +264,38 @@ class Transbank
      */
     public function onepay()
     {
-        return $this->services['onepay'] ?? $this->services['onepay'] = new Onepay($this);
+        return $this->services['onepay'] ?? $this->services['onepay'] = new Onepay($this, $this->logger);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Static instantiation
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Creates a new TransbankConfig instance
+     *
+     * @param string|null $environment
+     * @param array $credentials
+     * @param LoggerInterface $logger
+     * @return Transbank
+     */
+    public static function make(string $environment = null, array $credentials = [], LoggerInterface $logger = null)
+    {
+        // Instantiate Transbank with the Logger. If no logger was passed, we will
+        // use the default Null Logger which logs nothing.
+        $transbank = new static($logger ?? new NullLogger());
+
+        // Set the environment.
+        $transbank->setEnvironment($environment ?? '');
+
+        // For each credentials array, set them.
+        foreach ($credentials as $service => $credentialBag) {
+            $transbank->setCredentials($service, $credentialBag);
+        }
+
+        return $transbank;
     }
 
 }

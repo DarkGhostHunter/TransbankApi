@@ -2,7 +2,7 @@
 
 include_once '../load.php';
 
-$webpay = DarkGhostHunter\TransbankApi\Transbank::environment()->webpay();
+$webpay = DarkGhostHunter\TransbankApi\Transbank::make()->webpay();
 
 $payment = $webpay->makeNormal([
     'returnUrl' => currentUrlPath('return.php'),

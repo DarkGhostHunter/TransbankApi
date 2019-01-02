@@ -19,6 +19,10 @@ class AbstractAdapterTest extends TestCase
             public function getCredentials() { return $this->credentials; }
             public function commit(TransactionInterface $transaction, $options = null) {}
             public function retrieveAndConfirm($transaction, $options = null) {}
+
+            public function __construct()
+            {
+            }
         };
     }
 

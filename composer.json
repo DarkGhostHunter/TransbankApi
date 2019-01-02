@@ -24,7 +24,8 @@
     "ext-dom": "*",
     "ext-soap": "*",
     "luisurrutia/transbank-soap": "0.0.1",
-    "guzzlehttp/guzzle": "^6.0"
+    "guzzlehttp/guzzle": "^6.0",
+    "katzgrau/klogger": "1.2.*"
   },
   "require-dev": {
     "phpunit/phpunit": "~7.0",

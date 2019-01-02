@@ -10,6 +10,7 @@ use DarkGhostHunter\TransbankApi\Transactions\OnepayNullifyTransaction;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 use DarkGhostHunter\TransbankApi\Transbank;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class OnepayTransactionFactoryTest extends TestCase
 {
@@ -38,7 +39,7 @@ class OnepayTransactionFactoryTest extends TestCase
 
         $this->mockAdapter = \Mockery::mock(OnepayAdapter::class);
 
-        $this->onepay = new Onepay($this->mockTransbank);
+        $this->onepay = new Onepay($this->mockTransbank, new NullLogger());
         $this->onepay->setAdapter($this->mockAdapter);
     }
 

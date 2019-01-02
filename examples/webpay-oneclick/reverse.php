@@ -2,7 +2,7 @@
 
 include_once '../../vendor/autoload.php';
 
-$webpay = \DarkGhostHunter\TransbankApi\Transbank::environment()->webpay();
+$webpay = \DarkGhostHunter\TransbankApi\Transbank::make()->webpay();
 
 $result = $webpay->createReverseCharge([
     'buyOrder' => $_POST['buyOrder']

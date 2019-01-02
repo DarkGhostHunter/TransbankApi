@@ -4,6 +4,7 @@ namespace DarkGhostHunter\TransbankApi\Contracts;
 
 use DarkGhostHunter\TransbankApi\Responses\AbstractResponse;
 use DarkGhostHunter\TransbankApi\Transbank;
+use Psr\Log\LoggerInterface;
 
 /**
  * Interface TransbankServiceInterface
@@ -20,8 +21,9 @@ interface ServiceInterface
      * TransbankServiceInterface constructor.
      *
      * @param Transbank $config
+     * @param LoggerInterface $logger
      */
-    public function __construct(Transbank $config);
+    public function __construct(Transbank $config, LoggerInterface $logger);
 
     /**
      * Returns if the service is using a Production environment
@@ -72,7 +74,8 @@ interface ServiceInterface
      * Returns a new service instance using the Transbank Configuration
      *
      * @param Transbank $config
+     * @param LoggerInterface|null $logger
      * @return ServiceInterface|$this
      */
-    public static function fromConfig(Transbank $config);
+    public static function fromConfig(Transbank $config, LoggerInterface $logger = null);
 }

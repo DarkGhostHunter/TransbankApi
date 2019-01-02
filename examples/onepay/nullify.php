@@ -2,7 +2,7 @@
 
 include_once '../load.php';
 
-$onepay = DarkGhostHunter\TransbankApi\Transbank::environment()->onepay();
+$onepay = DarkGhostHunter\TransbankApi\Transbank::make()->onepay();
 
 $nullify = $onepay->makeNullify([
     'occ'                   => $_POST['occ'],
