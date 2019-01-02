@@ -166,7 +166,7 @@ class OnepayClient extends AbstractClient
     */
 
     /**
-     * Commits a Onepay WebpayClient on Transbank servers
+     * Commits a Onepay Transaction on Transbank servers
      *
      * @param OnepayTransaction $transaction
      * @return array
@@ -187,7 +187,7 @@ class OnepayClient extends AbstractClient
     }
 
     /**
-     * Confirms a Onepay WebpayClient on Transbank servers
+     * Confirms a Onepay Transaction on Transbank servers
      *
      * @param OnepayTransaction $transaction
      * @return array
@@ -208,7 +208,7 @@ class OnepayClient extends AbstractClient
     }
 
     /**
-     * Refunds a Onepay WebpayClient on Transbank servers
+     * Refunds a Onepay Transaction on Transbank servers
      *
      * @param OnepayNullifyTransaction $transaction
      * @return array
@@ -279,7 +279,7 @@ class OnepayClient extends AbstractClient
     }
 
     /**
-     * Verifies a Onepay WebpayClient Commit Response
+     * Verifies a Onepay Transaction Commit Response
      *
      * @param $response
      * @param $transaction
@@ -298,7 +298,7 @@ class OnepayClient extends AbstractClient
     }
 
     /**
-     * Verifies a Onepay WebpayClient Confirm Response
+     * Verifies a Onepay Transaction Confirm Response
      *
      * @param $response
      * @param $transaction

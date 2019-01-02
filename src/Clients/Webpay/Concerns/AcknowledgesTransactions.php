@@ -14,7 +14,7 @@ use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 trait AcknowledgesTransactions
 {
     /**
-     * Notifies WebpaySoap that the WebpayClient has been accepted
+     * Notifies Webpay that the Transaction has been accepted
      *
      * @param $transaction
      * @return object
@@ -25,7 +25,7 @@ trait AcknowledgesTransactions
     }
 
     /**
-     * Acknowledges and accepts the WebpayClient
+     * Acknowledges and accepts the Transaction
      *
      * @param $token
      * @return bool

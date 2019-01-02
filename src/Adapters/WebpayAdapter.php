@@ -124,7 +124,7 @@ class WebpayAdapter extends AbstractAdapter
     }
 
     /**
-     * Boots the WebpaySoap Processor for the transaction type
+     * Boots the correct Webpay Soap Adapter for the transaction type
      *
      * @param string $type
      * @throws ServiceSdkUnavailableException

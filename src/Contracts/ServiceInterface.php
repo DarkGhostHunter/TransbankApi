@@ -54,7 +54,7 @@ interface ServiceInterface
     public function setAdapter(AdapterInterface $adapter);
 
     /**
-     * Performs a new WebpayClient to Transbank Services and returns its Result
+     * Performs a new Transaction to Transbank Services and returns its Result
      *
      * @param TransactionInterface $transaction
      * @return AbstractResponse
@@ -62,7 +62,7 @@ interface ServiceInterface
     public function commit(TransactionInterface $transaction);
 
     /**
-     * Gets and Acknowledges a WebpayClient in Transbank
+     * Gets and Acknowledges a Transaction in Transbank
      *
      * @param $transaction
      * @param $options

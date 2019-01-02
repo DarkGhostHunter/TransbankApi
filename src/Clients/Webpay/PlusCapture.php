@@ -7,13 +7,6 @@ use DarkGhostHunter\TransbankApi\Exceptions\Webpay\InvalidSignatureException;
 use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
 use Exception;
 
-/**
- * Class PlusCapture
- *
- * This class allows the commerce to capture an transaction made through WebpaySoap
- *
- * @package DarkGhostHunter\TransbankApi\WebpaySoap
- */
 class PlusCapture extends WebpayClient
 {
     /**
@@ -55,7 +48,7 @@ class PlusCapture extends WebpayClient
     }
 
     /**
-     * Performs the WebpaySoap Capture operation
+     * Performs the Webpay Soap Capture operation
      *
      * @param $capture
      * @return array

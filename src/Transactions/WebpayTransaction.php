@@ -7,7 +7,7 @@ use DarkGhostHunter\TransbankApi\Helpers\Helpers;
 class WebpayTransaction extends AbstractTransaction
 {
     /**
-     * Set default attributes for the Item, depending on the WebpayClient type
+     * Set default attributes for the Item, depending on the Transaction type
      *
      * @param array $defaults
      */
@@ -40,7 +40,7 @@ class WebpayTransaction extends AbstractTransaction
     }
 
     /**
-     * Filter the defaults for the WebpayClient type
+     * Filter the defaults for the Transaction type
      *
      * @param string $service
      * @param array $only

@@ -207,7 +207,7 @@ class OnepayTransaction extends AbstractTransaction
     */
 
     /**
-     * Returns hoy many Items this WebpayClient has
+     * Returns how many Items this Transaction has
      *
      * @return int
      */

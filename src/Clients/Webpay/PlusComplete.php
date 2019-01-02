@@ -17,7 +17,7 @@ class PlusComplete extends WebpayClient
     protected $endpointType = 'complete';
 
     /**
-     * Initializes a transaction WebpaySoap
+     * Initializes a transaction
      *
      * @param WebpayTransaction $transaction
      * @return mixed
@@ -130,7 +130,7 @@ class PlusComplete extends WebpayClient
     }
 
     /**
-     * Acknowledges the WebpayClient result
+     * Acknowledges the Transaction result
      *
      * @param $token
      * @return bool
@@ -158,7 +158,7 @@ class PlusComplete extends WebpayClient
     }
 
     /**
-     * Performs the acknowledge to WebpaySoap, which means to accept the transaction result
+     * Performs the acknowledge to Webpay, which means to accept the transaction result
      *
      * @param $transaction
      * @return array
@@ -197,7 +197,7 @@ class PlusComplete extends WebpayClient
     }
 
     /**
-     * Initializes a transaction in WebpaySoap, returning the token transaction
+     * Initializes a transaction in Webpay, returning the token transaction
      *
      * @param $transaction
      * @return array

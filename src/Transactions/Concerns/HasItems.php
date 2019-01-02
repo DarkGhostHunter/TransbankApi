@@ -8,7 +8,7 @@ use DarkGhostHunter\TransbankApi\Transactions\Item;
 trait HasItems
 {
     /**
-     * Items in the WebpayClient
+     * Items in the Transaction
      *
      * @var array
      */

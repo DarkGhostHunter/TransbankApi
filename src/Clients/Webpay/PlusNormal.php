@@ -58,7 +58,7 @@ class PlusNormal extends WebpayClient
     }
 
     /**
-     * Commits a Normal or Mall WebpayClient into WebpaySoap
+     * Commits a Normal or Mall Transaction into Webpay
      *
      * @param WebpayTransaction $transaction
      * @return array
@@ -92,7 +92,7 @@ class PlusNormal extends WebpayClient
     }
 
     /**
-     * Obtains the WebpayClient results from Webpay Soap
+     * Obtains the Transaction results from Webpay Soap
      *
      * @param string $transaction
      * @return array
@@ -100,10 +100,10 @@ class PlusNormal extends WebpayClient
      */
     public function retrieveAndConfirm($transaction)
     {
-        // Perform the WebpayClient result
+        // Retrieve Transaction result
         $response = $this->retrieve($transaction);
 
-        // If Validation passes and the WebpayClient is Confirmed...
+        // If Validation passes and the Transaction is Confirmed...
         if ($this->validate() && $this->confirm($transaction)) {
             // Extract the results from the response and return it
             return $response;

@@ -17,7 +17,7 @@
 
 ## Dependencias
 
-Este paquete usa [Guzzle HTTP 6.0](http://docs.guzzlephp.org/en/stable/) además de la [implementación de SOAP de Luis Urrutia](https://github.com/LuisUrrutia/TransbankSoap).  
+Este paquete usa [Guzzle HTTP 6.0](http://docs.guzzlephp.org/en/stable/), [KLogger](http://codefury.net/projects/klogger/), y la [implementación de SOAP de Luis Urrutia](https://github.com/LuisUrrutia/TransbankSoap).  
 
 A su vez, este paquete necesita las siguientes extensiones de PHP habilitadas:
 
@@ -38,14 +38,14 @@ Hay tres formas para instalar el paquete: usando Composer, sin composer, y todo 
 Para usar el SDK en tu proyecto puedes usar Composer, instalándolo desde la consola:
 
 ```bash
-composer require darkghosthunter/transbank-wrapper
+composer require darkghosthunter/transbank-api
 ```
 
 También puedes añadir el SDK como dependencia a tu proyecto y luego ejecutar `composer update`.
 
 ```json
     "require": {
-        "darkghosthunter/transbank-api": "^1.0"
+        "darkghosthunter/transbank-api": "^2.0"
     }
 ```
 
@@ -78,10 +78,10 @@ Si no tienes acceso a la consola de tu servidor web, siempre puedes usar tu prop
 * Abre una ventana de consola (powershell en Windows, Terminal en MacOS, *sh en Linux) y tipea:
 
 ```bash
-directorio/de/php.exe composer.phar install --no-dev
+directorio/de/php composer.phar install --no-dev
 ```
 
-> (Si en MacOS y Unix, omite `.exe`)
+> (Si estás en Windows, usa `php.exe`)
 
 * Comprime el directorio del paquete.
 
@@ -93,9 +93,9 @@ directorio/de/php.exe composer.phar install --no-dev
 
 ## Documentación 
 
-La documentación de este paquete está [en la Wiki](https://github.com/DarkGhostHunter/transbank-wrapper/wiki).
+La documentación de este paquete está [en la Wiki](https://github.com/DarkGhostHunter/TransbankApi/wiki).
 
-La información sobre las variables de cada transacción está en [Transbank Developers](https://www.transbankdevelopers.cl). Este paquete no modifica el nombre de las variables, sin embargo en alguna versión 2.0 lo hará para mantener la homogeneidad entre transacciones.
+La información sobre las variables que necesitas para realizar cada transacción está en [Transbank Developers](https://www.transbankdevelopers.cl). Este paquete no modifica el nombre de las variables.
 
 ## Ejemplos
 

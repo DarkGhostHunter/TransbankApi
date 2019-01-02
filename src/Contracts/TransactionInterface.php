@@ -8,35 +8,36 @@ namespace DarkGhostHunter\TransbankApi\Contracts;
  * A transaction works like a resource. It holds a reference to the service object it belongs to.
  * This allows the transaction to be committed to Transbank, and save the response inside it.
  * Since all transactions share common properties and methods, the only thing differencing
- * the WebpayClient is its 'type', which should be set by the Service.
+ * the Transaction is its 'type', which should be set by the Service. Some transactions
+ * may need a different Transaction implementing this interface to better suit itself.
  *
  * @package DarkGhostHunter\TransbankApi\Contracts
  */
 interface TransactionInterface
 {
     /**
-     * Set the WebpayClient type
+     * Set the Transaction type
      *
      * @param string $type
      */
     public function setType(string $type);
 
     /**
-     * Return the WebpayClient type
+     * Return the Transaction type
      *
      * @return string
      */
     public function getType();
 
     /**
-     * Sets the Service to be used for this WebpayClient
+     * Sets the Service to be used for this Transaction
      *
      * @param ServiceInterface $service
      */
     public function setService(ServiceInterface $service);
 
     /**
-     * Returns the Service used by this WebpayClient
+     * Returns the Service used by this Transaction
      *
      * @return ServiceInterface
      */
