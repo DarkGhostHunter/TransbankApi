@@ -234,6 +234,9 @@ class AbstractServiceTest extends TestCase
 
     public function testFromConfig()
     {
+        $this->mockTransbank->shouldReceive('getLogger')
+            ->andReturn(new NullLogger());
+
         $service = $this->service::fromConfig($this->mockTransbank);
 
         $this->assertInstanceOf(Contracts\ServiceInterface::class, $service);
