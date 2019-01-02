@@ -31,7 +31,7 @@ class Transbank
     protected const INTEGRATION_ENV = 'integration';
 
     /**
-     * Available services for this Transbank wrapper
+     * Available services for this Transbank package
      *
      * @const array
      */
@@ -246,7 +246,7 @@ class Transbank
     */
 
     /**
-     * Returns or creates a WebpaySoap instance
+     * Returns or creates a Webpay instance
      *
      * @return Webpay
      * @throws Exception

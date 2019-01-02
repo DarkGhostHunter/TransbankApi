@@ -8,7 +8,7 @@ use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 class OnepayTransactionFactory extends AbstractTransactionFactory
 {
     /**
-     * Returns an instance of a WebpayClient
+     * Returns an instance of a Transaction
      *
      * @param string $type
      * @param array $attributes
@@ -28,7 +28,7 @@ class OnepayTransactionFactory extends AbstractTransactionFactory
     }
 
     /**
-     * Makes a Onepay WebpayClient, optionally with Items inside it
+     * Makes a Onepay Transaction, optionally with Items inside it
      *
      * @param array $attributes
      * @return \DarkGhostHunter\TransbankApi\Transactions\AbstractTransaction
@@ -41,7 +41,7 @@ class OnepayTransactionFactory extends AbstractTransactionFactory
     }
 
     /**
-     * Creates a Onepay WebpayClient and immediately sends it to Transbank
+     * Creates a Onepay Transaction and immediately sends it to Transbank
      *
      * @param array $attributes
      * @return \DarkGhostHunter\TransbankApi\Responses\AbstractResponse

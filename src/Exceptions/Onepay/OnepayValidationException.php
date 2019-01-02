@@ -9,6 +9,6 @@ class OnepayValidationException extends \Exception implements TransbankException
 {
     public function __construct(OnepayTransaction $transaction)
     {
-        parent::__construct("Onepay response has invalid signature. WebpayClient is as follows: \n$transaction");
+        parent::__construct("Onepay response has invalid signature. Transaction is as follows: \n$transaction");
     }
 }

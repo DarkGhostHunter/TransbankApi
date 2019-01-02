@@ -10,9 +10,9 @@ use Exception;
 /**
  * Class PlusNullify
  *
- * This class allows the commerce to nullify a WebpayClient, totally or parcially.
+ * This class allows the commerce to nullify a Transaction, totally or partially.
  *
- * @package DarkGhostHunter\TransbankApi\WebpaySoap
+ * @package DarkGhostHunter\TransbankApi\Clients\Webpay
  */
 class PlusNullify extends WebpayClient
 {
@@ -24,7 +24,7 @@ class PlusNullify extends WebpayClient
     protected $endpointType = 'commerce';
 
     /**
-     * Nulls a WebpayClient in WebpaySoap
+     * Nulls a Transaction in Webpay
      *
      * @param WebpayTransaction $transaction
      * @return mixed
@@ -34,9 +34,9 @@ class PlusNullify extends WebpayClient
     public function nullify(WebpayTransaction $transaction)
     {
         $transaction = (object)[
-            // WebpayClient Code or Capture Authorization Code
+            // Transaction Code or Capture Authorization Code
             'authorizationCode' => $transaction->authorizationCode,
-            // Authorized WebpayClient amount to null (substract), or full Capture Amount
+            // Authorized Transaction amount to null (substract), or full Capture Amount
             'authorizedAmount' => $transaction->authorizedAmount,
             'buyOrder' => $transaction->buyOrder,
             'commerceId' => $transaction->commerceCode ?? $this->credentials->commerceCode,
@@ -59,7 +59,7 @@ class PlusNullify extends WebpayClient
     }
 
     /**
-     * Performs the Nullify on WebpaySoap
+     * Performs the Nullify on Webpay
      *
      * @param $transaction
      * @return mixed

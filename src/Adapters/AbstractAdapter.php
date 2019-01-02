@@ -22,7 +22,7 @@ abstract class AbstractAdapter implements AdapterInterface
     protected $client;
 
     /**
-     * Credentials for the Service and WebpayClient
+     * Credentials for the Service and Transaction
      *
      * @var Fluent
      */

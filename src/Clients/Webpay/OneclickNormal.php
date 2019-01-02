@@ -17,7 +17,7 @@ class OneclickNormal extends WebpayClient
     protected $endpointType = 'oneclick';
 
     /**
-     * Registers the User into WebpaySoap Oneclick systems
+     * Registers the User into Webpay Oneclick systems
      *
      * @param WebpayTransaction $transaction
      * @return array
@@ -47,7 +47,7 @@ class OneclickNormal extends WebpayClient
     }
 
     /**
-     * Ends the Registration process in WebpaySoap Oneclick systems
+     * Ends the Registration process in Webpay Oneclick systems
      *
      * @param WebpayTransaction $transaction
      * @return mixed
@@ -75,7 +75,7 @@ class OneclickNormal extends WebpayClient
     }
 
     /**
-     * Unregisters (removes) an User from WebpaySoap Oneclick
+     * Unregisters (removes) an User from Webpay Oneclick
      *
      * @param WebpayTransaction $transaction
      * @return mixed
@@ -104,7 +104,7 @@ class OneclickNormal extends WebpayClient
     }
 
     /**
-     * Authorizes (charges) the WebpayClient to the User through WebpaySoap Oneclick
+     * Authorizes (charges) the Transaction to the User through Webpay Oneclick
      *
      * @param WebpayTransaction $transaction
      * @return mixed
@@ -135,7 +135,7 @@ class OneclickNormal extends WebpayClient
     }
 
     /**
-     * Reverses a WebpayClient made through WebpaySoap Oneclick
+     * Reverses a Transaction made through Webpay Oneclick
      *
      * @param WebpayTransaction $transaction
      * @return mixed
@@ -164,7 +164,7 @@ class OneclickNormal extends WebpayClient
     }
 
     /**
-     * Registers the User in WebpaySoap Oneclick systems
+     * Registers the User in Webpay Oneclick systems
      *
      * @param $register
      * @return mixed
@@ -190,7 +190,7 @@ class OneclickNormal extends WebpayClient
     }
 
     /**
-     * Removes a User from WebpaySoap systems
+     * Removes a User from Webpay systems
      *
      * @param $unregister
      * @return mixed
@@ -216,7 +216,7 @@ class OneclickNormal extends WebpayClient
     }
 
     /**
-     * Performs a Reverse in WebpaySoap
+     * Performs a Reverse in Webpay
      *
      * @param $reverse
      * @return mixed

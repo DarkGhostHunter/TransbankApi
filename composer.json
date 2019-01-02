@@ -5,8 +5,7 @@
     "payments",
     "transbank",
     "api",
-    "sdk",
-    "wrapper"
+    "sdk"
   ],
   "authors": [
     {

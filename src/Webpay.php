@@ -15,7 +15,7 @@ use DarkGhostHunter\TransbankApi\TransactionFactories\WebpayTransactionFactory;
 use Throwable;
 
 /**
- * Class WebpaySoap
+ * Class Webpay
  * @package DarkGhostHunter\TransbankApi
  * 
  * @method Transactions\WebpayTransaction       makeNormal(array $attributes = [])
@@ -68,7 +68,7 @@ use Throwable;
 class Webpay extends AbstractService
 {
     /**
-     * Name of the default WebpaySoap Public Certificate
+     * Name of the default Webpay Public Certificate
      *
      * @const string
      */
@@ -105,7 +105,7 @@ class Webpay extends AbstractService
     }
 
     /**
-     * Instantiates (and/or boots) the WebpayClient Factory for the Service
+     * Instantiates (and/or boots) the Transaction Factory for the Service
      *
      * @return void
      */
@@ -143,7 +143,7 @@ class Webpay extends AbstractService
     }
 
     /**
-     * Retrieve the Integration Credentials depending on the WebpayClient type
+     * Retrieve the Integration Credentials depending on the Transaction type
      *
      * @param string $type
      * @return array
@@ -177,7 +177,7 @@ class Webpay extends AbstractService
     }
 
     /**
-     * Returns the WebpaySoap Public Certificate depending on the environment
+     * Returns the Webpay Public Certificate depending on the environment
      *
      * @return bool|string
      */
@@ -240,7 +240,7 @@ class Webpay extends AbstractService
     }
 
     /**
-     * Retrieves a WebpayClient
+     * Retrieves a Transaction
      *
      * @param $transaction
      * @param $type
@@ -260,7 +260,7 @@ class Webpay extends AbstractService
     }
 
     /**
-     * Confirms a WebpayClient
+     * Confirms a Transaction
      *
      * @param $transaction
      * @param $type

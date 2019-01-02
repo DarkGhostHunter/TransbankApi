@@ -33,7 +33,7 @@ class Onepay extends AbstractService
     protected const PRODUCTION_KEYS = 'production/onepay-keys.php';
 
     /**
-     * WebpayClient Factory to use for forwarding calls
+     * Transaction Factory to use for forwarding calls
      *
      * @example \DarkGhostHunter\TransbankApi\Clients\Webpay\AbstractTransactionFactory::class
      * @var string
@@ -68,7 +68,7 @@ class Onepay extends AbstractService
     }
 
     /**
-     * Instantiates (and/or boots) the WebpayClient Factory for the Service
+     * Instantiates (and/or boots) the Transaction Factory for the Service
      *
      * @return void
      */
@@ -115,7 +115,7 @@ class Onepay extends AbstractService
     */
 
     /**
-     * Gets and Acknowledges a WebpayClient in Transbank
+     * Gets and Acknowledges a Transaction in Transbank
      *
      * @param $transaction
      * @param $options
@@ -145,7 +145,7 @@ class Onepay extends AbstractService
     {
         $response = new OnepayResponse($result);
 
-        // Set the type of the WebpayClient where this response belongs
+        // Set the type of the Transaction where this response belongs
         $response->setType($options);
 
         // Set the status of the Response

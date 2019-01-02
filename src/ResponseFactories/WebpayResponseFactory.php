@@ -11,7 +11,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
     */
 
     /**
-     * Retrieves and Confirms a Webpay Plus Normal WebpayClient
+     * Retrieves and Confirms a Webpay Plus Normal Transaction
      *
      * @param string $transaction
      * @return \DarkGhostHunter\TransbankApi\Contracts\ResponseInterface|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
@@ -23,7 +23,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
     }
 
     /**
-     * Retrieves a Webpay Plus Normal WebpayClient
+     * Retrieves a Webpay Plus Normal Transaction
      *
      * @param string $transaction
      * @return \DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
@@ -34,7 +34,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
     }
 
     /**
-     * Confirms a Webpay Plus Normal WebpayClient
+     * Confirms a Webpay Plus Normal Transaction
      *
      * @param string $transaction
      * @return \DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
@@ -51,7 +51,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
     */
 
     /**
-     * Retrieves and Confirms a Webpay Plus Mall Normal WebpayClient
+     * Retrieves and Confirms a Webpay Plus Mall Normal Transaction
      *
      * @param string $transaction
      * @return \DarkGhostHunter\TransbankApi\Contracts\ResponseInterface|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse
@@ -63,7 +63,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
     }
 
     /**
-     * Retrieves a Webpay Plus Mall Normal WebpayClient
+     * Retrieves a Webpay Plus Mall Normal Transaction
      *
      * @param string $transaction
      * @return \DarkGhostHunter\TransbankApi\Contracts\ResponseInterface|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse
@@ -74,7 +74,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
     }
 
     /**
-     * Confirms a Webpay Plus Mall Normal WebpayClient
+     * Confirms a Webpay Plus Mall Normal Transaction
      *
      * @param string $transaction
      * @return \DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
@@ -91,7 +91,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
     */
 
     /**
-     * Retrieves and Confirms a Webpay Plus Deferred WebpayClient
+     * Retrieves and Confirms a Webpay Plus Deferred Transaction
      *
      * @param string $transaction
      * @return \DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
@@ -103,7 +103,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
     }
 
     /**
-     * Retrieves a Webpay Plus Deferred WebpayClient
+     * Retrieves a Webpay Plus Deferred Transaction
      *
      * @param string $transaction
      * @return \DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse|\DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse
@@ -114,7 +114,7 @@ class WebpayResponseFactory extends AbstractResponseFactory
     }
 
     /**
-     * Confirms a Webpay Plus Deferred WebpayClient
+     * Confirms a Webpay Plus Deferred Transaction
      *
      * @param string $transaction
      * @return \DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse

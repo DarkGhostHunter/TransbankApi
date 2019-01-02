@@ -14,7 +14,7 @@ use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 trait RetrievesResults
 {
     /**
-     * Returns the WebpayClient results
+     * Returns the Transaction results
      *
      * @param string $transaction
      * @return array
