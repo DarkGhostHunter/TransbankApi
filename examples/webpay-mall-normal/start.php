@@ -2,7 +2,7 @@
 
 include_once '../../vendor/autoload.php';
 
-$webpay = DarkGhostHunter\TransbankApi\Transbank::environment()->webpay();
+$webpay = DarkGhostHunter\TransbankApi\Transbank::make()->webpay();
 
 $result = $webpay->createMallNormal([
     'returnUrl' => 'http://localhost:8080/webpay-mall-normal/return.php',

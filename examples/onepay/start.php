@@ -2,7 +2,7 @@
 
 include_once '../load.php';
 
-$transbank = DarkGhostHunter\TransbankApi\Transbank::environment();
+$transbank = DarkGhostHunter\TransbankApi\Transbank::make();
 
 $transbank->setDefaults('onepay', [
     'channel'               => 'web',

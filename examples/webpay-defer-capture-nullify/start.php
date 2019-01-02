@@ -2,7 +2,7 @@
 
 include_once '../../vendor/autoload.php';
 
-$webpay = DarkGhostHunter\TransbankApi\Transbank::environment()->webpay();
+$webpay = DarkGhostHunter\TransbankApi\Transbank::make()->webpay();
 
 $result = $webpay->createDefer([
     'returnUrl' => 'http://localhost:8080/webpay-defer-capture-nullify/return.php',
