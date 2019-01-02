@@ -11,6 +11,8 @@ use DarkGhostHunter\TransbankApi\ResponseFactories\AbstractResponseFactory;
 use DarkGhostHunter\TransbankApi\TransactionFactories\AbstractTransactionFactory;
 use Exception;
 use BadMethodCallException;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Class AbstractService
@@ -69,6 +71,13 @@ abstract class AbstractService implements ServiceInterface
      */
     protected $responseFactory;
 
+    /**
+     * Logger
+     *
+     * @var LoggerInterface
+     */
+    protected $logger;
+
     /*
     |--------------------------------------------------------------------------
     | Construct
@@ -79,11 +88,12 @@ abstract class AbstractService implements ServiceInterface
      * Abstract Service constructor.
      *
      * @param Transbank $transbankConfig
-     * @throws \Exception
+     * @param LoggerInterface $logger
      */
-    public function __construct(Transbank $transbankConfig)
+    public function __construct(Transbank $transbankConfig, LoggerInterface $logger)
     {
         $this->transbankConfig = $transbankConfig;
+        $this->logger = $logger;
 
         $this->defaults = $this->getDefaults();
         $this->credentials = $this->getCredentials();
@@ -251,7 +261,9 @@ abstract class AbstractService implements ServiceInterface
     public function commit(TransactionInterface $transaction)
     {
         // Set the correct adapter credentials
-        $this->setAdapterCredentials($transaction->getType());
+        $this->setAdapterCredentials($type = $transaction->getType());
+
+        $this->logger->info("Getting [$type]: $transaction");
 
         // Commit the transaction to the adapter
         return $this->parseResponse(
@@ -272,10 +284,32 @@ abstract class AbstractService implements ServiceInterface
         // Set the correct adapter credentials
         $this->setAdapterCredentials($options);
 
+        $this->logger->info("Getting [$options]: " . json_encode($transaction));
+
         return $this->parseResponse(
             $this->adapter->retrieveAndConfirm($transaction, $options),
             $options
         );
+    }
+
+    /**
+     * Get the Logger
+     *
+     * @return LoggerInterface
+     */
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    /**
+     * Set the Logger
+     *
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
     }
 
     /*
@@ -348,11 +382,11 @@ abstract class AbstractService implements ServiceInterface
      * Returns a new service instance using the Transbank Configuration
      *
      * @param Transbank $config
+     * @param LoggerInterface|null $logger
      * @return AbstractService|$this
-     * @throws \Exception
      */
-    public static function fromConfig(Transbank $config)
+    public static function fromConfig(Transbank $config, LoggerInterface $logger = null)
     {
-        return new static($config);
+        return new static($config, $logger ?? new NullLogger());
     }
 }

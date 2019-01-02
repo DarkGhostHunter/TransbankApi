@@ -20,9 +20,7 @@ class AbstractTransactionTest extends TestCase
         $this->mockService = \Mockery::mock(AbstractService::class);
 
         $this->transaction = new class extends AbstractTransaction {};
-
     }
-
 
     public function testGetAndSetService()
     {

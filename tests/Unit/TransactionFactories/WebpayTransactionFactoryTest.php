@@ -12,6 +12,7 @@ use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
 use DarkGhostHunter\TransbankApi\Transbank;
 use DarkGhostHunter\TransbankApi\Webpay;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class WebpayTransactionFactoryTest extends TestCase
 {
@@ -39,7 +40,7 @@ class WebpayTransactionFactoryTest extends TestCase
 
         $this->mockAdapter = \Mockery::mock(WebpayAdapter::class);
 
-        $this->webpay = new Webpay($this->mockTransbank);
+        $this->webpay = new Webpay($this->mockTransbank, new NullLogger());
         $this->webpay->setAdapter($this->mockAdapter);
     }
 

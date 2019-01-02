@@ -251,6 +251,8 @@ class Webpay extends AbstractService
         // Set the correct adapter credentials
         $this->setAdapterCredentials($type);
 
+        $this->logger->info("Retrieving [$type]: $transaction");
+
         return $this->parseResponse(
             $this->adapter->retrieve($transaction, $type),
             $type
@@ -268,6 +270,8 @@ class Webpay extends AbstractService
     {
         // Set the correct adapter credentials
         $this->setAdapterCredentials($type);
+
+        $this->logger->info("Confirming [$type]: $transaction");
 
         $response = $this->adapter->confirm($transaction, $type);
 

@@ -17,7 +17,7 @@ class OnepayIntegrationTransactionsTest extends TestCase
 
     protected function setUp() : void
     {
-        $transbank = Transbank::environment();
+        $transbank = Transbank::make('integration');
 
         $transbank->setDefaults('onepay', [
             'channel'               => 'mobile',
@@ -26,9 +26,7 @@ class OnepayIntegrationTransactionsTest extends TestCase
             'appScheme'             => 'my-app://onepay/result',
         ]);
 
-        $this->onepay = Onepay::fromConfig(
-            $transbank
-        );
+        $this->onepay = Onepay::fromConfig($transbank);
     }
 
     public function testCreatesCartInTransbank()

@@ -18,7 +18,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
 
     protected function setUp()
     {
-        $transbank = Transbank::environment();
+        $transbank = Transbank::make('integration');
 
         $transbank->setDefaults('webpay', [
             'plusReturnUrl'         => 'http://app.com/webpay/result',

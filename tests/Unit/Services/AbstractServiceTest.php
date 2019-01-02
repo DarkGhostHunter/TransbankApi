@@ -10,6 +10,8 @@ use DarkGhostHunter\TransbankApi\TransactionFactories\AbstractTransactionFactory
 use DarkGhostHunter\TransbankApi\Transactions\AbstractTransaction;
 use DarkGhostHunter\TransbankApi\Transbank;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 class AbstractServiceTest extends TestCase
 {
@@ -17,12 +19,17 @@ class AbstractServiceTest extends TestCase
     /** @var AbstractService */
     protected $service;
 
+    /** @var LoggerInterface&\Mockery\MockInterface */
+    protected $mockLogger;
+
     /** @var Transbank&\Mockery\MockInterface */
     protected $mockTransbank;
 
     protected function setUp()
     {
         $this->mockTransbank = \Mockery::mock(Transbank::class);
+
+        $this->mockLogger = \Mockery::mock(LoggerInterface::class);
 
         $this->mockTransbank->shouldReceive('getDefaults')
             ->once()
@@ -36,7 +43,7 @@ class AbstractServiceTest extends TestCase
                 'baz' => 'qux'
             ]);
 
-        $this->service = new class ($this->mockTransbank) extends AbstractService {
+        $this->service = new class ($this->mockTransbank, $this->mockLogger) extends AbstractService {
             public function bootAdapter() {}
             public function bootTransactionFactory() {}
             protected function getProductionCredentials() {
@@ -103,6 +110,10 @@ class AbstractServiceTest extends TestCase
         $mockAdapter->shouldReceive('commit')
             ->andReturn(['baz' => 'qux']);
 
+        $this->mockLogger->shouldReceive('info')
+            ->with(\Mockery::type('string'))
+            ->andReturnNull();
+
         $this->mockTransbank->shouldReceive('isProduction')->once()
             ->andReturnFalse();
 
@@ -123,6 +134,16 @@ class AbstractServiceTest extends TestCase
 
     }
 
+    public function testSetAndGetLogger()
+    {
+        $mockLogger = new class extends NullLogger {
+            public function foo() { return 'bar'; }
+        };
+
+        $this->service->setLogger($mockLogger);
+        $this->assertEquals('bar', $this->service->getLogger()->foo());
+    }
+
     public function testGetTransaction()
     {
         $mockAdapter = \Mockery::mock(Contracts\AdapterInterface::class);
@@ -133,6 +154,10 @@ class AbstractServiceTest extends TestCase
         $mockAdapter->shouldReceive('retrieveAndConfirm')->once()
             ->with(\Mockery::type('string'), \Mockery::type('string'))
             ->andReturn(['baz' => 'qux']);
+
+        $this->mockLogger->shouldReceive('info')
+            ->with(\Mockery::type('string'))
+            ->andReturnNull();
 
         $this->mockTransbank->shouldReceive('isProduction')->once()
             ->andReturnFalse();

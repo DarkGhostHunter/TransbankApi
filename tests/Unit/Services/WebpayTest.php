@@ -12,6 +12,8 @@ use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
 use DarkGhostHunter\TransbankApi\Transbank;
 use DarkGhostHunter\TransbankApi\Webpay;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 class WebpayTest extends TestCase
 {
@@ -23,6 +25,9 @@ class WebpayTest extends TestCase
 
     /** @var WebpayAdapter&\Mockery\MockInterface */
     protected $mockAdapter;
+
+    /** @var LoggerInterface&\Mockery\MockInterface */
+    protected $mockLogger;
 
     protected function setUp()
     {
@@ -46,7 +51,9 @@ class WebpayTest extends TestCase
         $this->mockAdapter->shouldReceive('setCredentials')
             ->andReturn(['foo' => 'bar']);
 
-        $this->webpay = new Webpay($this->mockTransbank);
+        $this->mockLogger = \Mockery::mock(LoggerInterface::class);
+
+        $this->webpay = new Webpay($this->mockTransbank, $this->mockLogger);
 
         $this->webpay->setAdapter($this->mockAdapter);
     }
@@ -60,6 +67,10 @@ class WebpayTest extends TestCase
                     'foo' => 'bar'
                 ]);
             });
+
+        $this->mockLogger->shouldReceive('info')
+            ->with(\Mockery::type('string'))
+            ->andReturnNull();
 
         $transaction = $this->webpay->getTransaction('mock-transaction', 'mock-type');
 
@@ -84,6 +95,10 @@ class WebpayTest extends TestCase
                 ]);
             });
 
+        $this->mockLogger->shouldReceive('info')
+            ->with(\Mockery::type('string'))
+            ->andReturnNull();
+
         $transaction = $this->webpay->retrieveTransaction('mock-transaction', 'mock-type');
 
         $this->assertInstanceOf(AbstractResponse::class, $transaction);
@@ -96,6 +111,10 @@ class WebpayTest extends TestCase
             ->once()
             ->with('mock-transaction', 'mock-type')
             ->andReturnTrue();
+
+        $this->mockLogger->shouldReceive('info')
+            ->with(\Mockery::type('string'))
+            ->andReturnNull();
 
         $transaction = $this->webpay->confirmTransaction('mock-transaction', 'mock-type');
 
@@ -133,7 +152,7 @@ class WebpayTest extends TestCase
         $adapter->shouldReceive('retrieveAndConfirm')
             ->andReturn(['foo' => 'bar']);
 
-        $webpay = new Webpay($transbank);
+        $webpay = new Webpay($transbank, new NullLogger());
 
         $webpay->setAdapter($adapter);
 
@@ -175,7 +194,7 @@ class WebpayTest extends TestCase
         $adapter->shouldReceive('retrieveAndConfirm')
             ->andReturn(['foo' => 'bar']);
 
-        $webpay = new Webpay($transbank);
+        $webpay = new Webpay($transbank, new NullLogger());
 
         $webpay->setAdapter($adapter);
 
