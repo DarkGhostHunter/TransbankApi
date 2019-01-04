@@ -11,7 +11,7 @@ php:
 
 env:
   global:
-    - CC_TEST_REPORTER_ID=4d12b9a040db790caffa948a34301f4a980f720cbbee3b6992ff3356f267e994
+    - CC_TEST_REPORTER_ID=e24fa0125ad35d500e1bafa57fb3237790ab2b4ff732fcd4970361df773ac93f
 
 
 before_script:

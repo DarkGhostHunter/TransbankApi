@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Transactions\Concerns;
 
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Transactions\AbstractTransaction;
 use DarkGhostHunter\TransbankApi\Transactions\Concerns\HasItems;
 use DarkGhostHunter\TransbankApi\Transactions\Item;

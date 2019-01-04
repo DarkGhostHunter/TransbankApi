@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Transbank;
 
+use DarkGhostHunter\Fluid\Fluid;
 use DarkGhostHunter\TransbankApi\Exceptions\Credentials\CredentialInvalidException;
 use DarkGhostHunter\TransbankApi\Exceptions\Transbank\InvalidServiceException;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Onepay;
 use DarkGhostHunter\TransbankApi\Transbank;
 use DarkGhostHunter\TransbankApi\Webpay;
@@ -97,7 +97,7 @@ class TransbankTest extends TestCase
     {
         $this->transbank->setCredentials('webpay', $array = ['foo' => 'bar']);
 
-        $this->assertInstanceOf(Fluent::class, $this->transbank->getCredentials('webpay'));
+        $this->assertInstanceOf(Fluid::class, $this->transbank->getCredentials('webpay'));
         $this->assertEquals('bar', $this->transbank->getCredentials('webpay')->foo);
 
         $this->assertNull($this->transbank->getCredentials('anyService'));

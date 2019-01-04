@@ -2,7 +2,7 @@
 
 namespace DarkGhostHunter\TransbankApi\Concerns;
 
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
+use DarkGhostHunter\Fluid\Fluid;
 use DarkGhostHunter\TransbankApi\Helpers\Helpers;
 
 trait HasCredentialOperations
@@ -49,7 +49,7 @@ trait HasCredentialOperations
     protected function setAdapterCredentials(string $type = null)
     {
         $this->adapter->setCredentials(
-            new Fluent(
+            new Fluid(
                 array_merge(
                     $this->isProduction()
                         ? $this->getProductionCredentials()

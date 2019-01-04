@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Clients\Webpay;
 
+use DarkGhostHunter\Fluid\Fluid;
 use DarkGhostHunter\TransbankApi\Clients\Webpay\WebpayClient;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use PHPUnit\Framework\TestCase;
 
 class WebpayClientTest extends TestCase
@@ -11,7 +11,7 @@ class WebpayClientTest extends TestCase
 
     public function testBoot()
     {
-        $client = new class(true, new Fluent(['privateKey' => 'foo', 'publicCert' => 'bar'])) extends WebpayClient {
+        $client = new class(true, new Fluid(['privateKey' => 'foo', 'publicCert' => 'bar'])) extends WebpayClient {
             protected $endpointType = 'webpay';
         };
 
@@ -26,7 +26,7 @@ class WebpayClientTest extends TestCase
 
     public function testEndpointType()
     {
-        $client = new class(true, new Fluent(['foo' => 'bar'])) extends WebpayClient {};
+        $client = new class(true, new Fluid(['foo' => 'bar'])) extends WebpayClient {};
 
         $this->assertNull($client->getEndpointType());
         $client->setEndpointType('foo');

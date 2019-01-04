@@ -2,13 +2,11 @@
 
 namespace Tests\Unit\Services;
 
+use DarkGhostHunter\Fluid\Fluid;
 use DarkGhostHunter\TransbankApi\Adapters\WebpayAdapter;
 use DarkGhostHunter\TransbankApi\Exceptions\Credentials\CredentialsNotReadableException;
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\TransactionTypeNullException;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
-use DarkGhostHunter\TransbankApi\Helpers\Helpers;
 use DarkGhostHunter\TransbankApi\Responses\AbstractResponse;
-use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
 use DarkGhostHunter\TransbankApi\Transbank;
 use DarkGhostHunter\TransbankApi\Webpay;
 use PHPUnit\Framework\TestCase;
@@ -38,7 +36,7 @@ class WebpayTest extends TestCase
 
         $this->mockTransbank->shouldReceive('getCredentials')->once()
             ->with('webpay')
-            ->andReturn(new Fluent([ 'baz' => 'qux' ]));
+            ->andReturn(new Fluid([ 'baz' => 'qux' ]));
 
         $this->mockTransbank->shouldReceive('isProduction')->once()
             ->andReturnTrue();

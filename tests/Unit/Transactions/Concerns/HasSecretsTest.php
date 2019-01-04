@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Transactions\Concerns;
 
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
+use DarkGhostHunter\Fluid\Fluid;
 use DarkGhostHunter\TransbankApi\Helpers\Helpers;
 use DarkGhostHunter\TransbankApi\Transactions\Concerns\HasSecrets;
 use PHPUnit\Framework\TestCase;
@@ -10,12 +10,12 @@ use PHPUnit\Framework\TestCase;
 class HasSecretsTest extends TestCase
 {
 
-    /** @var Fluent&HasSecrets */
+    /** @var Fluid&HasSecrets */
     protected $fluent;
 
     protected function setUp()
     {
-        $this->fluent = new class extends Fluent {
+        $this->fluent = new class extends Fluid {
             use HasSecrets;
             protected $attributes = [
                 'foo' => 'bar',

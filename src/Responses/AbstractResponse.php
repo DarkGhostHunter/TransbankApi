@@ -2,10 +2,10 @@
 
 namespace DarkGhostHunter\TransbankApi\Responses;
 
+use DarkGhostHunter\Fluid\Fluid;
 use DarkGhostHunter\TransbankApi\Contracts\ResponseInterface;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 
-abstract class AbstractResponse extends Fluent implements ResponseInterface
+abstract class AbstractResponse extends Fluid implements ResponseInterface
 {
     /**
      * File where all the error codes translation reside

@@ -6,7 +6,6 @@ use DarkGhostHunter\TransbankApi\Clients\AbstractClient;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayClientException;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayResponseException;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayValidationException;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayNullifyTransaction;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 use GuzzleHttp\Client;

@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Clients;
 
+use DarkGhostHunter\Fluid\Fluid;
 use DarkGhostHunter\TransbankApi\Clients\AbstractClient;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use PHPUnit\Framework\TestCase;
 
 class AbstractClientTest extends TestCase
@@ -14,7 +14,7 @@ class AbstractClientTest extends TestCase
 
     protected function setUp()
     {
-        $this->client = new class(true, new Fluent(['foo' => 'bar'])) extends AbstractClient {
+        $this->client = new class(true, new Fluid(['foo' => 'bar'])) extends AbstractClient {
             protected function boot() {}
         };
     }

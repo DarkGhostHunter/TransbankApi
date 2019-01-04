@@ -2,7 +2,7 @@
 
 namespace DarkGhostHunter\TransbankApi\Clients;
 
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
+use DarkGhostHunter\Fluid\Fluid;
 
 abstract class AbstractClient
 {
@@ -16,7 +16,7 @@ abstract class AbstractClient
     /**
      * Credentials for the Service Client
      *
-     * @var Fluent
+     * @var Fluid
      */
     protected $credentials;
 
@@ -31,9 +31,9 @@ abstract class AbstractClient
      * Connector constructor.
      *
      * @param bool $isProduction
-     * @param Fluent $credentials
+     * @param Fluid $credentials
      */
-    public function __construct(bool $isProduction, Fluent $credentials)
+    public function __construct(bool $isProduction, Fluid $credentials)
     {
         $this->isProduction = $isProduction;
         $this->credentials = $credentials;

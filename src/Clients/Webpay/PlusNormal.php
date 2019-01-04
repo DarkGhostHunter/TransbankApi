@@ -67,7 +67,7 @@ class PlusNormal extends WebpayClient
      */
     public function commit(WebpayTransaction $transaction)
     {
-        // Create a normal transaction using the Fluent Helper
+        // Create a normal transaction using the Fluid Helper
         $commit = $this->makeCommit([
             'wSTransactionType'     => 'TR_NORMAL_WS',
             'sessionId'             => $transaction->sessionId,

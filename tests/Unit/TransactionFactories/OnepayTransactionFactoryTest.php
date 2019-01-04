@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\TransactionFactories;
 
+use DarkGhostHunter\Fluid\Fluid;
 use DarkGhostHunter\TransbankApi\Adapters\OnepayAdapter;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Onepay;
 use DarkGhostHunter\TransbankApi\Responses\OnepayResponse;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayNullifyTransaction;
@@ -31,7 +31,7 @@ class OnepayTransactionFactoryTest extends TestCase
             ->andReturn(['foo' => 'bar']);
         $this->mockTransbank->shouldReceive('getCredentials')->once()
             ->with('onepay')
-            ->andReturn(new Fluent(['foo' => 'bar']));
+            ->andReturn(new Fluid(['foo' => 'bar']));
         $this->mockTransbank->shouldReceive('isProduction')->once()
             ->andReturnTrue();
         $this->mockTransbank->shouldReceive('getEnvironment')

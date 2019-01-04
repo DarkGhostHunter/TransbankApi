@@ -2,7 +2,7 @@
 
 namespace DarkGhostHunter\TransbankApi;
 
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
+use DarkGhostHunter\Fluid\Fluid;
 use Exception;
 use DarkGhostHunter\TransbankApi\Exceptions\Credentials\CredentialInvalidException;
 use DarkGhostHunter\TransbankApi\Exceptions\Transbank\InvalidServiceException;
@@ -145,7 +145,7 @@ class Transbank
      * Gets a Service credentials
      *
      * @param string $service
-     * @return Fluent|null
+     * @return Fluid|null
      */
     public function getCredentials(string $service)
     {
@@ -174,7 +174,7 @@ class Transbank
             }
         }
 
-        $this->servicesCredentials[$service] = new Fluent($credentials);
+        $this->servicesCredentials[$service] = new Fluid($credentials);
 
     }
 

@@ -43,7 +43,7 @@ abstract class AbstractService implements ServiceInterface
     /**
      * Credentials to use with the Adapter
      *
-     * @var \DarkGhostHunter\TransbankApi\Helpers\Fluent
+     * @var \DarkGhostHunter\Fluid\Fluid
      */
     protected $credentials;
 

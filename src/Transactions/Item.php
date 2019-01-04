@@ -2,9 +2,9 @@
 
 namespace DarkGhostHunter\TransbankApi\Transactions;
 
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
+use DarkGhostHunter\Fluid\Fluid;
 
-class Item extends Fluent
+class Item extends Fluid
 {
     // ...
 }

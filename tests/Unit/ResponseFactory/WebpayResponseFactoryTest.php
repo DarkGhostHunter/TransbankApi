@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\ResponseFactory;
 
+use DarkGhostHunter\Fluid\Fluid;
 use DarkGhostHunter\TransbankApi\Adapters\WebpayAdapter;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Responses\WebpayOneclickResponse;
 use DarkGhostHunter\TransbankApi\Responses\WebpayPlusMallResponse;
 use DarkGhostHunter\TransbankApi\Responses\WebpayPlusResponse;
@@ -31,7 +31,7 @@ class WebpayResponseFactoryTest extends TestCase
             ->andReturn(['foo' => 'bar']);
         $this->mockTransbank->shouldReceive('getCredentials')->once()
             ->with('webpay')
-            ->andReturn(new Fluent(['foo' => 'bar']));
+            ->andReturn(new Fluid(['foo' => 'bar']));
         $this->mockTransbank->shouldReceive('isProduction')->once()
             ->andReturnTrue();
         $this->mockTransbank->shouldReceive('getEnvironment')
