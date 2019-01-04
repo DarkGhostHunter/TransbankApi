@@ -2,15 +2,14 @@
 
 namespace Tests\Unit\Clients\Onepay;
 
+use DarkGhostHunter\Fluid\Fluid;
 use DarkGhostHunter\TransbankApi\Clients\Onepay\OnepayClient;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayClientException;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayResponseException;
 use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayValidationException;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayNullifyTransaction;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -24,7 +23,7 @@ class OnepayClientTest extends TestCase
 
     protected function setUp()
     {
-        $this->client = new OnepayClient(false, new Fluent([
+        $this->client = new OnepayClient(false, new Fluid([
             'appKey' => 'test-app',
             'apiKey' => 'test-key',
             'secret' => 'test-secret',

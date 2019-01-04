@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\Clients\Webpay;
 
+use DarkGhostHunter\Fluid\Fluid;
 use DarkGhostHunter\TransbankApi\Clients\Webpay\PlusNormal;
 use DarkGhostHunter\TransbankApi\Clients\Webpay\SoapImplementation;
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException;
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\InvalidSignatureException;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
 use LuisUrrutia\TransbankSoap\Validation;
 use PHPUnit\Framework\TestCase;
@@ -29,7 +29,7 @@ class PlusNormalTest extends TestCase
 
     protected function setUp()
     {
-        $this->client = new PlusNormal(true, new Fluent(['privateKey' => 'foo', 'publicCert' => 'bar']));
+        $this->client = new PlusNormal(true, new Fluid(['privateKey' => 'foo', 'publicCert' => 'bar']));
 
         $this->client->boot();
 
@@ -48,7 +48,7 @@ class PlusNormalTest extends TestCase
         $this->mockConnector
             ->expects('getTransactionResult')
             ->with(\Mockery::type('object'))
-            ->andReturnUsing(function (Fluent $fluent) {
+            ->andReturnUsing(function (Fluid $fluent) {
                 $this->assertEquals('test-confirm', $fluent->tokenInput);
                 return (object)['return' => ['foo' => 'bar']];
             });
@@ -76,7 +76,7 @@ class PlusNormalTest extends TestCase
         $this->mockConnector
             ->expects('getTransactionResult')
             ->with(\Mockery::type('object'))
-            ->andReturnUsing(function (Fluent $fluent) {
+            ->andReturnUsing(function (Fluid $fluent) {
                 $this->assertEquals('test-confirm', $fluent->tokenInput);
                 return (object)['return' => ['foo' => 'bar']];
             });

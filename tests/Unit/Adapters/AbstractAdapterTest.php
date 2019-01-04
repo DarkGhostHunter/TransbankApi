@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Adapters;
 
+use DarkGhostHunter\Fluid\Fluid;
 use DarkGhostHunter\TransbankApi\Adapters\AbstractAdapter;
 use DarkGhostHunter\TransbankApi\Contracts\TransactionInterface;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use PHPUnit\Framework\TestCase;
 
 class AbstractAdapterTest extends TestCase
@@ -28,14 +28,14 @@ class AbstractAdapterTest extends TestCase
 
     public function testSetAndGetClient()
     {
-        $this->adapter->setClient(new Fluent(['foo' => 'bar']));
+        $this->adapter->setClient(new Fluid(['foo' => 'bar']));
 
         $this->assertEquals('bar', $this->adapter->getClient()->foo);
     }
 
     public function testSetCredentials()
     {
-        $this->adapter->setCredentials(new Fluent(['foo' => 'bar']));
+        $this->adapter->setCredentials(new Fluid(['foo' => 'bar']));
 
         $this->assertEquals('bar', $this->adapter->getCredentials()->foo);
     }

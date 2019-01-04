@@ -2,12 +2,12 @@
 
 namespace DarkGhostHunter\TransbankApi\Transactions;
 
+use DarkGhostHunter\Fluid\Fluid;
 use DarkGhostHunter\TransbankApi\AbstractService;
 use DarkGhostHunter\TransbankApi\Contracts\ServiceInterface;
 use DarkGhostHunter\TransbankApi\Contracts\TransactionInterface;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 
-abstract class AbstractTransaction extends Fluent implements TransactionInterface
+abstract class AbstractTransaction extends Fluid implements TransactionInterface
 {
     /**
      * Service this Transaction uses
@@ -70,7 +70,7 @@ abstract class AbstractTransaction extends Fluent implements TransactionInterfac
      */
     public function setDefaults(array $defaults)
     {
-        $this->attributes = array_merge($defaults, $this->attributes);
+        $this->attributes = array_merge($defaults, $this->attributes ?? []);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace DarkGhostHunter\TransbankApi\Clients\Webpay\Concerns;
 
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
+use DarkGhostHunter\Fluid\Fluid;
 
 /**
  * Trait RetrievesResults
@@ -22,7 +22,7 @@ trait RetrievesResults
     public function retrieve(string $transaction)
     {
         return (array)($this->connector->getTransactionResult(
-            new Fluent([
+            new Fluid([
                 'tokenInput' => $transaction
             ])
         ))->return;

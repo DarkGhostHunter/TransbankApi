@@ -3,9 +3,7 @@
 namespace DarkGhostHunter\TransbankApi\Clients\Webpay;
 
 use DarkGhostHunter\TransbankApi\Clients\AbstractClient;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use LuisUrrutia\TransbankSoap\Validation;
-use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException;
 use SoapClient;
 
 abstract class WebpayClient extends AbstractClient

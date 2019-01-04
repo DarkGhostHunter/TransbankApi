@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\Adapters;
 
+use DarkGhostHunter\Fluid\Fluid;
 use DarkGhostHunter\TransbankApi\Adapters\OnepayAdapter;
 use DarkGhostHunter\TransbankApi\Clients\AbstractClient;
 use DarkGhostHunter\TransbankApi\Clients\Onepay\OnepayClient;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayNullifyTransaction;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +28,7 @@ class OnepayAdapterTest extends TestCase
         $this->adapter = new OnepayAdapter();
 
         $this->client = \Mockery::mock(AbstractClient::class, [
-            true, new Fluent(['foo' => 'bar'])
+            true, new Fluid(['foo' => 'bar'])
         ]);
 
         $this->adapter->setClient($this->client);

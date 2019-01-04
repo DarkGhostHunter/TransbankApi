@@ -2,7 +2,7 @@
 
 namespace DarkGhostHunter\TransbankApi\Contracts;
 
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
+use DarkGhostHunter\Fluid\Fluid;
 
 /**
  * Interface AdapterInterface
@@ -18,10 +18,10 @@ interface AdapterInterface
     /**
      * Sets credentials to use against Transbank SDK
      *
-     * @param Fluent $credentials
+     * @param Fluid $credentials
      * @return mixed
      */
-    public function setCredentials(Fluent $credentials);
+    public function setCredentials(Fluid $credentials);
 
     /**
      * Commits a transaction into the Transbank SDK

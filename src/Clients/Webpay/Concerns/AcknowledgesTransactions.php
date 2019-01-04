@@ -3,7 +3,7 @@
 
 namespace DarkGhostHunter\TransbankApi\Clients\Webpay\Concerns;
 
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
+use DarkGhostHunter\Fluid\Fluid;
 
 /**
  * Trait AcknowledgesTransactions
@@ -32,7 +32,7 @@ trait AcknowledgesTransactions
      */
     public function confirm($token)
     {
-        $acknowledgeTransaction = new Fluent([
+        $acknowledgeTransaction = new Fluid([
             'tokenInput' => $token
         ]);
 

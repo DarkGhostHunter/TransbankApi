@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\Clients\Webpay;
 
+use DarkGhostHunter\Fluid\Fluid;
 use DarkGhostHunter\TransbankApi\Clients\Webpay\OneclickNormal;
 use DarkGhostHunter\TransbankApi\Clients\Webpay\SoapImplementation;
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ErrorResponseException;
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\InvalidSignatureException;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
 use LuisUrrutia\TransbankSoap\Validation;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +28,7 @@ class OneclickNormalTest extends TestCase
 
     protected function setUp()
     {
-        $this->client = new OneclickNormal(true, new Fluent(['privateKey' => 'foo', 'publicCert' => 'bar']));
+        $this->client = new OneclickNormal(true, new Fluid(['privateKey' => 'foo', 'publicCert' => 'bar']));
 
         $this->client->boot();
 

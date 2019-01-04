@@ -2,12 +2,12 @@
 
 namespace Tests\Unit\Adapters;
 
+use DarkGhostHunter\Fluid\Fluid;
 use DarkGhostHunter\TransbankApi\Adapters\WebpayAdapter;
 use DarkGhostHunter\TransbankApi\Clients\AbstractClient;
 use DarkGhostHunter\TransbankApi\Clients\Webpay\PlusNormal;
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\InvalidWebpayTransactionException;
 use DarkGhostHunter\TransbankApi\Exceptions\Webpay\ServiceSdkUnavailableException;
-use DarkGhostHunter\TransbankApi\Helpers\Fluent;
 use DarkGhostHunter\TransbankApi\Transactions\WebpayTransaction;
 use PHPUnit\Framework\TestCase;
 
@@ -45,14 +45,14 @@ class WebpayAdapterTest extends TestCase
     {
         $this->adapter = new WebpayAdapter();
 
-        $this->adapter->setCredentials(new Fluent([
+        $this->adapter->setCredentials(new Fluid([
             'foo' => 'bar'
         ]));
 
         $this->adapter->setIsProduction(true);
 
         $this->client = \Mockery::mock(AbstractClient::class, [
-            true, new Fluent(['foo' => 'bar'])
+            true, new Fluid(['foo' => 'bar'])
         ]);
 
         $this->adapter->setClients([
