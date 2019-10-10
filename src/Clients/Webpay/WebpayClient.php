@@ -132,7 +132,7 @@ abstract class WebpayClient extends AbstractClient
             $this->credentials->publicCert,
             [
                 'classmap' => $this->classMap,
-                'trace' => !$this->isProduction,
+                'trace' => $this->isProduction,
                 'exceptions' => true
             ]
         );
