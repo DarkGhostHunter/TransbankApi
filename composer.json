@@ -24,7 +24,7 @@
     "ext-soap": "*",
     "luisurrutia/transbank-soap": "0.0.1",
     "guzzlehttp/guzzle": "^6.0",
-    "monolog/monolog": "^2.0",
+    "psr/log": "^1.0.1",
     "darkghosthunter/fluid": "^1.0"
   },
   "require-dev": {
