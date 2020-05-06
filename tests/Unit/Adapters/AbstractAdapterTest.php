@@ -13,7 +13,7 @@ class AbstractAdapterTest extends TestCase
     /** @var AbstractAdapter */
     protected $adapter;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->adapter = new class extends AbstractAdapter {
             public function getCredentials() { return $this->credentials; }

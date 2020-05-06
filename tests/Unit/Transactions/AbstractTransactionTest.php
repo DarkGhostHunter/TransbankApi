@@ -15,7 +15,7 @@ class AbstractTransactionTest extends TestCase
     /** @var AbstractTransaction */
     protected $transaction;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->mockService = \Mockery::mock(AbstractService::class);
 

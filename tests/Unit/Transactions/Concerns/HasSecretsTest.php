@@ -13,8 +13,8 @@ class HasSecretsTest extends TestCase
     /** @var Fluid&HasSecrets */
     protected $fluent;
 
-    protected function setUp()
-    {
+    protected function setUp() : void
+{
         $this->fluent = new class extends Fluid {
             use HasSecrets;
             protected $attributes = [

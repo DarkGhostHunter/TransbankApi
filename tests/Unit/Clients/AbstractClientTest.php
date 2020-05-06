@@ -12,7 +12,7 @@ class AbstractClientTest extends TestCase
     /** @var AbstractClient */
     protected $client;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->client = new class(true, new Fluid(['foo' => 'bar'])) extends AbstractClient {
             protected function boot() {}

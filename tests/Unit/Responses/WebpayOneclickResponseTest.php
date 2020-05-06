@@ -7,15 +7,12 @@ use PHPUnit\Framework\TestCase;
 
 class WebpayOneclickResponseTest extends TestCase
 {
-
     public function testSetUrlWebpayAttribute()
     {
         $response = new WebpayOneclickResponse([
             'urlWebpay' => $url = 'http://webpay4g.this.com/is-a-test/',
             'TBK_TOKEN' => $token = 'test-token',
         ]);
-
-        var_dump($response->getAttributes());
 
         $this->assertEquals($url, $response->url);
         $this->assertEquals($token, $response->TBK_TOKEN);

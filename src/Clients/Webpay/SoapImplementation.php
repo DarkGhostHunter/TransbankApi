@@ -19,7 +19,6 @@ use SoapClient;
  */
 class SoapImplementation extends SoapClient
 {
-
     /**
      * Commerce Private Key
      *

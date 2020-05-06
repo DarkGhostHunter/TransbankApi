@@ -10,7 +10,7 @@ class AbstractResponseTest extends TestCase
     /** @var AbstractResponse */
     protected $response;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->response = new class extends AbstractResponse {
             protected $tokenName = 'old-token';

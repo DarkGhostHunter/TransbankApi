@@ -41,7 +41,7 @@ class WebpayAdapterTest extends TestCase
         'oneclick.reverse',
     ];
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->adapter = new WebpayAdapter();
 

@@ -13,8 +13,8 @@ class HasItemsTest extends TestCase
     /** @var AbstractTransaction&HasItems */
     protected $transaction;
 
-    protected function setUp()
-    {
+    protected function setUp() : void
+{
         $this->transaction = new class extends AbstractTransaction { use HasItems; };
     }
 

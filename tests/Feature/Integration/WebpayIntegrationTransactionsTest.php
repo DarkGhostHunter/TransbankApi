@@ -16,8 +16,8 @@ class WebpayIntegrationTransactionsTest extends TestCase
     /** @var Webpay */
     protected $webpay;
 
-    protected function setUp()
-    {
+    protected function setUp() : void
+{
         $transbank = Transbank::make('integration');
 
         $transbank->setDefaults('webpay', [
@@ -46,8 +46,8 @@ class WebpayIntegrationTransactionsTest extends TestCase
         ]);
 
         $this->assertInstanceOf(WebpayPlusResponse::class, $normal);
-        $this->assertTrue(is_string($normal->token));
-        $this->assertTrue(is_string(filter_var($normal->url, FILTER_VALIDATE_URL)));
+        $this->assertIsString($normal->token);
+        $this->assertIsString(filter_var($normal->url, FILTER_VALIDATE_URL));
 
     }
 
@@ -55,7 +55,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
     {
         $this->expectException(InvalidWebpayTransactionException::class);
 
-        $normal = $this->webpay->createNormal([
+        $this->webpay->createNormal([
             'returnUrl' => 'invalidReturnUrl',
             'finalUrl' => 'invalidFinalUrl',
             'amount' => -2000,
@@ -152,8 +152,8 @@ class WebpayIntegrationTransactionsTest extends TestCase
         ]);
 
         $this->assertInstanceOf(WebpayOneclickResponse::class, $registration);
-        $this->assertTrue(is_string($registration->token));
-        $this->assertTrue(is_string(filter_var($registration->url, FILTER_VALIDATE_URL)));
+        $this->assertIsString($registration->token);
+        $this->assertIsString(filter_var($registration->url, FILTER_VALIDATE_URL));
     }
 
     public function testCommitsInvalidOneclickUnregistration()
