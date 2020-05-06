@@ -3,8 +3,10 @@
 namespace DarkGhostHunter\TransbankApi\Clients\Webpay;
 
 use DarkGhostHunter\TransbankApi\Clients\AbstractClient;
+use DarkGhostHunter\TransbankApi\Exceptions\TransbankUnavailableException;
 use LuisUrrutia\TransbankSoap\Validation;
 use SoapClient;
+use SoapFault;
 
 abstract class WebpayClient extends AbstractClient
 {
@@ -109,6 +111,7 @@ abstract class WebpayClient extends AbstractClient
      * Boot the connector
      *
      * @return void
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\TransbankUnavailableException
      */
     public function boot()
     {
@@ -123,19 +126,24 @@ abstract class WebpayClient extends AbstractClient
      * Creates a new instance of the Soap Client using the Configuration as base
      *
      * @return void
+     * @throws \DarkGhostHunter\TransbankApi\Exceptions\TransbankUnavailableException
      */
     protected function bootSoapClient()
     {
-        $this->connector = new SoapImplementation(
-            $this->endpoint,
-            $this->credentials->privateKey,
-            $this->credentials->publicCert,
-            [
-                'classmap' => $this->classMap,
-                'trace' => !$this->isProduction,
-                'exceptions' => true
-            ]
-        );
+        try {
+            $this->connector = new SoapImplementation(
+                $this->endpoint,
+                $this->credentials->privateKey,
+                $this->credentials->publicCert,
+                [
+                    'classmap' => $this->classMap,
+                    'trace' => ! $this->isProduction,
+                    'exceptions' => true
+                ]
+            );
+        } catch (SoapFault $exception) {
+            throw new TransbankUnavailableException(null, null, $exception);
+        }
     }
 
     /**
