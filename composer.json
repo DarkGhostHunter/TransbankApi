@@ -7,6 +7,7 @@
     "api",
     "sdk"
   ],
+  "license": "MIT",
   "authors": [
     {
       "name": "Italo Baeza C",
@@ -41,5 +42,11 @@
       "Tests\\" : "tests"
     }
   },
-  "license": "MIT"
+  "scripts": {
+    "test": "vendor/bin/phpunit",
+    "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+  },
+  "config": {
+    "sort-packages": true
+  }
 }
