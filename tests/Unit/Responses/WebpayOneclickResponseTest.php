@@ -37,6 +37,8 @@ class WebpayOneclickResponseTest extends TestCase
         $response = new WebpayOneclickResponse(['responseCode' => 0]);
         $response->dynamicallySetSuccessStatus();
 
+        var_dump($response);
+
         $this->assertTrue($response->isSuccess());
 
         $response = new WebpayOneclickResponse(['responseCode' => 1]);
