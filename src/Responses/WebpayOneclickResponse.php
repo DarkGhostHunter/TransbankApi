@@ -35,7 +35,7 @@ class WebpayOneclickResponse extends AbstractResponse
             $this->isSuccess = true;
         }
 
-        if ($this->attributes['responseCode'] ?? null === 0) {
+        if (($this->attributes['responseCode'] ?? null) === 0) {
             $this->isSuccess = true;
         }
     }
