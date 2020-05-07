@@ -29,7 +29,6 @@ class WebpayOneclickResponse extends AbstractResponse
         if ($this->count() === 1 && (Helpers::arrayFirst($this->attributes) === true)) {
             $this->isSuccess = true;
             $this->attributes = [];
-            return;
         }
 
         if ($this->{$this->tokenName} || $this->reversed) {
