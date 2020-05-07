@@ -156,6 +156,12 @@ abstract class AbstractResponse extends Fluid implements ResponseInterface
      */
     public function isSuccess()
     {
+
+        var_dump($this->attributes);
+        var_dump($this->{$this->tokenName});
+        var_dump($this->reversed);
+        var_dump($this->responseCode);
+
         return $this->isSuccess;
     }
 
