@@ -36,12 +36,8 @@ class WebpayOneclickResponseTest extends TestCase
 
         $quz = new WebpayOneclickResponse(['responseCode' => 0]);
         $quz->dynamicallySetSuccessStatus();
-
-
-        var_dump($quz->attributes);
-        var_dump($quz->{$quz->tokenName});
-        var_dump($quz->reversed);
-        var_dump($quz->responseCode);
+        
+        var_dump((array)$quz);
 
         $this->assertTrue($quz->isSuccess());
 
