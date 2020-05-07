@@ -21,32 +21,32 @@ class WebpayOneclickResponseTest extends TestCase
 
     public function testDynamicallySetSuccessStatus()
     {
-        $response = new WebpayOneclickResponse([true]);
-        $response->dynamicallySetSuccessStatus();
+        $foo = new WebpayOneclickResponse([true]);
+        $foo->dynamicallySetSuccessStatus();
 
-        $this->assertTrue($response->isSuccess());
+        $this->assertTrue($foo->isSuccess());
 
-        $response = new WebpayOneclickResponse([
+        $bar = new WebpayOneclickResponse([
             'urlWebpay' => $url = 'http://webpay4g.this.com/is-a-test/',
             'TBK_TOKEN' => $token = 'test-token',
         ]);
-        $response->dynamicallySetSuccessStatus();
+        $bar->dynamicallySetSuccessStatus();
 
-        $this->assertTrue($response->isSuccess());
+        $this->assertTrue($bar->isSuccess());
 
-        $response = new WebpayOneclickResponse(['responseCode' => 0]);
-        $response->dynamicallySetSuccessStatus();
+        $quz = new WebpayOneclickResponse(['responseCode' => 0]);
+        $quz->dynamicallySetSuccessStatus();
 
-        $this->assertTrue($response->isSuccess());
+        $this->assertTrue($quz->isSuccess());
 
-        $response = new WebpayOneclickResponse(['responseCode' => 1]);
-        $response->dynamicallySetSuccessStatus();
+        $qux = new WebpayOneclickResponse(['responseCode' => 1]);
+        $qux->dynamicallySetSuccessStatus();
 
-        $this->assertFalse($response->isSuccess());
+        $this->assertFalse($qux->isSuccess());
 
-        $response = new WebpayOneclickResponse(['reversed' => 'anything']);
-        $response->dynamicallySetSuccessStatus();
+        $quuz = new WebpayOneclickResponse(['reversed' => 'anything']);
+        $quuz->dynamicallySetSuccessStatus();
 
-        $this->assertTrue($response->isSuccess());
+        $this->assertTrue($quuz->isSuccess());
     }
 }
