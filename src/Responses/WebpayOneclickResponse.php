@@ -32,7 +32,11 @@ class WebpayOneclickResponse extends AbstractResponse
             return;
         }
 
-        if ($this->{$this->tokenName} || $this->reversed || $this->responseCode === 0) {
+        if ($this->{$this->tokenName} || $this->reversed) {
+            $this->isSuccess = true;
+        }
+
+        if ($this->attributes['responseCode'] ?? null === 0) {
             $this->isSuccess = true;
         }
     }
