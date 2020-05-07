@@ -4,6 +4,7 @@ namespace DarkGhostHunter\TransbankApi\Helpers;
 
 use ReflectionClass;
 use Throwable;
+use ReflectionException;
 
 class Helpers
 {
@@ -17,7 +18,7 @@ class Helpers
     {
         try {
             return (new ReflectionClass($class))->getShortName();
-        } catch (\ReflectionException $e) {
+        } catch (ReflectionException $e) {
             return null;
         }
     }
@@ -70,5 +71,21 @@ class Helpers
     public static function arrayExcept(array $array, $excluded)
     {
         return array_diff_key($array, array_flip($excluded));
+    }
+
+    /**
+     * Returns the first item in the array.
+     *
+     * @param  array  $array
+     * @param  mixed  $default
+     * @return mixed
+     */
+    public static function arrayFirst(array $array, $default = null)
+    {
+        foreach ($array as $item) {
+            return $item;
+        }
+
+        return $default;
     }
 }
