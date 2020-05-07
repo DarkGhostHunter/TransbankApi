@@ -19,7 +19,6 @@ use SoapClient;
  */
 class SoapImplementation extends SoapClient
 {
-
     /**
      * Commerce Private Key
      *
@@ -41,6 +40,7 @@ class SoapImplementation extends SoapClient
      * @param string $privateKey
      * @param string $publicCert
      * @param array|null $options
+     * @throws \SoapFault
      */
     public function __construct(string $wsdl, string $privateKey, string $publicCert, array $options = null)
     {

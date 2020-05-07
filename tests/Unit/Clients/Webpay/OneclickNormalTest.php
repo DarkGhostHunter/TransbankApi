@@ -26,7 +26,7 @@ class OneclickNormalTest extends TestCase
     /** @var Validation&\Mockery\MockInterface */
     protected $mockValidator;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->client = new OneclickNormal(true, new Fluid(['privateKey' => 'foo', 'publicCert' => 'bar']));
 

@@ -23,7 +23,7 @@ class OnepayAdapterTest extends TestCase
     /** @var AbstractClient&\Mockery\MockInterface */
     protected $client;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->adapter = new OnepayAdapter();
 

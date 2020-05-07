@@ -25,7 +25,7 @@ class AbstractServiceTest extends TestCase
     /** @var Transbank&\Mockery\MockInterface */
     protected $mockTransbank;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->mockTransbank = \Mockery::mock(Transbank::class);
 
@@ -247,7 +247,7 @@ class AbstractServiceTest extends TestCase
         $dir = $this->service->credentialsDirectory();
 
         $this->assertIsString($dir);
-        $this->assertContains('/../credentials', $dir);
+        $this->assertStringContainsString('/../credentials', $dir);
     }
 
     public function testEnvironmentCredentialsDirectory()
@@ -258,6 +258,6 @@ class AbstractServiceTest extends TestCase
 
         $dir = $this->service->environmentCredentialsDirectory();
 
-        $this->assertContains('mock-dir', $dir);
+        $this->assertStringContainsString('mock-dir', $dir);
     }
 }

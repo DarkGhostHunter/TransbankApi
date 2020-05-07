@@ -21,7 +21,7 @@ class OnepayClientTest extends TestCase
     /** @var OnepayClient */
     protected $client;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->client = new OnepayClient(false, new Fluid([
             'appKey' => 'test-app',

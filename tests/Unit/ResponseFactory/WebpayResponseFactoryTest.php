@@ -24,7 +24,7 @@ class WebpayResponseFactoryTest extends TestCase
     /** @var WebpayAdapter&\Mockery\MockInterface */
     protected $mockAdapter;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->mockTransbank = \Mockery::mock(Transbank::class);
         $this->mockTransbank->shouldReceive('getDefaults')->once()

@@ -1,7 +1,7 @@
 ![rawpixel - Unsplash (UL) #SEDqvdbkDQw](https://images.unsplash.com/photo-1535603383947-c1ee27a4906f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1280&h=400&q=80)
 
 [![Latest Stable Version](https://poser.pugx.org/darkghosthunter/transbank-api/v/stable)](https://packagist.org/packages/darkghosthunter/transbank-api) [![License](https://poser.pugx.org/darkghosthunter/transbank-api/license)](https://packagist.org/packages/darkghosthunter/transbank-api)
-![](https://img.shields.io/packagist/php-v/darkghosthunter/transbank-api.svg) [![Build Status](https://travis-ci.com/DarkGhostHunter/TransbankApi.svg?branch=master)](https://travis-ci.com/DarkGhostHunter/TransbankApi) [![Coverage Status](https://coveralls.io/repos/github/DarkGhostHunter/TransbankApi/badge.svg?branch=master)](https://coveralls.io/github/DarkGhostHunter/TransbankApi?branch=master) [![Maintainability](https://api.codeclimate.com/v1/badges/4a6d823102cea362adfd/maintainability)](https://codeclimate.com/github/DarkGhostHunter/TransbankApi/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/4a6d823102cea362adfd/test_coverage)](https://codeclimate.com/github/DarkGhostHunter/TransbankApi/test_coverage)
+![](https://img.shields.io/packagist/php-v/darkghosthunter/transbank-api.svg) [![PHP Composer](https://github.com/DarkGhostHunter/TransbankApi/workflows/PHP%20Composer/badge.svg)](https://github.com/DarkGhostHunter/TransbankApi/actions) [![Coverage Status](https://coveralls.io/repos/github/DarkGhostHunter/TransbankApi/badge.svg?branch=master)](https://coveralls.io/github/DarkGhostHunter/TransbankApi?branch=master) [![Maintainability](https://api.codeclimate.com/v1/badges/4a6d823102cea362adfd/maintainability)](https://codeclimate.com/github/DarkGhostHunter/TransbankApi/maintainability)
 
 
 # Transbank API
@@ -12,12 +12,12 @@
 
 ## Requisitos:
 
-- PHP 7.1.3 o mayor
+- PHP 7.2.5 o mayor
 - Composer
 
 ## Dependencias
 
-Este paquete usa [Guzzle HTTP 6.0](http://docs.guzzlephp.org/en/stable/), [KLogger](http://codefury.net/projects/klogger/), y la [implementación de SOAP de Luis Urrutia](https://github.com/LuisUrrutia/TransbankSoap).  
+Este paquete usa [Guzzle HTTP 6.0](http://docs.guzzlephp.org/en/stable/) y la [implementación de SOAP de Luis Urrutia](https://github.com/LuisUrrutia/TransbankSoap).  
 
 A su vez, este paquete necesita las siguientes extensiones de PHP habilitadas:
 
@@ -27,7 +27,11 @@ A su vez, este paquete necesita las siguientes extensiones de PHP habilitadas:
 * ext-soap
 * ext-dom
 
-Instalarlas dependerá de tu sistema: en algunos casos sólo necesitarás habilitarlas en tu `php.ini`; en otros, descargarlas usando tu gestor de packetes (como `apt-get` o `apk`) o compilarlas manualmente. 
+Instalarlas dependerá de tu sistema: en algunos casos sólo necesitarás habilitarlas en tu `php.ini`; en otros, descargarlas usando tu gestor de packetes (como `apt-get` o `apk`) o compilarlas manualmente.
+
+### Logger
+
+Esta librería es compatible con cualquier [logger PSR-3](https://www.php-fig.org/psr/psr-3/). Si quieres que tu proyecto escriba información sobre las transacciones, puedes usar [Monolog](https://github.com/Seldaek/monolog/) o cualquier otro que siga el estándar.
 
 # Instalación
 

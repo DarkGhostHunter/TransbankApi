@@ -17,8 +17,8 @@ class TransbankTest extends TestCase
     /** @var Transbank */
     protected $transbank;
 
-    protected function setUp()
-    {
+    protected function setUp() : void
+{
         $this->transbank = new Transbank(new NullLogger());
     }
 

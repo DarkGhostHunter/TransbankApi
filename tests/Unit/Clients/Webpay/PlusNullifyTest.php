@@ -26,7 +26,7 @@ class PlusNullifyTest extends TestCase
     /** @var Validation&\Mockery\MockInterface */
     protected $mockValidator;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->client = new PlusNullify(true, new Fluid(['privateKey' => 'foo', 'publicCert' => 'bar']));
 

@@ -11,7 +11,7 @@ class OnepayResponseTest extends TestCase
     /** @var OnepayResponse */
     protected $response;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->response = new OnepayResponse(['foo' => 'bar']);
     }

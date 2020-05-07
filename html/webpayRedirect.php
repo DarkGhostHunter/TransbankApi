@@ -10,7 +10,7 @@
     </form>
     <script>
         // Redirige al usuario inmediatamente a Webpay
-        document.getElementById('redirect').submit();
+        document.getElementById('redirect').submit()
     </script>
 </body>
 </html>

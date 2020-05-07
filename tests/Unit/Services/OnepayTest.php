@@ -27,7 +27,7 @@ class OnepayTest extends TestCase
     /** @var LoggerInterface&\Mockery\MockInterface */
     protected $mockLogger;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->mockTransbank = \Mockery::mock(Transbank::class);
 

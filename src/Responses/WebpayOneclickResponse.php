@@ -2,6 +2,8 @@
 
 namespace DarkGhostHunter\TransbankApi\Responses;
 
+use DarkGhostHunter\TransbankApi\Helpers\Helpers;
+
 class WebpayOneclickResponse extends AbstractResponse
 {
     /**
@@ -24,16 +26,17 @@ class WebpayOneclickResponse extends AbstractResponse
      */
     public function dynamicallySetSuccessStatus()
     {
-        switch (true) {
-            case count($this->attributes) === 1 && ($this->attributes[0] ?? false) === true:
-                $this->isSuccess = true;
-                $this->attributes = [];
-                break;
-            case (bool)$this->{$this->tokenName}:
-            case (bool)$this->reversed:
-            case $this->responseCode === 0:
-                $this->isSuccess = true;
-                break;
+        if ($this->count() === 1 && (Helpers::arrayFirst($this->attributes) === true)) {
+            $this->isSuccess = true;
+            $this->attributes = [];
+        }
+
+        if ($this->{$this->tokenName} || $this->reversed) {
+            $this->isSuccess = true;
+        }
+
+        if (($this->attributes['responseCode'] ?? null) === 0) {
+            $this->isSuccess = true;
         }
     }
 

@@ -19,8 +19,8 @@ class WebpayTransactionTest extends TestCase
         'oneclickResponseURL'   => 'http://app.com/webpay/response',
     ];
 
-    protected function setUp()
-    {
+    protected function setUp() : void
+{
         $this->transaction = new WebpayTransaction();
     }
 
