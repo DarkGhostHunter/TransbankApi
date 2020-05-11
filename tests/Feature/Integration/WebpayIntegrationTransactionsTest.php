@@ -16,7 +16,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
     /** @var Webpay */
     protected $webpay;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $transbank = Transbank::make('integration');
 
