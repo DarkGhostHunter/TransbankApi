@@ -46,8 +46,8 @@ class WebpayIntegrationTransactionsTest extends TestCase
         ]);
 
         $this->assertInstanceOf(WebpayPlusResponse::class, $normal);
-        $this->assertTrue(is_string($normal->token));
-        $this->assertTrue(is_string(filter_var($normal->url, FILTER_VALIDATE_URL)));
+        $this->assertIsString($normal->token);
+        $this->assertIsString(filter_var($normal->url, FILTER_VALIDATE_URL));
 
     }
 
@@ -55,7 +55,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
     {
         $this->expectException(InvalidWebpayTransactionException::class);
 
-        $normal = $this->webpay->createNormal([
+        $this->webpay->createNormal([
             'returnUrl' => 'invalidReturnUrl',
             'finalUrl' => 'invalidFinalUrl',
             'amount' => -2000,
@@ -85,15 +85,15 @@ class WebpayIntegrationTransactionsTest extends TestCase
         ]);
 
         $this->assertInstanceOf(WebpayPlusMallResponse::class, $normal);
-        $this->assertTrue(is_string($normal->token));
-        $this->assertTrue(is_string(filter_var($normal->url, FILTER_VALIDATE_URL)));
+        $this->assertIsString($normal->token);
+        $this->assertIsString(filter_var($normal->url, FILTER_VALIDATE_URL));
     }
 
     public function testCommitsInvalidPlusMallNormal()
     {
         $this->expectException(InvalidWebpayTransactionException::class);
 
-        $normal = $this->webpay->createMallNormal([
+        $this->webpay->createMallNormal([
             'buyOrder' => 'parent-order-123123',
             'items' => [
                 [
@@ -116,14 +116,14 @@ class WebpayIntegrationTransactionsTest extends TestCase
     {
         $this->expectException(InvalidWebpayTransactionException::class);
 
-        $normal = $this->webpay->createCapture([
+        $this->webpay->createCapture([
             'authorizationCode' => '!found',
             'captureAmount' => 2000,
             'buyOrder' => 'testBuyOrder',
             'captureAmount ' => 2000,
         ]);
 
-        $mall = $this->webpay->createMallCapture([
+        $this->webpay->createMallCapture([
             'sessionId' => 'client-session-id-88',
             'buyOrder' => 'myOrder#16548',
             'amount' => 1000,
@@ -135,7 +135,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
     {
         $this->expectException(InvalidWebpayTransactionException::class);
 
-        $nullify = $this->webpay->createNullify([
+        $this->webpay->createNullify([
             'authorizationCode' => '03fr4E',
             'authorizedAmount' => 19990,
             'buyOrder' => 'store-order-32154',
@@ -152,8 +152,8 @@ class WebpayIntegrationTransactionsTest extends TestCase
         ]);
 
         $this->assertInstanceOf(WebpayOneclickResponse::class, $registration);
-        $this->assertTrue(is_string($registration->token));
-        $this->assertTrue(is_string(filter_var($registration->url, FILTER_VALIDATE_URL)));
+        $this->assertIsString($registration->token);
+        $this->assertIsString(filter_var($registration->url, FILTER_VALIDATE_URL));
     }
 
     public function testCommitsInvalidOneclickUnregistration()
@@ -170,7 +170,7 @@ class WebpayIntegrationTransactionsTest extends TestCase
     {
         $this->expectException(InvalidWebpayTransactionException::class);
 
-        $charge = $this->webpay->createCharge([
+        $this->webpay->createCharge([
             'amount' => 9990,
             'buyOrder' => 7,
             'tbkUser' => 'tbkUser',
