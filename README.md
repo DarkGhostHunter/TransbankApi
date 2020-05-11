@@ -12,12 +12,12 @@
 
 ## Requisitos:
 
-- PHP 7.1.3 o mayor
+- PHP 7.2.5 o mayor
 - Composer
 
 ## Dependencias
 
-Este paquete usa [Guzzle HTTP 6.0](http://docs.guzzlephp.org/en/stable/), [KLogger](http://codefury.net/projects/klogger/), y la [implementación de SOAP de Luis Urrutia](https://github.com/LuisUrrutia/TransbankSoap).  
+Este paquete usa [Guzzle HTTP 6.0](http://docs.guzzlephp.org/en/stable/) y la [implementación de SOAP de Luis Urrutia](https://github.com/LuisUrrutia/TransbankSoap).  
 
 A su vez, este paquete necesita las siguientes extensiones de PHP habilitadas:
 
@@ -27,7 +27,11 @@ A su vez, este paquete necesita las siguientes extensiones de PHP habilitadas:
 * ext-soap
 * ext-dom
 
-Instalarlas dependerá de tu sistema: en algunos casos sólo necesitarás habilitarlas en tu `php.ini`; en otros, descargarlas usando tu gestor de packetes (como `apt-get` o `apk`) o compilarlas manualmente. 
+Instalarlas dependerá de tu sistema: en algunos casos sólo necesitarás habilitarlas en tu `php.ini`; en otros, descargarlas usando tu gestor de packetes (como `apt-get` o `apk`) o compilarlas manualmente.
+
+### Logger
+
+Esta librería es compatible con cualquier [logger PSR-3](https://www.php-fig.org/psr/psr-3/). Si quieres que tu proyecto escriba información sobre las transacciones, puedes usar [Monolog](https://github.com/Seldaek/monolog/) o cualquier otro que siga el estándar.
 
 # Instalación
 
