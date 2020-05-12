@@ -24,7 +24,7 @@
     "ext-dom": "*",
     "ext-soap": "*",
     "luisurrutia/transbank-soap": "0.0.1",
-    "robrichards/xmlseclibs": "3.0.4",
+    "robrichards/xmlseclibs": "3.1.0",
     "guzzlehttp/guzzle": "^6.5",
     "psr/log": "^1.0.1",
     "darkghosthunter/fluid": "^1.0"
