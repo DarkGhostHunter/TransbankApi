@@ -1,6 +1,6 @@
 {
   "name": "darkghosthunter/transbank-api",
-  "description": "Transbank SDK no oficial para PHP 7.1+",
+  "description": "Transbank SDK no oficial para PHP 7.4+",
   "keywords": [
     "payments",
     "transbank",
@@ -17,18 +17,18 @@
     }
   ],
   "require": {
-    "php": "^7.2",
+    "php": "^7.4||^8.0",
     "ext-curl": "*",
     "ext-json": "*",
-    "ext-mbstring": "*",
-    "ext-dom": "*",
-    "ext-soap": "*",
-    "luisurrutia/transbank-soap": "0.0.1",
-    "robrichards/xmlseclibs": "3.0.4",
-    "guzzlehttp/guzzle": "^6.5",
     "psr/log": "^1.0.1",
     "darkghosthunter/fluid": "^1.0"
   },
+  "ext-mbstring": "*",
+  "ext-dom": "*",
+  "ext-soap": "*",
+  "luisurrutia/transbank-soap": "0.0.1",
+  "robrichards/xmlseclibs": "3.0.4",
+  "guzzlehttp/guzzle": "^7.0",
   "require-dev": {
     "phpunit/phpunit": "^8.5",
     "mockery/mockery": "^1.3.1"
