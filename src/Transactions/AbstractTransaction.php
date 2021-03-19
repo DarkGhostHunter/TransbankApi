@@ -45,20 +45,18 @@ abstract class AbstractTransaction extends Fluid implements TransactionInterface
     protected function performCommit()
     {
         // Fill for default attributes
-        if (method_exists($this, $method = 'fillEmptyAttributes')
-            && is_callable([$this, $method])) {
-            call_user_func([$this, $method]);
+        if (method_exists($this, $method = 'fillEmptyAttributes') && is_callable([$this, $method])) {
+            $this->$method();
         }
 
         // Do any logic before getting the result
-        if (method_exists($this, $method = 'performPreLogic')
-            && is_callable([$this, $method])) {
-            call_user_func([$this, $method]);
+        if (method_exists($this, $method = 'performPreLogic') && is_callable([$this, $method])) {
+            $this->$method();
         }
 
         if ($this->response = $this->service->commit($this)) {
             $this->performed = true;
-        };
+        }
 
         return $this->response;
     }

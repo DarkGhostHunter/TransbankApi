@@ -1,3 +1,9 @@
+# Versión 4.0 Final
+
+Como leen, esta será la última versión de Transbank API. El nuevo SDK oficial de Transbank usa HTTPS en vez de SOAP (puaj!), así que este SDK ya no es necesario.
+
+# Ve y usa el [SDK Oficial de Transbank](https://github.com/TransbankDevelopers/transbank-sdk-php)
+
 ![rawpixel - Unsplash (UL) #SEDqvdbkDQw](https://images.unsplash.com/photo-1535603383947-c1ee27a4906f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1280&h=400&q=80)
 
 [![Latest Stable Version](https://poser.pugx.org/darkghosthunter/transbank-api/v/stable)](https://packagist.org/packages/darkghosthunter/transbank-api) [![License](https://poser.pugx.org/darkghosthunter/transbank-api/license)](https://packagist.org/packages/darkghosthunter/transbank-api)
