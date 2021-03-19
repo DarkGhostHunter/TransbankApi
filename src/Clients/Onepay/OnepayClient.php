@@ -9,6 +9,8 @@ use DarkGhostHunter\TransbankApi\Exceptions\Onepay\OnepayValidationException;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayNullifyTransaction;
 use DarkGhostHunter\TransbankApi\Transactions\OnepayTransaction;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 
 class OnepayClient extends AbstractClient
 {
@@ -141,8 +143,10 @@ class OnepayClient extends AbstractClient
                 $endpoint,
                 ['body' => json_encode($showSecrets, JSON_UNESCAPED_SLASHES)]
             );
+        } catch (RequestException $exception) {
+            throw new OnepayClientException($transaction, $exception->getResponse(), 0, $exception);
         } catch (\Throwable $throwable) {
-            throw new OnepayClientException($transaction, 0, $throwable);
+            throw new OnepayClientException($transaction, null, 0, $throwable);
         }
 
         $content = json_decode($response->getBody()->getContents());

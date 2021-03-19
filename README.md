@@ -1,3 +1,9 @@
+# Versión 4.0 Final
+
+Como leen, esta será la última versión de Transbank API. El nuevo SDK oficial de Transbank usa HTTPS en vez de SOAP (puaj!), así que este SDK ya no es necesario.
+
+# Ve y usa el [SDK Oficial de Transbank](https://github.com/TransbankDevelopers/transbank-sdk-php)
+
 ![rawpixel - Unsplash (UL) #SEDqvdbkDQw](https://images.unsplash.com/photo-1535603383947-c1ee27a4906f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1280&h=400&q=80)
 
 [![Latest Stable Version](https://poser.pugx.org/darkghosthunter/transbank-api/v/stable)](https://packagist.org/packages/darkghosthunter/transbank-api) [![License](https://poser.pugx.org/darkghosthunter/transbank-api/license)](https://packagist.org/packages/darkghosthunter/transbank-api)
@@ -12,12 +18,12 @@
 
 ## Requisitos:
 
-- PHP 7.2.5 o mayor
+- PHP 7.4, o PHP 8.0
 - Composer
 
 ## Dependencias
 
-Este paquete usa [Guzzle HTTP 6.0](http://docs.guzzlephp.org/en/stable/) y la [implementación de SOAP de Luis Urrutia](https://github.com/LuisUrrutia/TransbankSoap).  
+Este paquete usa [Guzzle HTTP 7.0](http://docs.guzzlephp.org/en/stable/) y la [implementación de SOAP de Luis Urrutia](https://github.com/LuisUrrutia/TransbankSoap).  
 
 A su vez, este paquete necesita las siguientes extensiones de PHP habilitadas:
 
@@ -37,67 +43,19 @@ Esta librería es compatible con cualquier [logger PSR-3](https://www.php-fig.or
 
 Hay tres formas para instalar el paquete: usando Composer, sin composer, y todo de forma (muy) manual.
 
-### Instalar con Composer (fácil)
+### Instalar con Composer
 
-Para usar el SDK en tu proyecto puedes usar Composer, instalándolo desde la consola:
+Para usar el SDK en tu proyecto usa Composer:
 
 ```bash
 composer require darkghosthunter/transbank-api
 ```
 
-También puedes añadir el SDK como dependencia a tu proyecto y luego ejecutar `composer update`.
-
-```json
-    "require": {
-        "darkghosthunter/transbank-api": "^2.0"
-    }
-```
-
-### Instalación sin Composer (complicado)
-
-Además de tener instalado la línea de comandos de PHP, debes descargar el código desde este repositorio, descomprimirlo en el directorio que desees, y realizar lo siguiente:
-
-1 - [Descargar `composer.phar`](https://getcomposer.org/download/) en el mismo directorio donde descomprimiste el SDK.
-
-2 - Ejecutar en el directorio del SDK:
-
-```bash
-php composer.phar install --no-dev
-```
-
-3 - Requerir el SDK directamente desde tu aplicación 
-
-```php
-require_once('/directorio/de/transbank-api/load.php');
-```
-
-### Instalación remota (jodido)
-
-Si no tienes acceso a la consola de tu servidor web, siempre puedes usar tu propio sistema: 
-
-* [Descarga PHP](http://php.net/downloads.php)
-
-* [Descarga `composer.phar`](https://getcomposer.org/download) donde descargaste este paquete.
-
-* Abre una ventana de consola (powershell en Windows, Terminal en MacOS, *sh en Linux) y tipea:
-
-```bash
-directorio/de/php composer.phar install --no-dev
-```
-
-> (Si estás en Windows, usa `php.exe`)
-
-* Comprime el directorio del paquete.
-
-* Sube el directorio del paquete a tu servidor y descomprímelo allí.
-
-> Si subes cada archivo uno por uno, puedes demorarte horas.
-
-* Continúa con el [tercer paso de la instalación manual](#instalación-sin-composer-complicado).
-
 ## Documentación 
 
 La documentación de este paquete está [en la Wiki](https://github.com/DarkGhostHunter/TransbankApi/wiki).
+
+Sin embargo, la idea de este paquete es que puedas realizar la mayoría de tus transacciones usando sintaxis expresiva:
 
 La información sobre las variables que necesitas para realizar cada transacción está en [Transbank Developers](https://www.transbankdevelopers.cl). Este paquete no modifica el nombre de las variables.
 

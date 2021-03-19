@@ -7,8 +7,6 @@ use DarkGhostHunter\TransbankApi\Helpers\Helpers;
 
 trait HasCredentialOperations
 {
-
-
     /*
     |--------------------------------------------------------------------------
     | Credentials Operations

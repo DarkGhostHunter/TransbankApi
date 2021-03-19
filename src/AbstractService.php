@@ -244,12 +244,12 @@ abstract class AbstractService implements ServiceInterface
     protected function forwardCallToTransactionFactory($method, $parameters)
     {
         // Proceed to call the Transaction Factory, or throw an Exception if the method doesn't exists.
-        if (method_exists($this->transactionFactory, $method) && is_callable([$this->transactionFactory, $method])) {
+        if ($this->transactionFactory && is_callable([$this->transactionFactory, $method]) && method_exists($this->transactionFactory, $method)) {
             return $this->transactionFactory->{$method}(...$parameters);
         }
 
         // Try the same with the Response factory
-        if (method_exists($this->responseFactory, $method) && is_callable([$this->responseFactory, $method])) {
+        if ($this->responseFactory && is_callable([$this->responseFactory, $method]) && method_exists($this->responseFactory, $method)) {
             return $this->responseFactory->{$method}(...$parameters);
         }
 
