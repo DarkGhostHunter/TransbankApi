@@ -18,12 +18,12 @@ Como leen, esta será la última versión de Transbank API. El nuevo SDK oficial
 
 ## Requisitos:
 
-- PHP 7.2.5 o mayor
+- PHP 7.4, o PHP 8.0
 - Composer
 
 ## Dependencias
 
-Este paquete usa [Guzzle HTTP 6.0](http://docs.guzzlephp.org/en/stable/) y la [implementación de SOAP de Luis Urrutia](https://github.com/LuisUrrutia/TransbankSoap).  
+Este paquete usa [Guzzle HTTP 7.0](http://docs.guzzlephp.org/en/stable/) y la [implementación de SOAP de Luis Urrutia](https://github.com/LuisUrrutia/TransbankSoap).  
 
 A su vez, este paquete necesita las siguientes extensiones de PHP habilitadas:
 
