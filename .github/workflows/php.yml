@@ -47,4 +47,4 @@ jobs:
         run: |
           rm -rf composer.* vendor/
           composer require php-coveralls/php-coveralls
-          vendor/bin/php-coveralls
+          vendor/bin/php-coveralls --coverage_clover=build/logs/clover.xml

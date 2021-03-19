@@ -19,5 +19,4 @@
       <directory>tests/Feature</directory>
     </testsuite>
   </testsuites>
-  <logging/>
 </phpunit>
